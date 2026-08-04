@@ -64,10 +64,15 @@ export const projectSchema = z.object({
   /** One sentence, indicative mood, no marketing adjectives. */
   summary: z.string().min(20).max(200),
   role: z.string().min(1),
+  /**
+   * The industry the software serves. Surfaced in the UI next to the client,
+   * because "eight industries in five years" is a claim the list itself proves.
+   */
   domain: z.enum([
     "telecom",
     "fintech",
     "media",
+    "identity",
     "government",
     "healthcare",
     "hospitality",
@@ -113,6 +118,24 @@ export const skillGroupSchema = z.object({
 });
 
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
+
+/* -------------------------------------------------------------------------- */
+/*  Credentials                                                               */
+/* -------------------------------------------------------------------------- */
+
+export const certificationSchema = z.object({
+  name: z.string().min(1),
+  issuer: z.string().min(1),
+});
+
+export const languageSchema = z.object({
+  name: z.string().min(1),
+  /** Mirrors the CEFR-adjacent wording recruiters expect on a CV. */
+  level: z.enum(["Native", "Professional", "Limited working", "Elementary"]),
+});
+
+export type Certification = z.infer<typeof certificationSchema>;
+export type Language = z.infer<typeof languageSchema>;
 
 /* -------------------------------------------------------------------------- */
 /*  Case study frontmatter (MDX)                                              */

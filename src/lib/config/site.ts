@@ -19,12 +19,15 @@ export const siteConfig = {
   role: "Software Engineer",
 
   /** One line, used in the header meta and structured data. */
-  tagline: "Software engineer building telecom and enterprise systems.",
+  tagline: "Frontend engineer building the internal systems banks and operators run on.",
 
   /**
-   * The hero statement. Deliberately concrete — it names the domain and the
-   * scale, because "passionate developer building beautiful experiences"
-   * is indistinguishable from every other portfolio on the internet.
+   * The hero statement.
+   *
+   * Concrete on purpose. "Passionate developer crafting beautiful digital
+   * experiences" describes nobody; naming the customer and what is at stake
+   * describes exactly one person. The emphasis line is the only place the
+   * serif appears on the page, so it has to carry the specificity.
    */
   headline: {
     lead: "I build the systems",
@@ -34,7 +37,7 @@ export const siteConfig = {
 
   /** Two or three sentences maximum. Anything longer belongs on /about. */
   summary:
-    "Five years shipping production software across Iraq — digital banking, telecom sales platforms, streaming services, identity providers and government reporting systems. I care about the parts users never see: correctness, load behaviour, and code the next engineer can change without fear.",
+    "Five years of frontend work on software other businesses depend on to operate — digital banking, telecom sales, streaming and advertising, identity and access management. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
 
   location: {
     city: "Kalar",
@@ -47,7 +50,7 @@ export const siteConfig = {
   availability: {
     status: "open",
     label: "Available for work",
-    detail: "Open to remote and contract engagements",
+    detail: "Open to remote and contract engagements, GMT+3",
   },
 
   contact: {
@@ -62,7 +65,7 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/in/twana-ibrahim-92057915b",
   },
 
-  /** Dropped into /public. Named with the year so it is obvious when stale. */
+  /** Lives in /public. Renamed from the original to keep the URL clean. */
   resumePath: "/twana-ibrahim-cv.pdf",
 
   /** Twitter-card fallback author handle; null renders no twitter:creator. */

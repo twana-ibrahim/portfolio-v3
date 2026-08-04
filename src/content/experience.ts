@@ -1,15 +1,18 @@
+import { z } from "zod";
 import { projects } from "./projects";
-import { parseExperience } from "./schema";
+import { certificationSchema, languageSchema, parseExperience } from "./schema";
 
 /**
  * EMPLOYMENT HISTORY, newest first.
  *
- * ── NEEDS VERIFICATION ──────────────────────────────────────────────────────
- * Highlights are written from the project list and the previous site's role
- * descriptions. They are plausible but not authored by you — read every line
- * and rewrite anything you would not defend in an interview. Where a highlight
- * begs for a number, add one.
- * ────────────────────────────────────────────────────────────────────────────
+ * Written from the CV, then edited hard. The CV's own bullets included the
+ * usual filler — "writing clean, modular, testable code", "participating in
+ * code reviews and agile ceremonies" — which every engineer on earth also
+ * claims, so it says nothing. What survives here is the specific stuff: what
+ * the software did, who used it, and which problems were actually difficult.
+ *
+ * Still worth your own pass. Anywhere a line reads as a responsibility rather
+ * than an achievement, add the number that makes it one.
  */
 export const experience = parseExperience(
   [
@@ -21,8 +24,9 @@ export const experience = parseExperience(
       start: "2026-07",
       end: null,
       highlights: [
-        "Building customer-facing interfaces for FIB, a digital bank, against a regulated backend where correctness and auditability are not negotiable.",
-        "Working to banking-grade constraints: strict validation on every input, defensive handling of money and state, and flows that must degrade safely rather than guess.",
+        "Building customer-facing features for FIB, a digital bank — the same project I moved onto at Gateway ICT and carried across when I joined.",
+        "Working against a regulated backend, where validation, access control and an auditable trail are requirements rather than refinements.",
+        "Extending the shared component library instead of adding one-off components to it, so the design system stays a system.",
       ],
       projects: ["fib"],
     },
@@ -34,8 +38,9 @@ export const experience = parseExperience(
       start: "2025-04",
       end: "2026-07",
       highlights: [
-        "Led the frontend for Gateway's product line, owning architecture decisions and review standards across the team.",
-        "Drove a performance pass on the streaming client focused on time-to-first-frame over slow mobile connections.",
+        "Moved from the MyTV+ team onto the FIB banking project mid-2026 — an unfamiliar domain and an unfamiliar codebase, with no ramp.",
+        "Cut load and interaction cost across large React applications through code splitting, lazy loading and state that stopped re-rendering the world.",
+        "Set the component and file conventions the rest of the team built against, and reviewed to them.",
       ],
       projects: ["mytv-plus-app", "mytv-plus-ads"],
     },
@@ -47,9 +52,10 @@ export const experience = parseExperience(
       start: "2024-03",
       end: "2025-03",
       highlights: [
-        "Built the agent-facing SIM and eSIM sales platform as an installable PWA, so field staff could keep selling through unreliable connectivity.",
-        "Delivered the dealer back-office covering stock allocation, agent management and commission reporting.",
-        "Shipped Smart Offers, the campaign tool used to build and target subscriber promotions by segment.",
+        "Built the dashboards and internal systems telecom agents and operations staff used every day to sell and reconcile.",
+        "Designed filtering and reporting interfaces for data-heavy workflows — the kind where a naive table makes the page unusable at real volumes.",
+        "Implemented role-based UI rendering that mirrors backend authorization, so the interface never offers an action the API will refuse.",
+        "Refactored legacy frontend into modular components, removing duplication across the SIM sales, offers and restaurant products.",
       ],
       projects: ["fast-sim-pwa", "fast-sim-web", "smart-offers", "fast-serve"],
     },
@@ -61,9 +67,9 @@ export const experience = parseExperience(
       start: "2022-09",
       end: "2024-03",
       highlights: [
-        "Built the MyTV+ streaming client and its public marketing site, from video playback to subscription flows.",
-        "Delivered the hotel property management system and its integration with in-room MyTV+ delivery.",
-        "Worked directly with product and backend to turn loose requirements into shippable scope.",
+        "Built the MyTV+ streaming interfaces for both web and television, plus the advertising platform behind ad inventory and campaign delivery.",
+        "Standardised the reusable components and patterns shared across products — the reason later platforms were quick to build.",
+        "Improved runtime performance with lazy loading, memoisation and tighter state boundaries on interfaces that render a lot at once.",
       ],
       projects: [
         "mytv-plus-app",
@@ -81,9 +87,9 @@ export const experience = parseExperience(
       start: "2021-10",
       end: "2022-09",
       highlights: [
-        "Built the admin console and authentication flows for a central identity provider serving several internal products.",
-        "Delivered case management for an NGO and a structured reporting system for a government body, both in Angular and RxJS.",
-        "First professional role — learned enterprise delivery: code review, release process, and working to a spec.",
+        "Built Angular and TypeScript reporting tools for telecom recharge and subscription analytics across regions.",
+        "Delivered the console and auth flows for a central identity provider: registration, role-based access control and granular permissions.",
+        "First professional role — where I learned enterprise delivery, code review, and shipping to a specification rather than to taste.",
       ],
       projects: ["authentication-server", "ksc-system", "government-report-system"],
     },
@@ -99,3 +105,17 @@ export const education = [
     end: "2021-06",
   },
 ] as const;
+
+/** Ordered by relevance to the work, not by date awarded. */
+export const certifications = z.array(certificationSchema).parse([
+  { name: "Advanced React", issuer: "Meta" },
+  { name: "Foundations of Project Management", issuer: "Google" },
+  { name: "Jira Fundamentals", issuer: "Atlassian" },
+]);
+
+export const languages = z.array(languageSchema).parse([
+  { name: "Kurdish", level: "Native" },
+  { name: "English", level: "Professional" },
+  { name: "Persian", level: "Limited working" },
+  { name: "Arabic", level: "Elementary" },
+]);

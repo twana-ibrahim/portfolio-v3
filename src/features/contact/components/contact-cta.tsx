@@ -25,8 +25,9 @@ export function ContactCta() {
           </h2>
 
           <p className="mt-7 max-w-xl text-ink-inverted/70 text-lead">
-            {siteConfig.availability.detail}. Tell me what you are working on and I will come back
-            with a straight answer about whether I am the right fit.
+            Open to remote and contract engagements. Tell me what you're working on and I'll come
+            back with a straight answer about whether I'm the right person for it — including when
+            I'm not.
           </p>
 
           <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">

@@ -6,46 +6,46 @@ import { skillGroupSchema } from "./schema";
  *
  * Four groups, six items maximum each — the schema enforces the cap.
  *
- * The previous site listed roughly forty technologies including HTML, CSS and
- * "Hard Working". A list that long is self-defeating: it says the author has
- * no ranking function, and it buries the three or four things that are
- * genuinely differentiating. Everything cut from here is still visible in
- * context on the individual projects, which is where it carries more weight
- * anyway — "Angular, RxJS, OAuth 2.0" under an identity provider proves more
- * than the same words in a badge cloud.
+ * The previous site listed roughly forty technologies, including HTML, CSS and
+ * "Hard Working". A list that long defeats itself: it says the author has no
+ * ranking function, and it buries the three or four things that genuinely
+ * differentiate. Everything cut from here still appears in context on the
+ * individual projects, which is where it carries more weight anyway —
+ * "Angular, RxJS, RBAC" under an identity provider proves something that the
+ * same words in a badge cloud never could.
  */
 export const skillGroups = z.array(skillGroupSchema).parse([
   {
     title: "Core",
-    items: ["TypeScript", "React", "Next.js", "Angular · RxJS", "Node.js", "PostgreSQL"],
+    items: ["TypeScript", "React", "Next.js", "Angular · RxJS", "React Native", "Node.js"],
   },
   {
     title: "Interface",
-    items: ["TailwindCSS", "Design systems", "Motion / GSAP", "Accessibility", "Figma"],
+    items: ["Tailwind CSS", "SCSS", "Design systems", "Accessibility", "Figma"],
   },
   {
     title: "State & data",
-    items: ["TanStack Query", "Redux Toolkit", "Zustand", "Zod", "REST · WebSockets"],
+    items: ["TanStack Query", "Redux Toolkit", "Zustand", "REST APIs", "PostgreSQL"],
   },
   {
     title: "Practice",
-    items: ["Vitest · Testing Library", "Playwright", "Performance budgets", "CI/CD", "Git"],
+    items: ["Vitest · Jest", "Testing Library", "Performance work", "Code review", "Git · Jira"],
   },
 ]);
 
 /**
- * Used by the About page for the "also worked with" line — the honest home for
- * everything that is real experience but not a headline skill.
+ * The honest home for everything that is real experience but not a headline
+ * skill. Listed in a single line on /about rather than given equal billing.
  */
 export const secondarySkills = [
-  "React Native",
-  "Expo",
   "Express",
+  "JWT",
   "MongoDB",
   "MySQL",
-  "SASS",
-  "MaterialUI",
+  "Material UI",
   "shadcn/ui",
-  "Jest",
+  "Expo",
+  "GSAP",
+  "Zod",
   "Linux",
 ] as const;

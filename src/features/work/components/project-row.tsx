@@ -2,6 +2,7 @@ import { ArrowUpRight, Lock } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { TagList } from "@/components/ui/tag";
+import { domainLabels } from "@/content/projects";
 import type { Project } from "@/content/schema";
 import { cn } from "@/lib/utils/cn";
 import { ordinal } from "@/lib/utils/format";
@@ -56,11 +57,11 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
         >
           {project.title}
         </h3>
-        {project.client ? (
-          <p className="mt-1.5 text-ink-subtle text-sm">{project.client}</p>
-        ) : (
-          <p className="mt-1.5 text-ink-subtle text-sm">Personal project</p>
-        )}
+        <p className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ink-subtle text-sm">
+          <span>{project.client || "Personal project"}</span>
+          <span aria-hidden className="h-px w-3 bg-line-strong" />
+          <span>{domainLabels[project.domain]}</span>
+        </p>
       </div>
 
       <div className="md:col-span-4">

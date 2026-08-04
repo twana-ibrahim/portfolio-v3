@@ -6,11 +6,17 @@ import { parseProjects } from "./schema";
  * Ordered newest first. `featured: true` promotes a project to the home page —
  * keep that to four. Everything else lives on /work.
  *
- * ── NEEDS VERIFICATION ──────────────────────────────────────────────────────
- * Years are inferred from the employment timeline on the previous site and are
- * best guesses. `metrics` are deliberately empty: numbers get invented very
- * easily and a wrong figure in an interview is worse than no figure. Fill them
- * in — users, agents, records, requests/day, load time before and after.
+ * Summaries say what the software *did* and who used it. No adjectives, no
+ * "cutting-edge", no "seamless". A reader deciding whether to interview you
+ * wants the noun and the verb; everything else is noise they have read a
+ * hundred times today.
+ *
+ * ── STILL NEEDED ────────────────────────────────────────────────────────────
+ * `metrics` are empty everywhere. This is the single highest-value thing you
+ * can add: users, agents, records, transactions/day, load time before and
+ * after. Left blank rather than guessed — a wrong figure in an interview is
+ * far worse than no figure. Years are inferred from the employment timeline
+ * and are worth a check.
  * ────────────────────────────────────────────────────────────────────────────
  */
 export const projects = parseProjects([
@@ -20,11 +26,11 @@ export const projects = parseProjects([
     client: "First Iraqi Bank",
     year: 2026,
     summary:
-      "Digital banking product work — building customer-facing interfaces against a regulated banking backend.",
+      "Customer-facing features for a digital bank, built against a regulated backend where validation, access control and an auditable trail are requirements.",
     role: "Frontend Developer",
     domain: "fintech",
     surface: "web-app",
-    stack: ["React", "TypeScript", "Next.js", "TanStack Query"],
+    stack: ["React", "TypeScript", "Next.js", "Design systems"],
     metrics: [],
     confidential: true,
     featured: true,
@@ -36,28 +42,15 @@ export const projects = parseProjects([
     client: "Fastlink Company",
     year: 2024,
     summary:
-      "Installable field app that lets telecom agents sell and activate SIM and eSIM cards from a phone, online or off.",
-    role: "Frontend Developer — sole owner of the client application",
+      "Digitised telecom sales covering physical SIM and eSIM workflows, with custom filtering, reporting and real-time agent management.",
+    role: "Frontend Developer",
     domain: "telecom",
     surface: "pwa",
-    stack: ["React", "TypeScript", "PWA", "Service Workers", "IndexedDB", "Zod"],
+    stack: ["React", "TypeScript", "PWA", "TanStack Query", "Role-based access"],
     metrics: [],
     confidential: true,
     featured: true,
     caseStudy: true,
-  },
-  {
-    slug: "smart-offers",
-    title: "Smart Offers",
-    client: "Fastlink Company",
-    year: 2024,
-    summary:
-      "Campaign tool for building and targeting subscriber offers by segment, then tracking take-up per campaign.",
-    role: "Frontend Developer",
-    domain: "telecom",
-    surface: "web-app",
-    stack: ["React", "TypeScript", "Redux Toolkit", "TanStack Query"],
-    confidential: true,
   },
   {
     slug: "fast-sim-web",
@@ -65,11 +58,24 @@ export const projects = parseProjects([
     client: "Fastlink Company",
     year: 2024,
     summary:
-      "Back-office portal where dealers and distributors manage agents, stock allocation and commission reporting.",
+      "Back-office portal where dealers and distributors manage agents, allocate stock and report across the whole sales network.",
     role: "Frontend Developer",
     domain: "telecom",
     surface: "web-app",
-    stack: ["React", "TypeScript", "TanStack Table", "Recharts"],
+    stack: ["React", "TypeScript", "Redux Toolkit", "Data tables"],
+    confidential: true,
+  },
+  {
+    slug: "smart-offers",
+    title: "Smart Offers",
+    client: "Fastlink Company",
+    year: 2024,
+    summary:
+      "Targeted marketing system with geo-fencing — builds subscriber offers by segment and location, then tracks take-up per campaign.",
+    role: "Frontend Developer",
+    domain: "telecom",
+    surface: "web-app",
+    stack: ["React", "TypeScript", "Redux Toolkit", "Geo-fencing"],
     confidential: true,
   },
   {
@@ -78,7 +84,7 @@ export const projects = parseProjects([
     client: "Fastlink Company",
     year: 2024,
     summary:
-      "Restaurant operations system covering menu management, order flow and daily sales reconciliation.",
+      "Restaurant and inventory management: menus, orders, stock levels and daily reconciliation in a single operations console.",
     role: "Frontend Developer",
     domain: "hospitality",
     surface: "web-app",
@@ -91,11 +97,11 @@ export const projects = parseProjects([
     client: "Gateway ICT",
     year: 2023,
     summary:
-      "Streaming application for live channels, films and series, built for low-bandwidth conditions across Iraq.",
+      "Streaming interfaces for web and television, covering live channels, films and series across the MyTV+ content delivery ecosystem.",
     role: "Frontend Developer",
     domain: "media",
     surface: "web-app",
-    stack: ["React", "TypeScript", "HLS", "Redux Toolkit"],
+    stack: ["React", "TypeScript", "Redux Toolkit", "TV interfaces"],
     metrics: [],
     confidential: true,
     featured: true,
@@ -103,24 +109,12 @@ export const projects = parseProjects([
     caseStudy: false,
   },
   {
-    slug: "mytv-plus-website",
-    title: "MyTV+ Marketing Site",
-    client: "Gateway ICT",
-    year: 2023,
-    summary:
-      "Public brand site for the MyTV+ service, presenting packages and subscription plans with scroll-led motion.",
-    role: "Frontend Developer",
-    domain: "media",
-    surface: "website",
-    stack: ["Next.js", "React", "GSAP", "TailwindCSS"],
-  },
-  {
     slug: "mytv-plus-ads",
     title: "MyTV+ Ads Platform",
     client: "Gateway ICT",
     year: 2023,
     summary:
-      "Advertising operations console for scheduling campaigns against channels and reporting on delivery.",
+      "Advertising operations console covering ad inventory, brand partnerships and campaign execution against streaming channels.",
     role: "Frontend Developer",
     domain: "media",
     surface: "platform",
@@ -133,7 +127,7 @@ export const projects = parseProjects([
     client: "Gateway ICT",
     year: 2023,
     summary:
-      "Property management system for room, guest and billing operations, integrated with in-room MyTV+ delivery.",
+      "Hotel management platform for rooms, guests and billing, integrated with in-room MyTV+ content delivery.",
     role: "Frontend Developer",
     domain: "hospitality",
     surface: "web-app",
@@ -141,12 +135,24 @@ export const projects = parseProjects([
     confidential: true,
   },
   {
+    slug: "mytv-plus-website",
+    title: "MyTV+ Brand Site",
+    client: "Gateway ICT",
+    year: 2023,
+    summary:
+      "Public marketing site for the MyTV+ service, presenting packages and subscription plans with scroll-led motion.",
+    role: "Frontend Developer",
+    domain: "media",
+    surface: "website",
+    stack: ["Next.js", "React", "GSAP", "TailwindCSS"],
+  },
+  {
     slug: "heart-beats",
     title: "Heart Beats",
     client: "Heart Beats",
     year: 2023,
     summary:
-      "Brand and services site for a healthcare provider, with an appointment enquiry flow and bilingual content.",
+      "Brand and services site for a healthcare provider, covering treatments, clinicians and patient enquiries.",
     role: "Frontend Developer",
     domain: "healthcare",
     surface: "website",
@@ -158,11 +164,11 @@ export const projects = parseProjects([
     client: "iQ Group",
     year: 2022,
     summary:
-      "Central identity provider issuing tokens and enforcing role-based access for a family of internal products.",
-    role: "Frontend Developer — admin console and auth flows",
-    domain: "government",
+      "Identity and access management for a family of internal products: registration, role-based access control and granular per-resource permissions.",
+    role: "Frontend Developer — console and auth flows",
+    domain: "identity",
     surface: "platform",
-    stack: ["Angular", "TypeScript", "RxJS", "OAuth 2.0", "OpenID Connect"],
+    stack: ["Angular", "TypeScript", "RxJS", "RBAC", "REST APIs"],
     metrics: [],
     confidential: true,
     featured: true,
@@ -175,11 +181,11 @@ export const projects = parseProjects([
     client: "iQ Group",
     year: 2022,
     summary:
-      "Case and beneficiary management platform for an NGO, covering intake, field reporting and donor exports.",
+      "Mission-critical platform for multi-branch operations — case management, funder relations and event coordination for an NGO.",
     role: "Frontend Developer",
     domain: "ngo",
     surface: "platform",
-    stack: ["Angular", "TypeScript", "RxJS", "NgRx"],
+    stack: ["Angular", "TypeScript", "RxJS", "MaterialUI"],
     confidential: true,
   },
   {
@@ -188,11 +194,11 @@ export const projects = parseProjects([
     client: "iQ Group",
     year: 2022,
     summary:
-      "Data collection and reporting system for a government body, with structured forms and aggregated dashboards.",
+      "Internal regional analytics tool — structured data collection and aggregated reporting for recharge and subscription workflows.",
     role: "Frontend Developer",
     domain: "government",
     surface: "web-app",
-    stack: ["Angular", "TypeScript", "RxJS", "Chart.js"],
+    stack: ["Angular", "TypeScript", "RxJS", "SCSS"],
     confidential: true,
   },
   {
@@ -201,7 +207,7 @@ export const projects = parseProjects([
     client: "Salahaddin University",
     year: 2021,
     summary:
-      "Placement platform matching university students to internships, with application tracking for both sides.",
+      "Placement platform matching university students to internships, with application tracking for students and host organisations.",
     role: "Frontend Developer",
     domain: "education",
     surface: "web-app",
@@ -213,7 +219,7 @@ export const projects = parseProjects([
     client: "",
     year: 2026,
     summary:
-      "React Native client for browsing current cinema releases, with search, detail views and offline caching.",
+      "React Native client for browsing current cinema releases, with search, detail views and cached results.",
     role: "Personal project",
     domain: "personal",
     surface: "mobile",
@@ -226,7 +232,7 @@ export const projects = parseProjects([
     client: "",
     year: 2025,
     summary:
-      "Social feed app built to explore React Native media handling — image upload, feeds, profiles and likes.",
+      "React Native social app with dynamic feeds, image posting, notifications and the usual engagement mechanics.",
     role: "Personal project",
     domain: "personal",
     surface: "mobile",
@@ -241,3 +247,22 @@ export const featuredProjects = projects.filter((project) => project.featured).s
 export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
 }
+
+/** Human-readable industry labels, used wherever a project is listed. */
+export const domainLabels: Record<(typeof projects)[number]["domain"], string> = {
+  telecom: "Telecom",
+  fintech: "Banking",
+  media: "Streaming",
+  identity: "Identity",
+  government: "Government",
+  healthcare: "Healthcare",
+  hospitality: "Hospitality",
+  ngo: "NGO",
+  education: "Education",
+  personal: "Personal",
+};
+
+/** Distinct industries shipped into — the "six industries" stat on the hero. */
+export const industryCount = new Set(
+  projects.filter((project) => project.domain !== "personal").map((project) => project.domain),
+).size;

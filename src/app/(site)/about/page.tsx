@@ -4,7 +4,7 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
-import { education } from "@/content/experience";
+import { certifications, education, languages } from "@/content/experience";
 import { SkillGrid } from "@/features/about";
 import { ContactCta } from "@/features/contact";
 import { ExperienceList } from "@/features/experience";
@@ -19,17 +19,17 @@ export const metadata: Metadata = createMetadata({
 });
 
 /**
- * ── NEEDS YOUR VOICE ────────────────────────────────────────────────────────
- * The paragraphs below are a scaffold, not a bio. Rewrite them in your own
- * words — this is the one page where sounding like a person beats sounding
- * polished. Say why you got into this, what you are actually good at, and what
- * you want to work on next.
+ * ── WORTH A PASS IN YOUR OWN VOICE ──────────────────────────────────────────
+ * Every fact below is from your CV, so nothing here is invented. But it is
+ * written in a voice I chose for you, and the About page is the one place
+ * where sounding like a person beats sounding polished. Read it aloud. Where
+ * it does not sound like you, change the words — not the facts.
  * ────────────────────────────────────────────────────────────────────────────
  */
 const bio = [
-  "I'm a software engineer based in Kalar, Sulaymaniyah. For the last five years I've worked almost entirely on systems that other businesses depend on to operate — the portal a telecom dealer opens every morning, the app a field agent uses to activate a SIM, the identity server that sits between six internal products and their users.",
-  "That kind of work shapes how you build. Nobody is delighted by an internal tool; they just need it to be correct, fast on a bad connection, and predictable enough that they stop thinking about it. So I've spent more time on validation, error states and load behaviour than on anything that photographs well.",
-  "Right now I'm building customer-facing interfaces for a digital bank, where the tolerance for getting things wrong is close to zero. Before that: telecom sales platforms, a streaming service, and enterprise systems for government and NGO clients.",
+  "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq. Five years in, almost all of it spent on software that other businesses run on — the dashboard a telecom operations team opens at the start of every shift, the app an agent uses to sell a SIM, the identity server that decides what six internal products will let you see.",
+  "That kind of work has a particular shape. Nobody is delighted by an internal tool. They need it to be right, to stay responsive when the table has ten thousand rows in it, and to never offer a button the backend is going to refuse. So most of my effort goes into things that don't photograph well: access control that mirrors the API exactly, filtering that survives real data volumes, and structure the next person can change without breaking three screens they've never opened.",
+  "Right now I'm building customer-facing features for FIB, a digital bank — a project I moved onto at Gateway ICT and carried with me to Tailored Applications. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
 ];
 
 export default function AboutPage() {
@@ -76,12 +76,27 @@ export default function AboutPage() {
               </div>
             ))}
 
-            <h2 className="label mt-12 border-line border-t pt-4 text-ink-subtle">Languages</h2>
-            <ul className="mt-5 space-y-2 text-ink text-sm">
-              <li>Kurdish — native</li>
-              <li>English — professional</li>
-              <li>Arabic — conversational</li>
+            <h2 className="label mt-12 border-line border-t pt-4 text-ink-subtle">
+              Certifications
+            </h2>
+            <ul className="mt-5 space-y-3">
+              {certifications.map((certification) => (
+                <li key={certification.name}>
+                  <p className="text-ink text-sm">{certification.name}</p>
+                  <p className="label mt-1 text-ink-subtle">{certification.issuer}</p>
+                </li>
+              ))}
             </ul>
+
+            <h2 className="label mt-12 border-line border-t pt-4 text-ink-subtle">Languages</h2>
+            <dl className="mt-5 space-y-2.5">
+              {languages.map((language) => (
+                <div key={language.name} className="flex items-baseline justify-between gap-4">
+                  <dt className="text-ink text-sm">{language.name}</dt>
+                  <dd className="label text-ink-subtle">{language.level}</dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </div>
       </Container>

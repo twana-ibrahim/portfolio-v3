@@ -32,12 +32,14 @@ export default function WorkPage() {
         <Reveal>
           <p className="label text-ink-subtle">Work</p>
           <h1 className="mt-6 max-w-4xl text-ink text-title">
-            Production systems for banks, operators and public bodies.
+            Systems that businesses{" "}
+            <em className="font-serif font-normal tracking-[-0.02em]">actually run on</em>.
           </h1>
           <p className="mt-8 max-w-xl text-ink-muted text-lead">
-            Most of this is internal software: back-office portals, agent tools and identity
-            infrastructure. It is not public, so where a link is missing that is deliberate — the
-            detail lives in the case studies instead.
+            Most of this is internal software — back-office portals, agent tools, reporting systems
+            and identity infrastructure, running inside banks, telecom operators and public bodies.
+            None of it is public, so a missing link here is deliberate rather than an oversight. The
+            detail lives in the case studies.
           </p>
         </Reveal>
       </Container>

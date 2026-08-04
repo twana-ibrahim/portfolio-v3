@@ -4,7 +4,7 @@ import { Container } from "@/components/layout/container";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import { experience } from "@/content/experience";
-import { projects } from "@/content/projects";
+import { industryCount, projects } from "@/content/projects";
 import { siteConfig } from "@/lib/config/site";
 
 /** Years since the first role. Derived so it is never a stale hardcoded "5+". */
@@ -17,10 +17,11 @@ function yearsOfExperience(): number {
   return Math.floor((now.getFullYear() * 12 + now.getMonth() + 1 - (year * 12 + month)) / 12);
 }
 
+/** All three derived from content, so none can go stale. */
 const stats = () => [
   { value: `${yearsOfExperience()}+`, label: "Years shipping" },
   { value: String(projects.length), label: "Projects delivered" },
-  { value: "6", label: "Industries" },
+  { value: String(industryCount), label: "Industries" },
 ];
 
 export function Hero() {
