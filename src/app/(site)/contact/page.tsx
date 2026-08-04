@@ -10,7 +10,7 @@ export const metadata: Metadata = createMetadata({
   title: "Contact",
   path: "/contact",
   description:
-    "Get in touch about contract or remote engineering work. Based in Erbil, Iraq and available for new projects.",
+    "Get in touch about contract or remote engineering work. Based in Kalar, Sulaymaniyah, Iraq and available for new projects.",
 });
 
 const directLinks = [

@@ -27,7 +27,7 @@ export const metadata: Metadata = createMetadata({
  * ────────────────────────────────────────────────────────────────────────────
  */
 const bio = [
-  "I'm a software engineer in Erbil. For the last five years I've worked almost entirely on systems that other businesses depend on to operate — the portal a telecom dealer opens every morning, the app a field agent uses to activate a SIM, the identity server that sits between six internal products and their users.",
+  "I'm a software engineer based in Kalar, Sulaymaniyah. For the last five years I've worked almost entirely on systems that other businesses depend on to operate — the portal a telecom dealer opens every morning, the app a field agent uses to activate a SIM, the identity server that sits between six internal products and their users.",
   "That kind of work shapes how you build. Nobody is delighted by an internal tool; they just need it to be correct, fast on a bad connection, and predictable enough that they stop thinking about it. So I've spent more time on validation, error states and load behaviour than on anything that photographs well.",
   "Right now I'm building customer-facing interfaces for a digital bank, where the tolerance for getting things wrong is close to zero. Before that: telecom sales platforms, a streaming service, and enterprise systems for government and NGO clients.",
 ];

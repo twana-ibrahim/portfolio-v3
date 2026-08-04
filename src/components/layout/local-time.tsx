@@ -11,7 +11,7 @@ const formatter = new Intl.DateTimeFormat("en-GB", {
 });
 
 /**
- * Live local time in Erbil.
+ * Live local time where Twana is.
  *
  * A small thing, but it does real work for a remote candidate: it makes the
  * timezone overlap concrete instead of something the reader has to look up.

@@ -37,8 +37,8 @@ export const siteConfig = {
     "Five years shipping production software across Iraq — digital banking, telecom sales platforms, streaming services, identity providers and government reporting systems. I care about the parts users never see: correctness, load behaviour, and code the next engineer can change without fear.",
 
   location: {
-    city: "Erbil",
-    region: "Kurdistan Region",
+    city: "Kalar",
+    region: "Sulaymaniyah",
     country: "Iraq",
     /** IANA zone — drives the live local-time readout in the footer. */
     timezone: "Asia/Baghdad",
