@@ -14,7 +14,10 @@ function yearsOfExperience(): number {
   const [year, month] = first.start.split("-").map(Number);
   if (!year || !month) return 0;
   const now = new Date();
-  return Math.floor((now.getFullYear() * 12 + now.getMonth() + 1 - (year * 12 + month)) / 12);
+  const months = now.getFullYear() * 12 + now.getMonth() + 1 - (year * 12 + month);
+  // Rounded, not floored: at four years and ten months, "4+" undersells the
+  // CV, which already says "over 5 years". Rounding matches it.
+  return Math.round(months / 12);
 }
 
 /** All three derived from content, so none can go stale. */

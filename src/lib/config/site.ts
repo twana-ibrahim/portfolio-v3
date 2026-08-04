@@ -32,7 +32,10 @@ export const siteConfig = {
   headline: {
     lead: "I build the systems",
     emphasis: "banks and operators",
-    trail: "run their business on.",
+    // Short on purpose. Each line is its own clipped box in the hero's mask
+    // reveal, so a line that wraps breaks the effect. "run their business on"
+    // wrapped at 1440px; this fits, and reads harder besides.
+    trail: "run on.",
   },
 
   /** Two or three sentences maximum. Anything longer belongs on /about. */
