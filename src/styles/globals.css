@@ -1,0 +1,183 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+/* next-themes writes `class="dark"` onto <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    /* Anchored headings in case studies must not hide under the sticky header. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Contextual alternates + tabular figures: numbers in tables and metrics
+       line up, which matters a lot on a CV-shaped page. */
+    font-feature-settings: "cv11", "ss01";
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Headings default to tight, balanced, and unhyphenated. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+    font-weight: 550;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  /* One focus style for the whole site. Visible, never removed. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--paper);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--line-strong);
+    border: 3px solid var(--paper);
+    border-radius: var(--radius-full);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--ink-subtle);
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY — non-negotiable
+
+   The !important here is deliberate and is the one place it is allowed in the
+   codebase: a user asking their OS to reduce motion must win over every
+   component-level animation, including ones added later by someone who forgot.
+   Biome's noImportantStyles rule is disabled for this file in biome.json.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   UTILITIES — the handful of patterns repeated across the whole site.
+   Anything used fewer than three times belongs in a component, not here.
+   ========================================================================== */
+
+/**
+ * Duration utilities.
+ *
+ * Tailwind v4 ships an `--ease-*` theme namespace but no `--duration-*` one,
+ * so `duration-fast` would silently emit nothing. Defining them here keeps
+ * timing on the token system instead of scattering `duration-[380ms]` around.
+ */
+@utility duration-instant {
+  transition-duration: var(--duration-instant);
+}
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+}
+@utility duration-reveal {
+  transition-duration: var(--duration-reveal);
+}
+
+/** Uppercase mono label. Used for section eyebrows, dates, tech tags. */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: var(--text-meta);
+  line-height: 1.2;
+  letter-spacing: 0.09em;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+/** The 12-column page grid. Every section aligns to it. */
+@utility grid-page {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: --spacing(6);
+
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    gap: --spacing(8);
+  }
+
+  @media (width >= 80rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+/** Hairline rule that sits flush with the grid. */
+@utility rule {
+  border: 0;
+  border-top: 1px solid var(--line);
+  width: 100%;
+}
+
+/**
+ * Underline that draws itself from the left on hover. Used on every inline
+ * link and nav item — it is the site's signature micro-interaction, so it
+ * lives here rather than being reimplemented per component.
+ */
+@utility link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0% 1px;
+  transition: background-size var(--duration-base) var(--ease-out-expo);
+
+  &:hover,
+  &:focus-visible {
+    background-size: 100% 1px;
+  }
+}

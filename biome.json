@@ -13,6 +13,8 @@
       "!**/coverage",
       "!**/playwright-report",
       "!**/test-results",
+      "!**/public",
+      "!**/*.svg",
       "!**/pnpm-lock.yaml"
     ]
   },
@@ -40,7 +42,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
+      "preset": "recommended",
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "error",
@@ -58,10 +60,22 @@
         "useTemplate": "error"
       },
       "a11y": {
-        "recommended": true
+        "preset": "recommended"
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["src/styles/globals.css"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noImportantStyles": "off"
+          }
+        }
+      }
+    }
+  ],
   "assist": {
     "actions": {
       "source": {
