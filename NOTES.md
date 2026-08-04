@@ -80,7 +80,30 @@ document. What's left is the part a CV can't provide.
 
 ## 2. Engineering still outstanding
 
-- [ ] Visual QA at 360 / 768 / 1280 / 1920, light and dark.
+### Visual QA — first pass done, findings below
+
+Screenshotted every route at 1440 and 390, light and dark, via Playwright.
+No horizontal overflow anywhere. Three bugs found and fixed (commit `d696b9d`):
+the tailwind-merge class-collapse, the wrapping hero headline, and the
+floored years count.
+
+Still to check:
+- [ ] 768 and 1920 breakpoints (only 390 and 1440 were covered).
+- [ ] Mobile detail pass — the 390px capture confirmed structure and stacking
+      but was too small to judge type sizing and spacing properly.
+- [ ] Mobile nav dialog, theme toggle, and form error states were never
+      exercised — all three are interactive and screenshots don't reach them.
+- [ ] Contact form submit path has never been run end to end (needs Resend
+      credentials).
+
+**Method note for whoever picks this up:** `globals.css` sets
+`scroll-behavior: smooth`, so a scripted scroll must pass
+`behavior: "instant"` or it never arrives and `whileInView` reveals stay at
+opacity 0 — which looks exactly like a rendering bug and is not one. A
+`fullPage` screenshot also expands the viewport, so scroll the page fully
+first, then return to top, then capture.
+
+- [ ] Visual QA at 768 / 1920.
 - [ ] Playwright smoke + axe accessibility pass on every route, both themes.
 - [ ] Lighthouse pass — target 100 across the board. Achievable on a site this
       size, and it's a credential in itself for a frontend engineer.
