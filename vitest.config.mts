@@ -1,9 +1,19 @@
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
+/**
+ * .mts rather than .ts: Vite's native config loader treats a bare .ts file in a
+ * CommonJS package as CJS and warns about the ESM syntax. The explicit module
+ * extension settles it without adding "type": "module" to package.json, which
+ * Next does not want.
+ */
 export default defineConfig({
-  plugins: [tsconfigPaths(), react()],
+  plugins: [react()],
+  resolve: {
+    // Native replacement for vite-tsconfig-paths — resolves the "@/*" alias
+    // straight from tsconfig.json.
+    tsconfigPaths: true,
+  },
   test: {
     environment: "jsdom",
     globals: true,
