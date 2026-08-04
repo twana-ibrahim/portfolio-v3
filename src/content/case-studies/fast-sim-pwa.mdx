@@ -1,0 +1,112 @@
+---
+title: "Selling SIM cards where the network isn't"
+project: fast-sim-pwa
+description: "How an installable field app let telecom agents keep selling and activating SIM and eSIM cards through unreliable connectivity."
+published: "2026-08-04"
+---
+
+{/*
+  ─────────────────────────────────────────────────────────────────────────────
+  TEMPLATE — this is the structure, not the finished text.
+
+  Replace every [BRACKETED] passage with what actually happened. The section
+  order matters more than the prose: problem → constraint → decision → outcome
+  is what makes a reader believe you did the engineering rather than the tickets.
+
+  The section that earns you the interview is "The decision". Be specific about
+  the option you rejected and why. Anyone can list what they built; describing a
+  trade-off you understood is the part that cannot be faked.
+
+  To add another case study: copy this file, rename it to <project-slug>.mdx,
+  update the frontmatter (`project` must equal the filename), and flip
+  `caseStudy: true` on that project in src/content/projects.ts.
+  ─────────────────────────────────────────────────────────────────────────────
+*/}
+
+## The problem
+
+Fastlink sells SIM and eSIM cards through a network of field agents — people
+working out of small shops and market stalls across the region, not out of an
+office with a fixed line. [DESCRIBE THE BEFORE STATE: what was the process?
+Paper forms? A desktop system back at the branch? How long did an activation
+take, and where did it break down?]
+
+[WHY IT MATTERED COMMERCIALLY: lost sales, activation delays, reconciliation
+errors, agents abandoning a sale halfway.]
+
+## The constraints
+
+Three things shaped every decision on this project:
+
+- **Connectivity is not a given.** [DESCRIBE: intermittent mobile data, agents
+  moving between coverage areas, sales happening in places with no signal at all.]
+- **The device is whatever the agent already owns.** [DESCRIBE: mid-range and
+  older Android handsets, limited storage, no possibility of mandating hardware.]
+- **Activations are financial transactions.** A duplicate submission or a lost
+  record is not a cosmetic bug — it is stock that cannot be reconciled.
+
+<Note title="Why not a native app">
+  [EXPLAIN THE DECISION: app store distribution, update cycles, the cost of
+  maintaining two native codebases, install friction for agents on limited data.
+  If a native app was genuinely considered and rejected, say what tipped it.]
+</Note>
+
+## What I built
+
+An installable Progressive Web App that agents add to their home screen once
+and then use like any other app on the phone.
+
+[DESCRIBE THE CORE FLOWS: agent authentication, stock lookup, customer
+registration, document capture, SIM/eSIM activation, receipt or confirmation.]
+
+### Working offline
+
+[THIS IS THE INTERESTING PART — GO DEEP.
+
+- What is cached, and how? (Service worker strategy: precache the shell,
+  runtime-cache reference data, something else?)
+- Where do pending activations live while offline? (IndexedDB queue?)
+- How does the queue drain when connectivity returns? (Background Sync? A
+  retry loop on reconnect?)
+- What happens if the same activation is submitted twice — how is idempotency
+  guaranteed? Client-generated request IDs? Server-side deduplication?
+- What does the agent see while a sale is pending? How do you communicate
+  "this is saved but not yet confirmed" without them re-submitting?]
+
+### Keeping it small
+
+[DESCRIBE: bundle size targets, code splitting, what you cut, how you handled
+images and fonts on a metered connection.]
+
+## The decision
+
+[PICK ONE HARD CALL AND EXPLAIN IT PROPERLY. Structure:
+
+  1. The situation that forced a choice.
+  2. The options you actually had, including the one that looked obvious.
+  3. What you chose, and the specific reason.
+  4. What it cost you — every real decision has a downside. Naming it is what
+     makes the rest credible.
+
+Good candidates on this project: the offline queue design, how conflicts
+between local and server state are resolved, or how you handled partial
+failures mid-activation.]
+
+## Outcome
+
+<Metrics>
+  <Metric value="[N]" label="Agents using it daily" />
+  <Metric value="[N]" label="Activations per month" />
+  <Metric value="[N]%" label="Faster than the old process" />
+</Metrics>
+
+[WHAT CHANGED, in the operator's terms rather than the engineer's. Sales that
+would previously have been lost. Time saved per activation. Reduction in
+reconciliation errors. Even rough figures beat none — "roughly 400 agents"
+is honest and useful; silence is not.]
+
+## What I'd do differently
+
+[THIS SECTION IS WORTH MORE THAN IT LOOKS. Naming a limitation you understood
+but shipped anyway signals judgement and honesty far better than a clean list
+of wins. One or two things, specifically.]

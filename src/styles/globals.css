@@ -104,6 +104,24 @@
 }
 
 /* ==========================================================================
+   SYNTAX HIGHLIGHTING
+
+   rehype-pretty-code runs Shiki once with two themes and emits both colours as
+   custom properties. Switching here rather than re-highlighting per theme means
+   the theme toggle costs nothing. Specificity does the work — no !important.
+   ========================================================================== */
+
+code[data-theme] span,
+pre[data-theme] span {
+  color: var(--shiki-light);
+}
+
+.dark code[data-theme] span,
+.dark pre[data-theme] span {
+  color: var(--shiki-dark);
+}
+
+/* ==========================================================================
    UTILITIES — the handful of patterns repeated across the whole site.
    Anything used fewer than three times belongs in a component, not here.
    ========================================================================== */

@@ -14,21 +14,34 @@ import { parseExperience } from "./schema";
 export const experience = parseExperience(
   [
     {
+      company: "Tailored Applications",
+      role: "Frontend Developer",
+      location: "Erbil, Iraq",
+      arrangement: "remote",
+      start: "2026-07",
+      end: null,
+      highlights: [
+        "Building customer-facing interfaces for FIB, a digital bank, against a regulated backend where correctness and auditability are not negotiable.",
+        "Working to banking-grade constraints: strict validation on every input, defensive handling of money and state, and flows that must degrade safely rather than guess.",
+      ],
+      projects: ["fib"],
+    },
+    {
       company: "Gateway ICT",
-      role: "Software Engineer",
+      role: "Frontend Developer",
       location: "Erbil, Iraq",
       arrangement: "remote",
       start: "2025-04",
-      end: null,
+      end: "2026-07",
       highlights: [
-        "Lead the frontend for Gateway's product line, owning architecture decisions and review standards across the team.",
+        "Led the frontend for Gateway's product line, owning architecture decisions and review standards across the team.",
         "Drove a performance pass on the streaming client focused on time-to-first-frame over slow mobile connections.",
       ],
       projects: ["mytv-plus-app", "mytv-plus-ads"],
     },
     {
-      company: "Fastlink · Newroz Telecom",
-      role: "Software Engineer",
+      company: "Fastlink Company",
+      role: "Frontend Developer",
       location: "Erbil, Iraq",
       arrangement: "remote",
       start: "2024-03",

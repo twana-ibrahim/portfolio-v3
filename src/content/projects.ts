@@ -15,13 +15,29 @@ import { parseProjects } from "./schema";
  */
 export const projects = parseProjects([
   {
+    slug: "fib",
+    title: "FIB",
+    client: "First Iraqi Bank",
+    year: 2026,
+    summary:
+      "Digital banking product work — building customer-facing interfaces against a regulated banking backend.",
+    role: "Frontend Developer",
+    domain: "fintech",
+    surface: "web-app",
+    stack: ["React", "TypeScript", "Next.js", "TanStack Query"],
+    metrics: [],
+    confidential: true,
+    featured: true,
+    caseStudy: false,
+  },
+  {
     slug: "fast-sim-pwa",
     title: "Fast SIM",
-    client: "Fastlink · Newroz Telecom",
+    client: "Fastlink Company",
     year: 2024,
     summary:
       "Installable field app that lets telecom agents sell and activate SIM and eSIM cards from a phone, online or off.",
-    role: "Frontend engineer — sole owner of the client application",
+    role: "Frontend Developer — sole owner of the client application",
     domain: "telecom",
     surface: "pwa",
     stack: ["React", "TypeScript", "PWA", "Service Workers", "IndexedDB", "Zod"],
@@ -33,11 +49,11 @@ export const projects = parseProjects([
   {
     slug: "smart-offers",
     title: "Smart Offers",
-    client: "Fastlink · Newroz Telecom",
+    client: "Fastlink Company",
     year: 2024,
     summary:
       "Campaign tool for building and targeting subscriber offers by segment, then tracking take-up per campaign.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "telecom",
     surface: "web-app",
     stack: ["React", "TypeScript", "Redux Toolkit", "TanStack Query"],
@@ -46,11 +62,11 @@ export const projects = parseProjects([
   {
     slug: "fast-sim-web",
     title: "Fast SIM Portal",
-    client: "Fastlink · Newroz Telecom",
+    client: "Fastlink Company",
     year: 2024,
     summary:
       "Back-office portal where dealers and distributors manage agents, stock allocation and commission reporting.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "telecom",
     surface: "web-app",
     stack: ["React", "TypeScript", "TanStack Table", "Recharts"],
@@ -59,11 +75,11 @@ export const projects = parseProjects([
   {
     slug: "fast-serve",
     title: "Fast Serve",
-    client: "Fastlink",
+    client: "Fastlink Company",
     year: 2024,
     summary:
       "Restaurant operations system covering menu management, order flow and daily sales reconciliation.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "hospitality",
     surface: "web-app",
     stack: ["React", "TypeScript", "Zustand", "TailwindCSS"],
@@ -76,14 +92,15 @@ export const projects = parseProjects([
     year: 2023,
     summary:
       "Streaming application for live channels, films and series, built for low-bandwidth conditions across Iraq.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "media",
     surface: "web-app",
     stack: ["React", "TypeScript", "HLS", "Redux Toolkit"],
     metrics: [],
     confidential: true,
     featured: true,
-    caseStudy: true,
+    // Flip to true once src/content/case-studies/mytv-plus-app.mdx exists.
+    caseStudy: false,
   },
   {
     slug: "mytv-plus-website",
@@ -92,7 +109,7 @@ export const projects = parseProjects([
     year: 2023,
     summary:
       "Public brand site for the MyTV+ service, presenting packages and subscription plans with scroll-led motion.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "media",
     surface: "website",
     stack: ["Next.js", "React", "GSAP", "TailwindCSS"],
@@ -104,7 +121,7 @@ export const projects = parseProjects([
     year: 2023,
     summary:
       "Advertising operations console for scheduling campaigns against channels and reporting on delivery.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "media",
     surface: "platform",
     stack: ["React", "TypeScript", "TanStack Query"],
@@ -117,7 +134,7 @@ export const projects = parseProjects([
     year: 2023,
     summary:
       "Property management system for room, guest and billing operations, integrated with in-room MyTV+ delivery.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "hospitality",
     surface: "web-app",
     stack: ["React", "TypeScript", "MaterialUI"],
@@ -130,7 +147,7 @@ export const projects = parseProjects([
     year: 2023,
     summary:
       "Brand and services site for a healthcare provider, with an appointment enquiry flow and bilingual content.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "healthcare",
     surface: "website",
     stack: ["React", "TypeScript", "SASS"],
@@ -142,14 +159,15 @@ export const projects = parseProjects([
     year: 2022,
     summary:
       "Central identity provider issuing tokens and enforcing role-based access for a family of internal products.",
-    role: "Frontend engineer — admin console and auth flows",
+    role: "Frontend Developer — admin console and auth flows",
     domain: "government",
     surface: "platform",
     stack: ["Angular", "TypeScript", "RxJS", "OAuth 2.0", "OpenID Connect"],
     metrics: [],
     confidential: true,
     featured: true,
-    caseStudy: true,
+    // Flip to true once src/content/case-studies/authentication-server.mdx exists.
+    caseStudy: false,
   },
   {
     slug: "ksc-system",
@@ -158,14 +176,11 @@ export const projects = parseProjects([
     year: 2022,
     summary:
       "Case and beneficiary management platform for an NGO, covering intake, field reporting and donor exports.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "ngo",
     surface: "platform",
     stack: ["Angular", "TypeScript", "RxJS", "NgRx"],
-    metrics: [],
     confidential: true,
-    featured: true,
-    caseStudy: true,
   },
   {
     slug: "government-report-system",
@@ -174,7 +189,7 @@ export const projects = parseProjects([
     year: 2022,
     summary:
       "Data collection and reporting system for a government body, with structured forms and aggregated dashboards.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "government",
     surface: "web-app",
     stack: ["Angular", "TypeScript", "RxJS", "Chart.js"],
@@ -187,7 +202,7 @@ export const projects = parseProjects([
     year: 2021,
     summary:
       "Placement platform matching university students to internships, with application tracking for both sides.",
-    role: "Frontend engineer",
+    role: "Frontend Developer",
     domain: "education",
     surface: "web-app",
     stack: ["React", "JavaScript", "Redux"],

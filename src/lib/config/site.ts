@@ -28,13 +28,13 @@ export const siteConfig = {
    */
   headline: {
     lead: "I build the systems",
-    emphasis: "telecom operators",
+    emphasis: "banks and operators",
     trail: "run their business on.",
   },
 
   /** Two or three sentences maximum. Anything longer belongs on /about. */
   summary:
-    "Five years shipping production software for telecom operators, government bodies and NGOs across Iraq — SIM and eSIM sales platforms, streaming services, identity providers and internal tooling. I care about the parts users never see: correctness, load behaviour, and code that the next engineer can change without fear.",
+    "Five years shipping production software across Iraq — digital banking, telecom sales platforms, streaming services, identity providers and government reporting systems. I care about the parts users never see: correctness, load behaviour, and code the next engineer can change without fear.",
 
   location: {
     city: "Erbil",

@@ -66,6 +66,7 @@ export const projectSchema = z.object({
   role: z.string().min(1),
   domain: z.enum([
     "telecom",
+    "fintech",
     "media",
     "government",
     "healthcare",
