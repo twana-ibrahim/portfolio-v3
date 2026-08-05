@@ -89,7 +89,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
               size={14}
               aria-hidden
               className={cn(
-                "transition-transform duration-base ease-out-quart",
+                "transition-transform duration-base ease-out-expo",
                 "group-hover:-translate-y-0.5 group-hover:translate-x-0.5",
                 target.kind === "internal" && "rotate-45",
               )}

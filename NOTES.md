@@ -193,16 +193,20 @@ serious rendering bug. It was the scroll. `settle()` in `e2e/helpers.ts` now
 steps down the page at 60% of viewport height per frame; use it rather than
 rolling your own.
 
-- [x] **Visual QA at 768 / 1024 / 1920.** Horizontal overflow is now an
-      automated check (`e2e/layout.spec.ts`) across every route at all three
-      widths, rather than something judged by eye. It found the contact-page
-      bug below on its first run.
+- [x] **Visual QA at 768 / 1024 / 1920** — passed at the time, and it found the
+      contact-page overflow below. No longer guarded: the check that caught it
+      lived in `e2e/layout.spec.ts`, which has been removed. Re-check by hand
+      after any layout change.
 - [ ] Mobile detail pass at 390 — still worth a human eye on type sizing and
       spacing, which a pass/fail assertion cannot judge.
-- [x] **Playwright smoke + axe pass on every route, both themes.** Written in
-      `e2e/` — 49 tests, green. Covers the three surfaces screenshots could not
-      reach: the mobile nav dialog, the theme toggle, and the contact form's
-      error states.
+- [ ] **No automated checks remain.** A Playwright suite (smoke, axe in both
+      themes, breakpoint overflow, and the interactive surfaces) reached 67
+      passing tests and was then removed on request, along with the 40 unit
+      tests. `pnpm verify` is now lint and typecheck only.
+
+      Everything below that says "verified" or "caught by" was true when
+      written and is no longer enforced. The six bugs in the QA section were
+      all found by those suites; nothing would catch them recurring.
 - [~] **Lighthouse — run on localhost, which only half counts.**
       Accessibility **100**, SEO **100**, Best Practices **96**, Performance
       **90**.
@@ -327,6 +331,9 @@ Recorded so they are not relitigated later.
 | Skill list | 4 groups, 6 items max | The old 40-badge wall said "I have heard of these things". Everything cut still appears in context on the projects, where it proves more. |
 | Paper grain | Tried, reverted | A tiled SVG turbulence on the body background is the cheapest "printed stock" cue there is, costs no request, and looked good. It also stops axe resolving what any text sits on: contrast went from 12 nodes checked to 0, and 26 to *incomplete*, in both themes — while violations stayed at zero, because nothing was being measured. That check has caught two real bugs here. Any full-bleed background image hides the solid colour axe walks up to, so there is no version of this that keeps both. Don't re-add it. |
 | Positioning | Roles, not contracts | Five years of employment at companies, not a freelance book. Leading with "contract engagements" invited questions about a track record that isn't there and undersold the one that is. |
+| Tests | Removed entirely | Both suites deleted on request — 40 unit tests and 67 Playwright tests, plus vitest, Playwright, axe and Testing Library. `pnpm verify` is lint and typecheck; lefthook's pre-push test job is gone. The trade was made knowingly: those suites caught six real bugs in one session and the paper-grain regression before it shipped, and nothing now guards contrast, overflow, list semantics or the interactive surfaces. Recorded so it reads as a decision rather than an oversight. |
+| Light theme | Matte, not brilliant | Paper moved from `oklch(0.985 0.002)` to `oklch(0.963 0.005)` — off near-white, with a little more warmth. Near-white with no chroma reads as a lit screen rather than stock. Darkening paper lowers every ratio against it, which took `ink-subtle` under AA, so it moved to 0.54 in the same change. The two are a pair; do not edit one alone. `line` and `line-strong` stepped down with it to keep the rules the same weight, and `viewport.themeColor` tracks paper. |
+| Hover feel | Slow curve, not a switch | All interaction easing moved to `ease-out-expo` and `--duration-fast` from 180ms to 260ms. Under ~200ms a colour change reads as a switch being thrown. The curve is doing most of the work — expo decelerates hard, which is what reads as considered. |
 | Budget | Free and open source only | No paid dependency, asset, font, or service tier. Rules out Spline's paid plans, commercial 3D model libraries and licensed typefaces. Everything currently in use qualifies — Geist and Instrument Serif are open-licence, three.js and Motion are MIT, and Vercel and Resend are used inside their free tiers. Check the licence before adding anything. |
 | `paper-inverted` in dark | Elevated dark, not a literal inversion | Inverting it turned the contact band into a full-bleed near-white slab on an otherwise dark page. Someone on dark theme chose it to avoid exactly that — a bright block three quarters down the page is glare, not emphasis. In dark it is now `oklch(0.255)`, a step above `paper-raised`, so the band still reads as its own moment and the ink stays light. Contrast is unaffected: 7.61:1 at `/70`, 14.12:1 at full. |
 | "Home" in the nav | Explicit item, not just the wordmark | The logo is only a home link to people who know the convention, and the mobile dialog covers the wordmark entirely — so there was no way back to the front page from inside the open menu. Note `isActive` special-cases `/`: every pathname starts with it, so the prefix match that keeps Work current on `/work/<slug>` would mark Home current everywhere. |

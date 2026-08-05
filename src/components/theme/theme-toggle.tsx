@@ -35,7 +35,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         aria-hidden
         strokeWidth={1.5}
         className={cn(
-          "absolute size-[18px] transition-all duration-base ease-out-quart",
+          "absolute size-[18px] transition-all duration-base ease-out-expo",
           isDark ? "scale-75 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100",
         )}
       />
@@ -43,7 +43,7 @@ export function ThemeToggle({ className }: { className?: string }) {
         aria-hidden
         strokeWidth={1.5}
         className={cn(
-          "absolute size-[18px] transition-all duration-base ease-out-quart",
+          "absolute size-[18px] transition-all duration-base ease-out-expo",
           isDark ? "scale-100 rotate-0 opacity-100" : "scale-75 -rotate-90 opacity-0",
         )}
       />

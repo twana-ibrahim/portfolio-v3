@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils/cn";
  */
 const controlStyles = [
   "w-full bg-transparent pb-2.5 text-ink",
-  "border-line border-b transition-colors duration-fast ease-out-quart",
+  "border-line border-b transition-colors duration-fast ease-out-expo",
   "placeholder:text-ink-subtle/60",
   "hover:border-line-strong focus:border-ink focus:outline-none",
   "aria-[invalid=true]:border-accent",

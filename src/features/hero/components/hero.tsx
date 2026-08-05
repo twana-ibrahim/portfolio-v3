@@ -1,6 +1,7 @@
 import { ArrowDown } from "lucide-react";
 import Link from "next/link";
 import { Container } from "@/components/layout/container";
+import { Perspective } from "@/components/motion/perspective";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import { industryCount, projects } from "@/content/projects";
@@ -40,19 +41,22 @@ export function Hero() {
         </Reveal>
 
         {/* The statement. Line breaks are authored, not measured — see TextReveal. */}
-        <h1 className="mt-8 text-display text-ink md:mt-10">
-          <TextReveal
-            delay={0.15}
-            lines={[
-              headline.lead,
-              // <em> is already italic; the serif face carries the contrast.
-              <em key="emphasis" className="font-serif font-normal tracking-[-0.02em]">
-                {headline.emphasis}
-              </em>,
-              headline.trail,
-            ]}
-          />
-        </h1>
+        <Perspective>
+          <h1 className="mt-8 text-display text-ink md:mt-10">
+            <TextReveal
+              delay={0.15}
+              depth
+              lines={[
+                headline.lead,
+                // <em> is already italic; the serif face carries the contrast.
+                <em key="emphasis" className="font-serif font-normal tracking-[-0.02em]">
+                  {headline.emphasis}
+                </em>,
+                headline.trail,
+              ]}
+            />
+          </h1>
+        </Perspective>
 
         <div className="mt-12 grid gap-10 md:mt-16 md:grid-cols-12">
           <Reveal delay={0.5} className="md:col-span-6 lg:col-span-5">

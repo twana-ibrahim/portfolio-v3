@@ -143,6 +143,15 @@ type TextRevealProps = {
   className?: string;
   lineClassName?: string;
   delay?: number;
+  /**
+   * Steps each line back in Z so they parallax when an ancestor tilts.
+   * Only meaningful inside <Perspective>; harmless without it.
+   *
+   * The offset goes on the clipping wrapper, not the inner span. `overflow:
+   * hidden` forces its own children to flatten, so a Z applied inside the mask
+   * would be silently dropped — the wrapper has to carry the depth itself.
+   */
+  depth?: boolean;
 };
 
 /**
@@ -150,14 +159,26 @@ type TextRevealProps = {
  * clipped box. Used exactly once per page. Repeating it turns a statement
  * into a tic.
  */
-export function TextReveal({ lines, className, lineClassName, delay = 0 }: TextRevealProps) {
+export function TextReveal({
+  lines,
+  className,
+  lineClassName,
+  delay = 0,
+  depth = false,
+}: TextRevealProps) {
   const reduced = useReducedMotion();
 
   return (
-    <span className={cn("block", className)}>
+    <span className={cn("block", depth && "transform-3d", className)}>
       {lines.map((line, index) => (
-        // biome-ignore lint/suspicious/noArrayIndexKey: lines are a fixed, authored list
-        <span key={index} className="block overflow-hidden pb-[0.12em]">
+        <span
+          // biome-ignore lint/suspicious/noArrayIndexKey: lines are a fixed, authored list
+          key={index}
+          className="block overflow-hidden pb-[0.12em]"
+          style={
+            depth ? { transform: `translateZ(calc(var(--depth-step) * ${index}))` } : undefined
+          }
+        >
           {reduced ? (
             <span className={cn("block", lineClassName)}>{line}</span>
           ) : (

@@ -85,7 +85,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]"
           <ArrowLeft
             size={13}
             aria-hidden
-            className="transition-transform duration-fast ease-out-quart group-hover:-translate-x-0.5"
+            className="transition-transform duration-fast ease-out-expo group-hover:-translate-x-0.5"
           />
           All work
         </Link>

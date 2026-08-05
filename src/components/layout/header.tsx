@@ -37,7 +37,7 @@ export function Header() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-colors duration-base ease-out-quart",
+        "sticky top-0 z-50 transition-colors duration-base ease-out-expo",
         scrolled && "border-line border-b bg-paper/80 backdrop-blur-md",
       )}
     >
@@ -84,7 +84,7 @@ export function Header() {
             </Dialog.Trigger>
 
             <Dialog.Portal>
-              <Dialog.Content className="fixed inset-0 z-100 flex flex-col bg-paper data-[state=closed]:animate-out data-[state=open]:animate-in data-[state=closed]:fade-out data-[state=open]:fade-in">
+              <Dialog.Content className="fixed inset-0 z-100 flex flex-col bg-paper data-[state=closed]:dialog-exit data-[state=open]:dialog-enter">
                 <Dialog.Title className="sr-only">Navigation</Dialog.Title>
 
                 <Container className="flex h-18 shrink-0 items-center justify-between">

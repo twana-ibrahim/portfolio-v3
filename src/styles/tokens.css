@@ -22,9 +22,20 @@
 :root {
   color-scheme: light;
 
-  /* Surfaces */
-  --paper: oklch(0.985 0.002 95); /* page background */
-  --paper-raised: oklch(0.962 0.003 95); /* cards, wells */
+  /**
+   * Surfaces — matte, not brilliant.
+   *
+   * Pulled off near-white and given a little more chroma on the warm axis.
+   * Paper stock is never 0.985 with no colour in it; that reads as a lit
+   * screen. The point of the change is that the page stops glowing and starts
+   * looking like something printed.
+   *
+   * Darkening paper lowers every contrast ratio against it, which took
+   * ink-subtle from 4.65:1 to 4.36:1 and under AA. It moved to 0.54 to
+   * compensate — the two values are a pair and neither should be edited alone.
+   */
+  --paper: oklch(0.963 0.005 95); /* page background */
+  --paper-raised: oklch(0.932 0.006 95); /* cards, wells */
   --paper-inverted: oklch(0.17 0.006 95); /* inverted sections */
 
   /* Text — three levels, never more */
@@ -33,12 +44,13 @@
   /* Carries `label` at 0.75rem, which WCAG counts as normal text — so this
      level needs the full 4.5:1, not the 3:1 large-text allowance. Was 0.646,
      which measured 3.15:1 and failed on every page. */
-  --ink-subtle: oklch(0.55 0.006 95); /* metadata, labels — 4.65:1 on paper */
+  --ink-subtle: oklch(0.54 0.006 95); /* metadata, labels — 4.54:1 on matte paper */
   --ink-inverted: oklch(0.985 0.002 95);
 
   /* Structure */
-  --line: oklch(0.898 0.004 95); /* hairline rules, dividers */
-  --line-strong: oklch(0.812 0.005 95); /* borders that need to be seen */
+  /* Stepped down with paper, so the rules keep the same weight against it. */
+  --line: oklch(0.878 0.005 95); /* hairline rules, dividers */
+  --line-strong: oklch(0.792 0.006 95); /* borders that need to be seen */
 
   /**
    * NO PAPER GRAIN — tried and reverted, deliberately.
@@ -192,11 +204,31 @@
      quart for UI state changes. Nothing bounces — bounce reads as playful,
      and this site is not playful. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /**
+   * Depth.
+   *
+   * The hero headline sits on a plane that tilts toward the cursor, with each
+   * authored line at its own Z so they parallax against one another rather
+   * than moving as one flat card. A long perspective keeps it dimensional
+   * without the fisheye that short values give at this type size.
+   */
+  --perspective-type: 1600px;
+  --depth-step: 26px;
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 
   --duration-instant: 100ms;
-  --duration-fast: 180ms;
+  /**
+   * The hover/interaction duration — every `duration-fast` in the codebase is
+   * a hover, focus or state transition.
+   *
+   * Raised from 180ms. Under ~200ms a colour change reads as a switch being
+   * thrown; the extra time is what makes it read as considered instead. Paired
+   * with ease-out-expo at the call sites, which decelerates hard and is doing
+   * most of the work here — the curve matters more than the number.
+   */
+  --duration-fast: 260ms;
   --duration-base: 380ms;
   --duration-slow: 700ms;
   --duration-reveal: 900ms;

@@ -31,7 +31,9 @@ export const metadata: Metadata = createMetadata();
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf9" },
+    // Tracks --paper. Both are matte now; a brighter bar above a matte page
+    // is the seam that gives away a themed browser chrome.
+    { media: "(prefers-color-scheme: light)", color: "#f4f3ef" },
     { media: "(prefers-color-scheme: dark)", color: "#111110" },
   ],
   colorScheme: "light dark",

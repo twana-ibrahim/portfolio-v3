@@ -50,6 +50,19 @@
     text-wrap: pretty;
   }
 
+  /**
+   * Tailwind v4 dropped `cursor: pointer` from buttons in preflight — a
+   * deliberate change to match native OS behaviour, where buttons do not
+   * show a hand. Restored here on purpose: on the web the hand is what people
+   * read as "this is clickable", and every button on this site is a web
+   * control rather than an OS one. Disabled buttons keep the default, because
+   * a hand over something inert is a lie.
+   */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
   ::selection {
     background-color: var(--accent);
     color: var(--accent-ink);
@@ -147,6 +160,48 @@ pre[data-theme] span {
 }
 @utility duration-reveal {
   transition-duration: var(--duration-reveal);
+}
+
+/**
+ * Mobile navigation dialog.
+ *
+ * The markup previously carried `animate-in`, `fade-in`, `animate-out` and
+ * `fade-out`. Those come from `tailwindcss-animate`, which is not installed
+ * and never was — the classes emitted zero CSS, so the dialog appeared and
+ * vanished instantly while looking, in the source, like it animated.
+ *
+ * Written by hand rather than adding the plugin: it is two keyframes used in
+ * one place, against a dependency that would ship a whole animation library
+ * for them.
+ */
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dialog-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@utility dialog-enter {
+  animation: dialog-in var(--duration-base) var(--ease-out-expo) both;
+}
+
+/* Leaving is faster than arriving — waiting to dismiss something feels slow
+   in a way that waiting for it to appear does not. */
+@utility dialog-exit {
+  animation: dialog-out var(--duration-fast) ease-in both;
 }
 
 /** Uppercase mono label. Used for section eyebrows, dates, tech tags. */

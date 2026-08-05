@@ -5,13 +5,23 @@ import { cn } from "@/lib/utils/cn";
 
 /**
  * Sharp corners, no gradients, no shadows on hover. In an editorial system the
- * button is a block of ink, and the only thing that moves is colour.
+ * button is a block of ink: the block itself never moves, and colour does the
+ * work.
+ *
+ * The icon is the one exception, and it is a consistency fix rather than a
+ * new idea. Every link on this site already nudges its arrow on hover; a
+ * button that sat perfectly still next to them read as the less responsive
+ * control, which is backwards for the primary action on the page. Same
+ * distance and same easing as the links, so it is the existing gesture rather
+ * than a second one.
  */
 const button = cva(
   [
     "inline-flex items-center justify-center gap-2 whitespace-nowrap",
     "font-medium tracking-tight",
-    "transition-colors duration-fast ease-out-quart",
+    "transition-colors duration-fast ease-out-expo",
+    "[&_svg]:transition-transform [&_svg]:duration-fast [&_svg]:ease-out-expo",
+    "hover:[&_svg]:translate-x-0.5",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
