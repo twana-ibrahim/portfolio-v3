@@ -1,6 +1,10 @@
+import { notFound } from "next/navigation";
+import { lang } from "next/root-params";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
+import { defaultLocale, isLocale } from "@/lib/config/i18n";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
 /**
  * Regenerate once a day.
@@ -24,14 +28,23 @@ export const revalidate = 86400;
  * which should not have the site header — an OG image route, a bare print
  * view of the CV — can sit outside it without fighting the layout.
  */
-export default function SiteLayout({ children }: { children: ReactNode }) {
+export default async function SiteLayout({ children }: { children: ReactNode }) {
+  const current = await lang();
+  if (current && !isLocale(current)) notFound();
+
+  const locale = isLocale(current ?? "") ? (current as typeof defaultLocale) : defaultLocale;
+  const dictionary = await getDictionary(locale);
+
+  // Header is a client component and cannot call next/root-params, so the
+  // locale and its strings are handed down from here rather than re-derived
+  // from the pathname on the client.
   return (
     <>
-      <Header />
+      <Header locale={locale} dictionary={dictionary} />
       <main id="main" className="flex-1">
         {children}
       </main>
-      <Footer />
+      <Footer locale={locale} dictionary={dictionary} />
     </>
   );
 }

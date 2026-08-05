@@ -23,7 +23,9 @@ export async function generateStaticParams() {
 
 export const dynamicParams = false;
 
-export async function generateMetadata({ params }: PageProps<"/work/[slug]">): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const study = await getCaseStudy(slug);
   if (!study) return createMetadata({ title: "Not found", noIndex: true });
@@ -63,7 +65,7 @@ const mdxOptions: CompileOptions = {
   },
 };
 
-export default async function CaseStudyPage({ params }: PageProps<"/work/[slug]">) {
+export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/[slug]">) {
   const { slug } = await params;
 
   const [study, project] = [await getCaseStudy(slug), getProjectBySlug(slug)];
