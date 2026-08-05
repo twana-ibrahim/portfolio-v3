@@ -50,7 +50,11 @@ export const projects = parseProjects([
     metrics: [],
     confidential: true,
     featured: true,
-    caseStudy: true,
+    // Was true, with a template at case-studies/fast-sim-pwa.mdx. Removed in
+    // favour of no case study at all: the work here was spec-and-ticket
+    // delivery, so the decision narrative the format needs would have had to
+    // be invented. Template recoverable at commit a85418b.
+    caseStudy: false,
   },
   {
     slug: "fast-sim-web",
