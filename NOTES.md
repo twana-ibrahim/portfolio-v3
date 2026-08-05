@@ -14,19 +14,44 @@ document. What's left is the part a CV can't provide.
 ### Blocking — the site should not launch without these
 
 - [ ] **Metrics.** Every project still has `metrics: []`. This is the single
-      biggest differentiator available and the CV has none of it. Agents on the
-      platform, activations per month, records under management, rows in the
-      heaviest table, load time before and after your optimisation work. Rough
-      is fine — "around 400 agents" is honest and useful. Left empty rather
+      biggest differentiator available and the CV has none of it. Rough is
+      fine — "around 400 agents" is honest and useful. Left empty rather
       than guessed, because a wrong figure in an interview is worse than none.
-- [ ] **The Fast SIM case study.** `src/content/case-studies/fast-sim-pwa.mdx`
-      is a structured template with `[BRACKETED]` prompts, anchored to what the
-      CV actually says the system did. Fill it in. The section that earns
-      interviews is **"The decision"** — name the option you rejected and why.
+      `value` is a **string**, so `"~400"` and `"3 min → 40s"` both validate.
+      Only the four `featured` projects need them:
+      - Fast SIM — agents on the platform · activations per month · rows in the
+        heaviest dealer table · time per activation before vs after
+      - MyTV+ — subscribers or concurrent viewers · catalogue size · which
+        device classes shipped to
+      - Authentication Server — products it was the IdP for · accounts under
+        management · roughly how many distinct roles
+      - FIB — probably nothing publicly sayable; leaving it empty is fine
 - [ ] **Read the experience highlights aloud.** `src/content/experience.ts`.
       The facts are yours; the sentences are mine. Anywhere a line reads as a
       responsibility rather than an achievement, add the number that turns it
       into one.
+
+### Case studies — deliberately none, for now
+
+The Fast SIM case study has been **removed**, not deferred. `caseStudy` is now
+`false` on every project and `src/content/case-studies/` is empty.
+
+The template asked for the before-state, what broke at volume, and one hard
+call with the rejected option named. Twana's scope on Fast SIM was
+spec-and-ticket delivery rather than owning those decisions, so the answers
+would have had to be invented — the same failure already recorded below, where
+an earlier draft fabricated an offline-first sync layer.
+
+An empty case-study section costs less than a hollow one: the format promises
+depth, and a reader who asks a single follow-up finds the floor. The work list
+carries the site on its own.
+
+To bring one back: write `src/content/case-studies/<slug>.mdx`, flip
+`caseStudy: true` on that project, and add the slug to `routes` in
+`e2e/helpers.ts`. The old template is at commit `a85418b` if the structure is
+useful. The strongest honest anchor is whichever project gave the most
+latitude — the personal repos (`movie-app`, `spotlight`) qualify by
+definition, since every decision in them is his.
 
 ### Decisions for you
 
@@ -103,13 +128,132 @@ opacity 0 — which looks exactly like a rendering bug and is not one. A
 `fullPage` screenshot also expands the viewport, so scroll the page fully
 first, then return to top, then capture.
 
-- [ ] Visual QA at 768 / 1920.
-- [ ] Playwright smoke + axe accessibility pass on every route, both themes.
-- [ ] Lighthouse pass — target 100 across the board. Achievable on a site this
-      size, and it's a credential in itself for a frontend engineer.
+**Second half of that note, learned the hard way:** scrolling to the bottom in
+*one jump* is not enough either. IntersectionObserver reports what intersects
+when it samples, so going from scroll 0 to `scrollHeight` in a single frame
+takes every mid-page element from below the fold to above it without ever
+being inside it — the observer never fires. The first capture of this pass had
+entirely blank "Selected work" and "Experience" sections and looked like a
+serious rendering bug. It was the scroll. `settle()` in `e2e/helpers.ts` now
+steps down the page at 60% of viewport height per frame; use it rather than
+rolling your own.
+
+- [x] **Visual QA at 768 / 1024 / 1920.** Horizontal overflow is now an
+      automated check (`e2e/layout.spec.ts`) across every route at all three
+      widths, rather than something judged by eye. It found the contact-page
+      bug below on its first run.
+- [ ] Mobile detail pass at 390 — still worth a human eye on type sizing and
+      spacing, which a pass/fail assertion cannot judge.
+- [x] **Playwright smoke + axe pass on every route, both themes.** Written in
+      `e2e/` — 49 tests, green. Covers the three surfaces screenshots could not
+      reach: the mobile nav dialog, the theme toggle, and the contact form's
+      error states.
+- [~] **Lighthouse — run on localhost, which only half counts.**
+      Accessibility **100**, SEO **100**, Best Practices **96**, Performance
+      **90**.
+      - The two 100s are trustworthy: both are static analyses and do not care
+        where the page is served from.
+      - Best Practices is 96 *only* because `/_vercel/insights/script.js` and
+        `/_vercel/speed-insights/script.js` 404 against `next start` — Vercel
+        serves those from its own edge. Expect 100 on a real deployment.
+      - Performance 90 is not a real number. It comes from LCP 3.5s, which is
+        Lighthouse's simulated Slow-4G plus 4× CPU throttle applied to a
+        localhost origin with no CDN. Measured directly, LCP is **216ms** and
+        the element is the hero `<span>`. CLS is 0, TBT 100ms, and there are
+        **no render-blocking resources**.
+      - Genuinely portable and worth acting on: ~50KB of unused JS across two
+        chunks, and **4 woff2 files totalling 83KB** — the largest single
+        category on the page.
+- [ ] Re-run Lighthouse against the deployed Vercel URL. That is the only run
+      whose Performance number means anything.
 - [ ] Resend setup: verify a sending domain, then set the three variables in
       `.env.example`.
 - [ ] Push to GitHub, connect the Vercel project.
+
+### QA pass — bugs found and fixed
+
+Five real defects, four of them invisible to a screenshot.
+
+1. **The honeypot never fired.** `website: z.string().max(0)` in
+   `features/contact/schema.ts` made a *filled* honeypot fail the parse, so the
+   action returned a validation error and never reached the
+   `if (input.website) return success` branch below it. A bot got a silent
+   no-op instead of the fake success, which is exactly the signal the fake
+   success exists to withhold — and the field's error had no `<Field>` to
+   render in, so nothing appeared on screen at all. The trap is a runtime
+   decision; the schema now accepts anything.
+2. **Lists were not lists.** `StaggerItem` wrapped every row in a motion `div`
+   inside `<ul>`/`<ol>`, with `className="contents"` hiding it visually.
+   `display: contents` fixes layout, not semantics: axe reported `list` and
+   `listitem` violations on the home, work and about pages, and a screen reader
+   would not announce the item count. `StaggerItem` now takes `as="li"`.
+3. **`--ink-subtle` failed WCAG AA in both themes** — 3.15:1 light, 3.96:1
+   dark, against a 4.5:1 requirement. It carries `label`, which is 0.75rem and
+   so counts as normal text, not large. That is every metadata line, section
+   heading and footer link on the site: the smallest type had the weakest
+   contrast. Now 0.55 / 0.585, measuring 4.65:1 and 4.68:1. Also dropped a
+   `text-ink-subtle/70` in the experience list that sat below even the old
+   floor, and `text-ink-inverted/50` in the contact CTA (3.59:1 in dark, where
+   `paper-inverted` is the *light* surface — it passed in light theme, which is
+   why a single-theme check would have missed it).
+4. **Three public projects were badged "Internal" with a padlock.**
+   `resolveTarget` in `project-row.tsx` returned `"none"` for any project
+   without a link and the row keyed the lock off *that*, not off
+   `confidential`. `mytv-plus-website`, `heart-beats` and `mashqi-hawina` are
+   public work with no URL recorded, and the site was calling them
+   confidential.
+5. **`/contact` overflowed the viewport by 31px at exactly 768.** The `md:`
+   grid engages at 768 and leaves the sidebar ~220px, which is narrower than
+   `tuwana.ibrahim99@gmail.com` — and a flex item defaults to
+   `min-width: auto`, so it refused to shrink and pushed the whole page
+   sideways. Only reproduces in the 768–1023 band, which is why 390 and 1440
+   both missed it. The value now wraps to its own line.
+6. **The email row's ↗ was invisible.** Fallout from the fix above: once the
+   value wrapped and filled the row, the icon had no `shrink-0` and the flex
+   container compressed it to 0px wide while the other three rows kept theirs.
+   Caught by measuring the rendered width per row, not by looking — at 13px it
+   is exactly the kind of thing an eye skips over.
+
+**Method note:** the axe suite runs with `contextOptions: { reducedMotion:
+"reduce" }`. The entrances animate opacity, so under parallel load a scan
+catches an element mid-fade and reports a contrast failure that existed for
+300ms — the suite flipped green to red purely on worker count. Reduced motion
+renders the final state immediately, which is the state worth auditing.
+
+### QA pass — open, needs a decision rather than a fix
+
+- [ ] **Dates freeze at build time.** The footer's `© {new Date()...}` and the
+      hero's `yearsOfExperience()` both run during a static prerender, so they
+      are baked at deploy. The hero comment says "derived so it is never a
+      stale hardcoded 5+" — it is still stale, just stamped at build instead of
+      typed by hand. Harmless if the site is redeployed a few times a year;
+      wrong every January otherwise.
+- [x] **"5+" no longer overstates.** Was counting from the first employment
+      record (2021-10) and *rounding*, so 4 yrs 10 mos rendered as "5+" —
+      claiming five or more when it was neither. Now counts from
+      `siteConfig.careerStart` (2021-01, when the stack was being learned) and
+      floors, which is what makes the "+" true rather than aspirational.
+      Today: 5 yrs 7 mos → "5+". Ticks to "6+" in Jan 2027.
+- [ ] **"Five years" is still hardcoded in three places** — `siteConfig.summary`,
+      the About `bio`, and the About `h1`. They agree with the computed figure
+      today and stop agreeing in **Jan 2027**. Left as prose on purpose:
+      "Five years in" reads better than "5 years in", and substituting a
+      numeral into a sentence to save one edit a year is a bad trade. Put a
+      reminder somewhere.
+- [ ] **"Projects delivered" counts the personal ones** (16), while
+      `industryCount` excludes them. Two stats sitting side by side counting
+      different populations.
+- [ ] Hitting `/work/<anything>` logs `Internal: NoFallbackError` server-side
+      before correctly returning 404. Cosmetic, but it will be log noise on
+      Vercel once crawlers find the old case-study URL.
+- [ ] **Stale comment in `projects.ts`.** `industryCount`'s doc comment calls
+      it *the "six industries" stat*; it computes **9**. The number on screen
+      is right — the comment is describing an older content set.
+- [ ] **The project row is cramped between 768 and 1023.** The 12-column grid
+      engages at `md:`, which leaves the summary column ~216px and wraps it to
+      five or six lines against a 92px meta column. Not broken, and no
+      overflow — but the layout only really breathes from `lg:` up. Worth
+      considering `lg:grid-cols-12` and letting 768–1023 stay stacked.
 
 ---
 
@@ -126,3 +270,5 @@ Recorded so they are not relitigated later.
 | Blog | None for now | An empty or stale blog hurts. The MDX pipeline exists, so a route is one file away. |
 | Logo | Inlined `currentColor` SVG | One file serves both themes; no second request, no flash on toggle. Sources kept in `public/brand/`. |
 | Skill list | 4 groups, 6 items max | The old 40-badge wall said "I have heard of these things". Everything cut still appears in context on the projects, where it proves more. |
+| `paper-inverted` in dark | Elevated dark, not a literal inversion | Inverting it turned the contact band into a full-bleed near-white slab on an otherwise dark page. Someone on dark theme chose it to avoid exactly that — a bright block three quarters down the page is glare, not emphasis. In dark it is now `oklch(0.255)`, a step above `paper-raised`, so the band still reads as its own moment and the ink stays light. Contrast is unaffected: 7.61:1 at `/70`, 14.12:1 at full. |
+| "Home" in the nav | Explicit item, not just the wordmark | The logo is only a home link to people who know the convention, and the mobile dialog covers the wordmark entirely — so there was no way back to the front page from inside the open menu. Note `isActive` special-cases `/`: every pathname starts with it, so the prefix match that keeps Work current on `/work/<slug>` would mark Home current everywhere. |
