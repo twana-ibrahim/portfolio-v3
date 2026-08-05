@@ -28,8 +28,14 @@ export const contactSchema = z.object({
   /**
    * Honeypot. Hidden from users and from assistive tech; only a bot fills it.
    * Named "website" because that is what naive form-filling bots look for.
+   *
+   * Deliberately accepts anything. A `.max(0)` here reads like the stricter
+   * choice and is the opposite: a filled honeypot would fail the parse, so the
+   * action would return a validation error and never reach the fake-success
+   * branch — handing the scraper the one signal this field exists to withhold.
+   * The trap is a runtime decision, not a validation rule.
    */
-  website: z.string().max(0, "Rejected.").optional().or(z.literal("")),
+  website: z.string().nullish(),
 
   /**
    * Milliseconds the form was on screen before submit. Humans take seconds;
