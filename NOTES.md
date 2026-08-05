@@ -59,28 +59,37 @@ Read `public/twana-ibrahim-cv.pdf` line by line against every content file.
 Dates, languages, education, certifications and the technical-skills list all
 match. Five things do not.
 
-- [ ] **"Erbil, Iraq" is not in the CV.** Four roles — both Gateway ICT
-      stints, Tailored Applications and Fastlink — carry `location:
-      "Erbil, Iraq"` in `experience.ts`. The CV says only *Remote* for all
-      four. Only iQ Group's Sulaymaniyah is CV-traceable. Probably true, but
-      it is currently an assertion with no source, which is the one thing this
-      content was built not to do.
-- [ ] **Fastlink is named two ways.** The CV says *Fastlink Telecom*;
-      `experience.ts` and `projects.ts` both say *Fastlink Company*. Pick one.
-- [ ] **Mashqi Hawina is not on the CV at all.** It is in `projects.ts`
-      (Salahaddin University, 2021, student placement platform) and appears
-      nowhere in the CV's project list. Carried over from the old site —
-      confirm it is real and yours before it stays.
-- [ ] **The CV claims backend that the site does not.** *"backed by a solid
-      foundation in backend integration and database design."* The skills
-      cover it (Node, Express, PostgreSQL, MongoDB, MySQL) but no prose does.
-      Either the site is under-claiming or the CV is over-claiming — they
-      should not disagree.
-- [ ] **The performance claim has no number anywhere.** *"Cut load and
-      interaction cost … code splitting, lazy loading and state that stopped
-      re-rendering the world."* It is the most checkable sentence on the site
-      and the only one with nothing behind it. One before/after figure fixes
-      it.
+- [x] **"Erbil, Iraq" confirmed.** Company HQs are in Erbil; Twana works
+      remotely from Kalar. `location` + `arrangement: "remote"` already says
+      exactly that, so nothing changed.
+- [x] **Fastlink renamed to the CV's *Fastlink Telecom*** across
+      `experience.ts` and all four `projects.ts` entries.
+- [x] **Mashqi Hawina confirmed real** — a final-year university project. Its
+      `role` changed from "Frontend Developer" to "Final-year university
+      project": next to a university's name the old wording read as a client
+      engagement, which it was not.
+- [x] **Backend background confirmed and now said out loud.** A paragraph in
+      the About bio covers Node, Express, REST and schema design, framed as
+      what it buys the frontend rather than as a second job title.
+- [ ] **The performance claim still has no number.** This is
+      `experience.ts` → Gateway ICT (2025-04) → *"Cut load and interaction
+      cost across large React applications through code splitting, lazy
+      loading and state that stopped re-rendering the world."*
+
+      The sentence names three techniques and no result. A reader cannot tell
+      whether it saved 100ms or four seconds, and it is the one line on the
+      site an interviewer is most likely to stop on, because it is the only
+      claim that is measurable in principle and unmeasured in practice.
+
+      Anything concrete fixes it, and rough is fine:
+      - bundle size before and after ("1.4MB → 480KB")
+      - time to interactive on the heaviest screen ("6s → under 2s")
+      - rows the table handled before it locked up, versus after
+      - how long a report took to open for a dealer with a year of data
+
+      If no number was ever recorded, say what changed qualitatively and
+      concretely instead — "the agent list stopped freezing on mid-range
+      Android" is checkable in a way that "improved performance" is not.
 
 ### What the content is still missing
 
@@ -99,12 +108,10 @@ match. Five things do not.
 
 ### Decisions for you
 
-- [ ] **Job title mismatch.** Your CV says *"Senior Software Engineer
-      (Frontend)"*. The site says *"Software Engineer"* — your call earlier in
-      the build. A recruiter comparing the two will notice. Pick one and make
-      both match; `siteConfig.role` is the only place the site needs changing.
-      For what it's worth, the CV's version is stronger and your history
-      supports it.
+- [x] **Job title resolved.** `siteConfig.role` is now *"Senior Software
+      Engineer (Frontend)"*, matching the CV exactly. Feeds the hero eyebrow,
+      the `<title>` ("Twana Ibrahim — Senior Software Engineer (Frontend)",
+      50 characters, inside the ~60 Google renders) and the structured data.
 - [ ] **FIB description.** `projects.ts` deliberately says little. Confirm what
       you can say publicly about a banking client.
 - [ ] **Custom domain.** Currently `twana-ibrahim.vercel.app`. Set
