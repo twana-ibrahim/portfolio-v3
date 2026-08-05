@@ -3,26 +3,19 @@ import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
-import { experience } from "@/content/experience";
 import { industryCount, projects } from "@/content/projects";
 import { siteConfig } from "@/lib/config/site";
+import { yearsSince } from "@/lib/utils/format";
 
-/** Years since the first role. Derived so it is never a stale hardcoded "5+". */
-function yearsOfExperience(): number {
-  const first = experience.at(-1);
-  if (!first) return 0;
-  const [year, month] = first.start.split("-").map(Number);
-  if (!year || !month) return 0;
-  const now = new Date();
-  const months = now.getFullYear() * 12 + now.getMonth() + 1 - (year * 12 + month);
-  // Rounded, not floored: at four years and ten months, "4+" undersells the
-  // CV, which already says "over 5 years". Rounding matches it.
-  return Math.round(months / 12);
-}
-
-/** All three derived from content, so none can go stale. */
+/**
+ * All three derived from content, so none can go stale.
+ *
+ * Counted from `careerStart` rather than the first employment record, which
+ * begins 2021-10 and ignores the year spent learning the stack. Flooring is
+ * what makes the "+" honest — see yearsSince.
+ */
 const stats = () => [
-  { value: `${yearsOfExperience()}+`, label: "Years shipping" },
+  { value: `${yearsSince(siteConfig.careerStart)}+`, label: "Years shipping" },
   { value: String(projects.length), label: "Projects delivered" },
   { value: String(industryCount), label: "Industries" },
 ];

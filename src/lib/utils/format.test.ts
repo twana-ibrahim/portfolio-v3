@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDateRange, formatDuration, formatYearMonth, ordinal } from "./format";
+import { formatDateRange, formatDuration, formatYearMonth, ordinal, yearsSince } from "./format";
 
 describe("formatYearMonth", () => {
   it("formats a year-month as an abbreviated month and year", () => {
@@ -49,6 +49,26 @@ describe("formatDuration", () => {
 
   it("never returns an empty string", () => {
     expect(formatDuration("2026-08", "2026-08", now)).toBe("1 mo");
+  });
+});
+
+describe("yearsSince", () => {
+  it("floors rather than rounding, so the rendered N+ is never a lie", () => {
+    // 5 yrs 7 mos. Rounding would give 6, and "6+" would claim six or more.
+    expect(yearsSince("2021-01", new Date("2026-08-05T00:00:00Z"))).toBe(5);
+  });
+
+  it("ticks over on the anniversary month, not before it", () => {
+    expect(yearsSince("2021-01", new Date("2026-12-31T00:00:00Z"))).toBe(5);
+    expect(yearsSince("2021-01", new Date("2027-01-01T00:00:00Z"))).toBe(6);
+  });
+
+  it("does not count the start month, unlike formatDuration", () => {
+    expect(yearsSince("2026-08", new Date("2026-08-31T00:00:00Z"))).toBe(0);
+  });
+
+  it("clamps a future start to zero instead of going negative", () => {
+    expect(yearsSince("2027-01", new Date("2026-08-05T00:00:00Z"))).toBe(0);
   });
 });
 

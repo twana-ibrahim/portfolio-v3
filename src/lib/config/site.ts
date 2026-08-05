@@ -18,6 +18,15 @@ export const siteConfig = {
   initials: "TI",
   role: "Software Engineer",
 
+  /**
+   * When the clock starts for the "years shipping" figure.
+   *
+   * Earlier than the first paid role (2021-10) on purpose: 2021 was spent
+   * learning the stack that role was hired for. Change this one date and the
+   * hero stat follows.
+   */
+  careerStart: "2021-01",
+
   /** One line, used in the header meta and structured data. */
   tagline: "Frontend engineer building the internal systems banks and operators run on.",
 

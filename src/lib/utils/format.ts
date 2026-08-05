@@ -58,6 +58,23 @@ export function formatDuration(start: string, end: string | null, now = new Date
   return parts.join(" ") || "1 mo";
 }
 
+/**
+ * Whole years elapsed since a "YYYY-MM" start.
+ *
+ * Floored, never rounded. The result is rendered as "N+", and rounding up
+ * makes that claim false for half of every year — at 4 yrs 7 mos, "5+" says
+ * five or more when it is neither.
+ *
+ * Not inclusive of the start month, unlike formatDuration: "how long did this
+ * role last" and "how long have you been doing this" count differently at the
+ * boundary.
+ */
+export function yearsSince(start: string, now = new Date()): number {
+  const from = parseYearMonth(start);
+  const months = (now.getFullYear() - from.year) * 12 + (now.getMonth() + 1 - from.month);
+  return Math.max(0, Math.floor(months / 12));
+}
+
 /** Zero-pads an ordinal for editorial numbering: 1 → "01". */
 export function ordinal(index: number): string {
   return String(index + 1).padStart(2, "0");
