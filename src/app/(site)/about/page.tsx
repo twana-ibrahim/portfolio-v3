@@ -29,6 +29,7 @@ export const metadata: Metadata = createMetadata({
 const bio = [
   "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq. Five years in, almost all of it spent on software that other businesses run on — the dashboard a telecom operations team opens at the start of every shift, the app an agent uses to sell a SIM, the identity server that decides what six internal products will let you see.",
   "That kind of work has a particular shape. Nobody is delighted by an internal tool. They need it to be right, to stay responsive when the table has ten thousand rows in it, and to never offer a button the backend is going to refuse. So most of my effort goes into things that don't photograph well: access control that mirrors the API exactly, filtering that survives real data volumes, and structure the next person can change without breaking three screens they've never opened.",
+  "Frontend is where I specialise, not where I stop. Node and Express, REST design, schemas in Postgres and Mongo — knowing what a response costs to produce changes what you ask for, and it is most of the difference between an interface that fits the system and one the backend team has to work around.",
   "Right now I'm building customer-facing features for FIB, a digital bank — a project I moved onto at Gateway ICT and carried with me to Tailored Applications. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
 ];
 
