@@ -53,6 +53,50 @@ useful. The strongest honest anchor is whichever project gave the most
 latitude — the personal repos (`movie-app`, `spotlight`) qualify by
 definition, since every decision in them is his.
 
+### Content audit against the CV — things only you can settle
+
+Read `public/twana-ibrahim-cv.pdf` line by line against every content file.
+Dates, languages, education, certifications and the technical-skills list all
+match. Five things do not.
+
+- [ ] **"Erbil, Iraq" is not in the CV.** Four roles — both Gateway ICT
+      stints, Tailored Applications and Fastlink — carry `location:
+      "Erbil, Iraq"` in `experience.ts`. The CV says only *Remote* for all
+      four. Only iQ Group's Sulaymaniyah is CV-traceable. Probably true, but
+      it is currently an assertion with no source, which is the one thing this
+      content was built not to do.
+- [ ] **Fastlink is named two ways.** The CV says *Fastlink Telecom*;
+      `experience.ts` and `projects.ts` both say *Fastlink Company*. Pick one.
+- [ ] **Mashqi Hawina is not on the CV at all.** It is in `projects.ts`
+      (Salahaddin University, 2021, student placement platform) and appears
+      nowhere in the CV's project list. Carried over from the old site —
+      confirm it is real and yours before it stays.
+- [ ] **The CV claims backend that the site does not.** *"backed by a solid
+      foundation in backend integration and database design."* The skills
+      cover it (Node, Express, PostgreSQL, MongoDB, MySQL) but no prose does.
+      Either the site is under-claiming or the CV is over-claiming — they
+      should not disagree.
+- [ ] **The performance claim has no number anywhere.** *"Cut load and
+      interaction cost … code splitting, lazy loading and state that stopped
+      re-rendering the world."* It is the most checkable sentence on the site
+      and the only one with nothing behind it. One before/after figure fixes
+      it.
+
+### What the content is still missing
+
+- [ ] **Metrics** — see above, unchanged and still the biggest single gap.
+- [ ] **FIB says almost nothing.** It is featured, it is the current work, and
+      the summary is generic. Even under NDA the *shape* is sayable: how many
+      screens, what the review bar is, what regulated delivery changes about
+      the day job.
+- [ ] **Nothing about how you work.** The CV mentions mentoring and code
+      review; the site's About covers none of it. For a senior positioning
+      that is the gap that matters most after metrics — a reader can see what
+      you built but not what you would be like to work with.
+- [ ] **No third-party voice.** One line from a lead at Gateway or Fastlink
+      would outweigh several paragraphs of self-description. Worth asking
+      while the relationships are warm.
+
 ### Decisions for you
 
 - [ ] **Job title mismatch.** Your CV says *"Senior Software Engineer
