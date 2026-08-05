@@ -84,8 +84,16 @@ export const siteConfig = {
   twitterHandle: null as string | null,
 } as const;
 
-/** Primary navigation. Order here is order on screen, desktop and mobile. */
+/**
+ * Primary navigation. Order here is order on screen, desktop and mobile.
+ *
+ * "Home" is listed explicitly rather than left to the wordmark. The logo is
+ * only a home link to people who already know that convention, and on mobile
+ * the dialog covers the wordmark entirely — so without this there is no way
+ * back to the front page from inside the menu.
+ */
 export const navigation = [
+  { href: "/", label: "Home" },
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

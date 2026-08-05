@@ -28,7 +28,11 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+  // "/" is exact-match only. The prefix test below is what lets /work/<slug>
+  // keep Work marked current, but every path starts with "/", so applying it
+  // to the home link would mark Home as the current page on every route.
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <header
