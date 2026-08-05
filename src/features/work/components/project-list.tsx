@@ -7,7 +7,7 @@ export function ProjectList({ projects }: { projects: readonly Project[] }) {
     <Stagger>
       <ul className="border-line border-b">
         {projects.map((project, index) => (
-          <StaggerItem key={project.slug} className="contents">
+          <StaggerItem key={project.slug} as="li" className="border-line border-t">
             <ProjectRow project={project} index={index} />
           </StaggerItem>
         ))}

@@ -73,10 +73,15 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
         <span className="label text-ink-subtle tabular-nums">{project.year}</span>
 
         {target.kind === "none" ? (
-          <span className="label inline-flex items-center gap-1.5 text-ink-subtle">
-            <Lock size={11} strokeWidth={2} aria-hidden />
-            Internal
-          </span>
+          // Keyed off `confidential`, not off having no link. Three of these
+          // are public sites that simply have no URL recorded — badging those
+          // "Internal" states something untrue about the client's work.
+          project.confidential ? (
+            <span className="label inline-flex items-center gap-1.5 text-ink-subtle">
+              <Lock size={11} strokeWidth={2} aria-hidden />
+              Internal
+            </span>
+          ) : null
         ) : (
           <span className="label inline-flex items-center gap-1.5 text-ink transition-colors duration-fast group-hover:text-accent">
             <span className="hidden sm:inline">{target.cta}</span>
@@ -97,29 +102,23 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
 
   const layout = "group grid grid-cols-1 items-baseline gap-x-8 gap-y-4 py-8 md:grid-cols-12";
 
+  // The <li> belongs to the caller: a <ul> may only contain <li>, and the
+  // stagger wrapper has to *be* that element rather than sit inside it.
   if (target.kind === "internal") {
     return (
-      <li className="border-line border-t">
-        <Link href={target.href} className={layout}>
-          {content}
-        </Link>
-      </li>
+      <Link href={target.href} className={layout}>
+        {content}
+      </Link>
     );
   }
 
   if (target.kind === "external") {
     return (
-      <li className="border-line border-t">
-        <a href={target.href} target="_blank" rel="noreferrer" className={layout}>
-          {content}
-        </a>
-      </li>
+      <a href={target.href} target="_blank" rel="noreferrer" className={layout}>
+        {content}
+      </a>
     );
   }
 
-  return (
-    <li className="border-line border-t">
-      <div className={layout}>{content}</div>
-    </li>
-  );
+  return <div className={layout}>{content}</div>;
 }

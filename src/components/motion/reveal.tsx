@@ -92,15 +92,40 @@ export function Stagger({ children, className, ...props }: RevealProps) {
   );
 }
 
-export function StaggerItem({ children, className, ...props }: RevealProps) {
+/**
+ * Deliberately narrower than RevealProps: the two element types do not share
+ * an event-handler surface, so inheriting `motion.div`'s props makes `li`
+ * untypeable. Nothing passes more than this anyway.
+ */
+type StaggerItemProps = {
+  children: ReactNode;
+  className?: string;
+  /**
+   * `li` exists because a `<ul>` may only contain `<li>`. Wrapping each row in
+   * a motion `div` and leaning on `display: contents` fixes the layout but not
+   * the semantics — the list stops being a list, and a screen reader stops
+   * announcing how many items are in it.
+   */
+  as?: "div" | "li";
+};
+
+export function StaggerItem({ children, className, as = "div" }: StaggerItemProps) {
   const reduced = useReducedMotion();
 
   if (reduced) {
-    return <div className={className}>{children}</div>;
+    return as === "li" ? (
+      <li className={className}>{children}</li>
+    ) : (
+      <div className={className}>{children}</div>
+    );
   }
 
-  return (
-    <motion.div variants={revealVariants} className={className} {...props}>
+  return as === "li" ? (
+    <motion.li variants={revealVariants} className={className}>
+      {children}
+    </motion.li>
+  ) : (
+    <motion.div variants={revealVariants} className={className}>
       {children}
     </motion.div>
   );
