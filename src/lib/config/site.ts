@@ -6,6 +6,9 @@
  * Swapping the domain, the email, or the tagline is then a one-file change.
  */
 
+import type { Dictionary } from "@/lib/i18n/dictionaries/en";
+import type { AppPath } from "@/lib/i18n/routing";
+
 /** Set NEXT_PUBLIC_SITE_URL in Vercel when a custom domain is attached. */
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://twana-ibrahim.vercel.app"
@@ -100,10 +103,10 @@ export const siteConfig = {
  * back to the front page from inside the menu.
  */
 export const navigation = [
-  { href: "/", label: "Home" },
-  { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-] as const;
+  { href: "/", key: "home" },
+  { href: "/work", key: "work" },
+  { href: "/about", key: "about" },
+  { href: "/contact", key: "contact" },
+] as const satisfies readonly { href: AppPath; key: keyof Dictionary["nav"] }[];
 
 export type NavItem = (typeof navigation)[number];

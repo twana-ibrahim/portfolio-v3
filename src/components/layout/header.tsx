@@ -7,16 +7,26 @@ import { Dialog } from "radix-ui";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
+import { LanguageToggle } from "@/components/layout/language-toggle";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
+import type { Locale } from "@/lib/config/i18n";
 import { navigation, siteConfig } from "@/lib/config/site";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+import { localePath } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils/cn";
+import { ordinal } from "@/lib/utils/format";
+
+type HeaderProps = {
+  locale: Locale;
+  dictionary: Dictionary;
+};
 
 /**
  * The header is transparent over the hero and only grows a background and a
  * hairline once the page has scrolled. A permanently filled bar would cut the
  * hero's full-bleed type in half, which is the whole point of the layout.
  */
-export function Header() {
+export function Header({ locale, dictionary }: HeaderProps) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,11 +38,18 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // "/" is exact-match only. The prefix test below is what lets /work/<slug>
-  // keep Work marked current, but every path starts with "/", so applying it
-  // to the home link would mark Home as the current page on every route.
-  const isActive = (href: string) =>
-    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+  /**
+   * Compared against the locale-prefixed path, because that is what the
+   * router reports. "/" is still exact-match only: every pathname starts with
+   * the locale root, so the prefix test that keeps Work current on
+   * /en/work/<slug> would mark Home current everywhere.
+   */
+  const isActive = (href: (typeof navigation)[number]["href"]) => {
+    const target = localePath(locale, href);
+    return href === "/"
+      ? pathname === target
+      : pathname === target || pathname.startsWith(`${target}/`);
+  };
 
   return (
     <header
@@ -43,9 +60,9 @@ export function Header() {
     >
       <Container className="flex h-18 items-center justify-between gap-8">
         <Link
-          href="/"
+          href={localePath(locale, "/")}
           className="group flex items-center gap-3 text-ink"
-          aria-label={`${siteConfig.name} — home`}
+          aria-label={`${siteConfig.name} — ${dictionary.a11y.home}`}
         >
           <Logo className="h-7 transition-colors duration-fast group-hover:text-accent" />
           <span className="hidden font-medium text-[0.9375rem] tracking-tight sm:block">
@@ -54,30 +71,31 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-1 md:gap-6">
-          <nav aria-label="Main" className="hidden md:block">
+          <nav aria-label={dictionary.a11y.mainNav} className="hidden md:block">
             <ul className="flex items-center gap-8">
               {navigation.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={localePath(locale, item.href)}
                     aria-current={isActive(item.href) ? "page" : undefined}
                     className={cn(
                       "link-underline text-[0.9375rem] transition-colors duration-fast",
                       isActive(item.href) ? "text-ink" : "text-ink-muted hover:text-ink",
                     )}
                   >
-                    {item.label}
+                    {dictionary.nav[item.key]}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <ThemeToggle />
+          <LanguageToggle locale={locale} dictionary={dictionary} />
+          <ThemeToggle dictionary={dictionary} />
 
           <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}>
             <Dialog.Trigger
-              aria-label="Open menu"
+              aria-label={dictionary.a11y.openMenu}
               className="grid size-9 place-items-center text-ink-muted transition-colors duration-fast hover:text-ink md:hidden"
             >
               <Menu size={20} strokeWidth={1.5} aria-hidden />
@@ -85,24 +103,24 @@ export function Header() {
 
             <Dialog.Portal>
               <Dialog.Content className="fixed inset-0 z-100 flex flex-col bg-paper data-[state=closed]:dialog-exit data-[state=open]:dialog-enter">
-                <Dialog.Title className="sr-only">Navigation</Dialog.Title>
+                <Dialog.Title className="sr-only">{dictionary.a11y.navigationDialog}</Dialog.Title>
 
                 <Container className="flex h-18 shrink-0 items-center justify-between">
                   <Logo className="h-7" />
                   <Dialog.Close
-                    aria-label="Close menu"
+                    aria-label={dictionary.a11y.closeMenu}
                     className="grid size-9 place-items-center text-ink-muted transition-colors duration-fast hover:text-ink"
                   >
                     <X size={20} strokeWidth={1.5} aria-hidden />
                   </Dialog.Close>
                 </Container>
 
-                <Container as="nav" aria-label="Mobile" className="mt-10 flex-1">
+                <Container as="nav" aria-label={dictionary.a11y.mobileNav} className="mt-10 flex-1">
                   <ul className="flex flex-col">
                     {navigation.map((item, index) => (
                       <li key={item.href} className="border-line border-t">
                         <Link
-                          href={item.href}
+                          href={localePath(locale, item.href)}
                           // Closed here rather than in an effect watching the
                           // pathname: the click is the cause, so it should be
                           // the trigger. Also covers navigating to the page
@@ -110,10 +128,8 @@ export function Header() {
                           onClick={() => setMenuOpen(false)}
                           className="flex items-baseline gap-5 py-6 text-heading text-ink"
                         >
-                          <span className="label text-ink-subtle">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          {item.label}
+                          <span className="label text-ink-subtle">{ordinal(index)}</span>
+                          {dictionary.nav[item.key]}
                         </Link>
                       </li>
                     ))}

@@ -3,6 +3,13 @@
 import { useEffect, useState } from "react";
 import { siteConfig } from "@/lib/config/site";
 
+/**
+ * Always formatted en-GB, whatever the page locale.
+ *
+ * A ckb-IQ formatter would emit Arabic-Indic digits, and every other figure on
+ * this site is Latin and tabular. One clock in a different numeral system next
+ * to a Latin phone number looks like a bug, not a localization.
+ */
 const formatter = new Intl.DateTimeFormat("en-GB", {
   hour: "2-digit",
   minute: "2-digit",
@@ -19,7 +26,7 @@ const formatter = new Intl.DateTimeFormat("en-GB", {
  * Renders nothing until mounted — the server has no client clock, and a
  * server-rendered time would be both wrong and a hydration mismatch.
  */
-export function LocalTime() {
+export function LocalTime({ suffix }: { suffix: string; locale?: string }) {
   const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
@@ -43,7 +50,7 @@ export function LocalTime() {
 
   return (
     <span className="tabular-nums">
-      {time ? `${time} local` : <span className="opacity-0">00:00 local</span>}
+      {time ? `${time} ${suffix}` : <span className="opacity-0">{`00:00 ${suffix}`}</span>}
     </span>
   );
 }

@@ -3,6 +3,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -12,7 +13,13 @@ import { cn } from "@/lib/utils/cn";
  * neutral state until mount. Both icons are always in the DOM and cross-fade —
  * swapping the element would cause a layout flash and lose the button's focus.
  */
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({
+  dictionary,
+  className,
+}: {
+  dictionary: Dictionary;
+  className?: string;
+}) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -24,7 +31,13 @@ export function ThemeToggle({ className }: { className?: string }) {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={mounted ? `Switch to ${isDark ? "light" : "dark"} theme` : "Switch theme"}
+      aria-label={
+        mounted
+          ? isDark
+            ? dictionary.a11y.switchToLight
+            : dictionary.a11y.switchToDark
+          : dictionary.a11y.switchTheme
+      }
       className={cn(
         "relative grid size-9 place-items-center rounded-xs text-ink-muted",
         "transition-colors duration-fast hover:text-ink",
