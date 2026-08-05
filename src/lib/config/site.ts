@@ -16,8 +16,8 @@ export const siteConfig = {
 
   name: "Twana Ibrahim",
   initials: "TI",
-  /** Matches the CV exactly. A site that undersells the CV loses either way. */
-  role: "Senior Software Engineer (Frontend)",
+  /** Matches the CV header exactly. Change both together or neither. */
+  role: "Software Engineer (Frontend)",
 
   /**
    * When the clock starts for the "years shipping" figure.
@@ -63,7 +63,13 @@ export const siteConfig = {
   availability: {
     status: "open",
     label: "Available for work",
-    detail: "Open to remote and contract engagements, GMT+3",
+    /**
+     * Roles, not engagements. The career is five years of employment at
+     * companies, not a freelance book — leading with "contract" invites
+     * questions about a track record that is not there, and undersells the
+     * one that is.
+     */
+    detail: "Open to remote roles, GMT+3",
   },
 
   contact: {
