@@ -1,4 +1,4 @@
-import { Download } from "lucide-react";
+import { ArrowUpRight, Download } from "lucide-react";
 import type { Metadata } from "next";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
@@ -10,7 +10,7 @@ import { ContactCta } from "@/features/contact";
 import { ExperienceList } from "@/features/experience";
 import { siteConfig } from "@/lib/config/site";
 import { createMetadata } from "@/lib/seo/metadata";
-import { formatDateRange } from "@/lib/utils/format";
+import { formatDateRange, formatYearMonth } from "@/lib/utils/format";
 
 export const metadata: Metadata = createMetadata({
   title: "About",
@@ -82,8 +82,32 @@ export default function AboutPage() {
             <ul className="mt-5 space-y-3">
               {certifications.map((certification) => (
                 <li key={certification.name}>
-                  <p className="text-ink text-sm">{certification.name}</p>
-                  <p className="label mt-1 text-ink-subtle">{certification.issuer}</p>
+                  {certification.verifyUrl ? (
+                    <a
+                      href={certification.verifyUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group inline-flex items-start gap-1 text-ink text-sm"
+                    >
+                      <span className="link-underline">{certification.name}</span>
+                      <ArrowUpRight
+                        size={13}
+                        aria-hidden
+                        className="shrink-0 translate-y-0.5 text-ink-subtle transition-transform duration-fast ease-out-quart group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </a>
+                  ) : (
+                    <p className="text-ink text-sm">{certification.name}</p>
+                  )}
+                  <p className="label mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-ink-subtle">
+                    <span>{certification.issuer}</span>
+                    {certification.awarded ? (
+                      <>
+                        <span aria-hidden className="h-px w-2 bg-line-strong" />
+                        <span>{formatYearMonth(certification.awarded)}</span>
+                      </>
+                    ) : null}
+                  </p>
                 </li>
               ))}
             </ul>

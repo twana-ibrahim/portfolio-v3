@@ -126,6 +126,14 @@ export type SkillGroup = z.infer<typeof skillGroupSchema>;
 export const certificationSchema = z.object({
   name: z.string().min(1),
   issuer: z.string().min(1),
+  /** "YYYY-MM" awarded. An undated credential reads as filler. */
+  awarded: YearMonth.optional(),
+  /**
+   * Public verification URL. This is the whole value of a certification —
+   * anyone can type a course name, and a link is the difference between a
+   * claim and a fact. Optional because not every issuer provides one.
+   */
+  verifyUrl: z.url().optional(),
 });
 
 export const languageSchema = z.object({

@@ -106,10 +106,28 @@ export const education = [
   },
 ] as const;
 
-/** Ordered by relevance to the work, not by date awarded. */
+/**
+ * Ordered by relevance to the work, not by date awarded.
+ *
+ * Verification URLs matter more than the names do. Anyone can type "Advanced
+ * React" into a list; a link that resolves to Coursera's record is the
+ * difference between a claim and a fact, and it costs one line of markup.
+ * Jira Fundamentals has neither a date nor a link because Atlassian issues no
+ * public credential for it — left as a bare claim rather than dressed up.
+ */
 export const certifications = z.array(certificationSchema).parse([
-  { name: "Advanced React", issuer: "Meta" },
-  { name: "Foundations of Project Management", issuer: "Google" },
+  {
+    name: "Advanced React",
+    issuer: "Meta",
+    awarded: "2023-12",
+    verifyUrl: "https://coursera.org/verify/QBW39CFN94MT",
+  },
+  {
+    name: "Foundations of Project Management",
+    issuer: "Google",
+    awarded: "2022-08",
+    verifyUrl: "https://coursera.org/verify/BK5V82XH2KNG",
+  },
   { name: "Jira Fundamentals", issuer: "Atlassian" },
 ]);
 
