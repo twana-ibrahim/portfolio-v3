@@ -17,7 +17,11 @@ export function ContactCta() {
     <section className="bg-paper-inverted py-24 text-ink-inverted md:py-32">
       <Container>
         <Reveal>
-          <p className="label text-ink-inverted/50">{siteConfig.availability.label}</p>
+          {/* One opacity level across the whole band. Now that the surface is
+              dark in both themes, /70 is a soft grey on dark either way —
+              9.18:1 light, 7.61:1 dark. /50 measured 4.4:1 in dark and is the
+              floor, so this keeps headroom. */}
+          <p className="label text-ink-inverted/70">{siteConfig.availability.label}</p>
 
           <h2 className="mt-7 max-w-4xl text-ink-inverted text-title">
             Have something that needs building{" "}

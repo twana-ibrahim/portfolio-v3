@@ -30,7 +30,10 @@
   /* Text — three levels, never more */
   --ink: oklch(0.17 0.006 95); /* primary */
   --ink-muted: oklch(0.487 0.008 95); /* secondary, body copy at scale */
-  --ink-subtle: oklch(0.646 0.006 95); /* metadata, labels */
+  /* Carries `label` at 0.75rem, which WCAG counts as normal text — so this
+     level needs the full 4.5:1, not the 3:1 large-text allowance. Was 0.646,
+     which measured 3.15:1 and failed on every page. */
+  --ink-subtle: oklch(0.55 0.006 95); /* metadata, labels — 4.65:1 on paper */
   --ink-inverted: oklch(0.985 0.002 95);
 
   /* Structure */
@@ -52,12 +55,23 @@
 
   --paper: oklch(0.152 0.004 95);
   --paper-raised: oklch(0.196 0.005 95);
-  --paper-inverted: oklch(0.962 0.003 95);
+
+  /**
+   * Does NOT inverse-map in dark, unlike every other pair here.
+   *
+   * A literal inversion turns the contact band into a full-bleed near-white
+   * block on an otherwise dark page — the reader chose dark to avoid exactly
+   * that, and a bright slab three quarters of the way down is glare, not
+   * emphasis. In dark it becomes the most elevated dark surface instead: a
+   * step above paper-raised, so the band still reads as its own moment, and
+   * the ink stays light rather than flipping.
+   */
+  --paper-inverted: oklch(0.255 0.006 95);
 
   --ink: oklch(0.962 0.003 95);
   --ink-muted: oklch(0.702 0.006 95);
-  --ink-subtle: oklch(0.545 0.006 95);
-  --ink-inverted: oklch(0.152 0.004 95);
+  --ink-subtle: oklch(0.585 0.006 95); /* was 0.545 — measured 3.96:1 */
+  --ink-inverted: oklch(0.962 0.003 95); /* light ink — see paper-inverted */
 
   --line: oklch(0.268 0.006 95);
   --line-strong: oklch(0.372 0.007 95);
