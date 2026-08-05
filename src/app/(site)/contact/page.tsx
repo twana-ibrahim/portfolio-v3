@@ -43,23 +43,32 @@ export default function ContactPage() {
           <h2 className="label text-ink-subtle">Direct</h2>
           <dl className="mt-6 border-line border-t">
             {directLinks.map((link) => (
+              // Wraps rather than overflows. At exactly 768 the two-column
+              // grid engages and leaves this sidebar ~220px, which is narrower
+              // than the email address — and a flex item defaults to
+              // min-width:auto, so it refuses to shrink and pushes the page
+              // sideways instead. The value drops to its own line first, and
+              // only breaks mid-token if even that is not enough.
               <div
                 key={link.label}
-                className="flex items-baseline justify-between gap-4 border-line border-b py-4"
+                className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-line border-b py-4"
               >
                 <dt className="label text-ink-subtle">{link.label}</dt>
-                <dd>
+                <dd className="min-w-0">
                   <a
                     href={link.href}
                     target={link.href.startsWith("http") ? "_blank" : undefined}
                     rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                    className="group inline-flex items-center gap-1 text-ink text-sm"
+                    className="group inline-flex max-w-full items-center gap-1 text-ink text-sm"
                   >
-                    <span className="link-underline">{link.value}</span>
+                    <span className="link-underline wrap-break-word">{link.value}</span>
+                    {/* shrink-0: once the value wraps and fills the row, a
+                        flex child with no floor gets compressed to zero and
+                        the arrow silently disappears. */}
                     <ArrowUpRight
                       size={13}
                       aria-hidden
-                      className="translate-y-px text-ink-subtle transition-transform duration-fast ease-out-quart group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      className="shrink-0 translate-y-px text-ink-subtle transition-transform duration-fast ease-out-quart group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                     />
                   </a>
                 </dd>
