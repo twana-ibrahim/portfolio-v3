@@ -39,7 +39,7 @@ export const projects = parseProjects([
   {
     slug: "fast-sim-pwa",
     title: "Fast SIM",
-    client: "Fastlink Company",
+    client: "Fastlink Telecom",
     year: 2024,
     summary:
       "Digitised telecom sales covering physical SIM and eSIM workflows, with custom filtering, reporting and real-time agent management.",
@@ -59,7 +59,7 @@ export const projects = parseProjects([
   {
     slug: "fast-sim-web",
     title: "Fast SIM Portal",
-    client: "Fastlink Company",
+    client: "Fastlink Telecom",
     year: 2024,
     summary:
       "Back-office portal where dealers and distributors manage agents, allocate stock and report across the whole sales network.",
@@ -72,7 +72,7 @@ export const projects = parseProjects([
   {
     slug: "smart-offers",
     title: "Smart Offers",
-    client: "Fastlink Company",
+    client: "Fastlink Telecom",
     year: 2024,
     summary:
       "Targeted marketing system with geo-fencing — builds subscriber offers by segment and location, then tracks take-up per campaign.",
@@ -85,7 +85,7 @@ export const projects = parseProjects([
   {
     slug: "fast-serve",
     title: "Fast Serve",
-    client: "Fastlink Company",
+    client: "Fastlink Telecom",
     year: 2024,
     summary:
       "Restaurant and inventory management: menus, orders, stock levels and daily reconciliation in a single operations console.",
@@ -212,7 +212,10 @@ export const projects = parseProjects([
     year: 2021,
     summary:
       "Placement platform matching university students to internships, with application tracking for students and host organisations.",
-    role: "Frontend Developer",
+    // Named as coursework rather than as a client engagement. It is real work
+    // and it predates the first job, so calling it "Frontend Developer" next
+    // to a university's name reads as something it was not.
+    role: "Final-year university project",
     domain: "education",
     surface: "web-app",
     stack: ["React", "JavaScript", "Redux"],

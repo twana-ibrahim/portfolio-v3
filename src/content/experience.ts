@@ -45,7 +45,7 @@ export const experience = parseExperience(
       projects: ["mytv-plus-app", "mytv-plus-ads"],
     },
     {
-      company: "Fastlink Company",
+      company: "Fastlink Telecom",
       role: "Frontend Developer",
       location: "Erbil, Iraq",
       arrangement: "remote",
@@ -110,23 +110,39 @@ export const education = [
  * Ordered by relevance to the work, not by date awarded.
  *
  * Verification URLs matter more than the names do. Anyone can type "Advanced
- * React" into a list; a link that resolves to Coursera's record is the
+ * React" into a list; a link that resolves to the issuer's own record is the
  * difference between a claim and a fact, and it costs one line of markup.
- * Jira Fundamentals has neither a date nor a link because Atlassian issues no
- * public credential for it — left as a bare claim rather than dressed up.
+ *
+ * Jira Fundamentals is last and unlinked because Atlassian issues no public
+ * credential for it. It is the one item here a reader cannot check, which is
+ * exactly why it sits at the bottom rather than being dressed up to match its
+ * neighbours.
+ *
+ * Tracking parameters are stripped from the share URLs — a `utm_source=android`
+ * on a credential link tells the reader which phone you were holding.
  */
 export const certifications = z.array(certificationSchema).parse([
   {
     name: "Advanced React",
     issuer: "Meta",
     awarded: "2023-12",
-    verifyUrl: "https://coursera.org/verify/QBW39CFN94MT",
+    verifyUrl: "https://www.coursera.org/account/accomplishments/verify/QBW39CFN94MT",
+  },
+  {
+    name: "Forward Program",
+    issuer: "McKinsey.org",
+    verifyUrl: "https://www.credly.com/badges/5e11d54e-34ee-4e94-900a-42fad221cbdf/public_url",
   },
   {
     name: "Foundations of Project Management",
     issuer: "Google",
     awarded: "2022-08",
-    verifyUrl: "https://coursera.org/verify/BK5V82XH2KNG",
+    verifyUrl: "https://www.coursera.org/account/accomplishments/certificate/BK5V82XH2KNG",
+  },
+  {
+    name: "Claude 101",
+    issuer: "Anthropic",
+    verifyUrl: "https://verify.skilljar.com/c/uagd8vi8f2v2",
   },
   { name: "Jira Fundamentals", issuer: "Atlassian" },
 ]);
