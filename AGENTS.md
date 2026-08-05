@@ -19,11 +19,9 @@ Rebuild of
 ```bash
 pnpm dev          # dev server (Turbopack)
 pnpm build        # production build — also regenerates typed route definitions
-pnpm verify       # lint + typecheck + unit tests. Run before every commit.
+pnpm verify       # lint + typecheck. Run before every commit.
 pnpm lint:fix     # biome check --write
 pnpm typecheck    # tsc --noEmit
-pnpm test         # Vitest watch
-pnpm test:e2e     # Playwright (builds and serves first)
 pnpm analyze      # bundle analyzer
 ```
 
@@ -35,7 +33,12 @@ constraint, the generated types under `.next/types` are stale. Run `pnpm build`
 
 Next.js 16 (App Router, RSC) · React 19 · TypeScript (strict, plus
 `noUncheckedIndexedAccess` and `verbatimModuleSyntax`) · Tailwind v4 · Motion ·
-Zod v4 · Radix · Resend · Biome · Vitest · Playwright · pnpm.
+Zod v4 · Radix · Resend · Biome · pnpm.
+
+There is no test suite. It was removed deliberately; the build, `tsc` and Zod's
+parse-at-module-load are the only automated guards left, so anything they do
+not catch reaches production. Contrast, layout overflow and interactive states
+are now manual checks.
 
 Deliberately absent: no state library (a portfolio has no global state worth a
 store), no UI kit (fights Tailwind, ships dead weight), no data-fetching

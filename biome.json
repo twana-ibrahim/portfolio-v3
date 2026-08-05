@@ -11,8 +11,6 @@
       "!**/.next",
       "!**/node_modules",
       "!**/coverage",
-      "!**/playwright-report",
-      "!**/test-results",
       "!**/public",
       "!**/*.svg",
       "!**/pnpm-lock.yaml"

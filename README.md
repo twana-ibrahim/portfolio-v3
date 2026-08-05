@@ -23,9 +23,10 @@ This one is built on a few positions:
   Where a number is unknown, the field is empty rather than estimated.
 - **Honest affordances.** Fourteen of the sixteen projects are internal work
   under NDA. Those rows are text, not dead links, and they say so.
-- **Accessibility is a requirement.** WCAG AA contrast in both themes,
-  verified in CI by axe rather than by eye, correct landmarks and list
-  semantics, `prefers-reduced-motion` honoured everywhere motion appears.
+- **Accessibility is a requirement.** WCAG AA contrast in both themes —
+  every ink and surface pair computed against its background rather than
+  eyeballed — correct landmarks and list semantics, and
+  `prefers-reduced-motion` honoured everywhere motion appears.
 - **Restraint as a design position.** Editorial/Swiss: oversized type,
   generous whitespace, hairline rules, one accent colour used as a signal.
   Three ink levels and two line weights are the entire palette.
@@ -53,7 +54,7 @@ what to cut — was made deliberately and is documented where it was made.
 
 Next.js 16 (App Router, RSC) · React 19 · TypeScript (strict, plus
 `noUncheckedIndexedAccess` and `verbatimModuleSyntax`) · Tailwind v4 · Motion ·
-Zod v4 · Radix · Resend · Biome · Vitest · Playwright · pnpm.
+Zod v4 · Radix · Resend · Biome · pnpm.
 
 Deliberately absent: no state library, no UI kit, no data-fetching library, no
 CMS. Each of those solves a problem this site does not have, and the reasoning
@@ -97,23 +98,23 @@ of updates a year do not justify a database.
 
 The full rules, and the reasoning behind them, are in `AGENTS.md`.
 
-## Testing
+## Checks
 
 ```bash
-pnpm verify       # lint, typecheck, 40 unit tests
-pnpm test:e2e     # 64 Playwright tests
+pnpm verify       # lint + typecheck
 ```
 
-The end-to-end suite covers four things:
+There is no test suite. What still runs automatically:
 
-- **smoke** — every route responds, titles itself, has exactly one `h1` and
-  both landmarks, with no console errors or failed requests
-- **a11y** — axe across every route in **both themes**, because the palette is
-  remapped in `.dark` and contrast is a different question in each
-- **layout** — horizontal overflow at 768, 1024 and 1920, naming the offending
-  element when it fails
-- **interactions** — the mobile navigation dialog, the theme toggle, and the
-  contact form's error states: the surfaces a screenshot cannot reach
+- **TypeScript**, strict, with `noUncheckedIndexedAccess`
+- **Biome** on commit, via lefthook
+- **Zod at module load**, so malformed content fails `pnpm build` rather than
+  rendering broken
+
+Everything else is a manual check. Contrast in both themes, horizontal
+overflow at each breakpoint, the mobile navigation dialog, the theme toggle
+and the contact form's error states are not covered by anything — they are the
+surfaces a type checker cannot see.
 
 ## Contact form
 
