@@ -16,7 +16,8 @@ export const siteConfig = {
 
   name: "Twana Ibrahim",
   initials: "TI",
-  role: "Software Engineer",
+  /** Matches the CV exactly. A site that undersells the CV loses either way. */
+  role: "Senior Software Engineer (Frontend)",
 
   /**
    * When the clock starts for the "years shipping" figure.
