@@ -17,22 +17,44 @@ import { cn } from "@/lib/utils/cn";
  */
 const button = cva(
   [
+    "relative isolate overflow-hidden",
     "inline-flex items-center justify-center gap-2 whitespace-nowrap",
     "font-medium tracking-tight",
-    "transition-colors duration-fast ease-out-expo",
-    "[&_svg]:transition-transform [&_svg]:duration-fast [&_svg]:ease-out-expo",
+    "transition-colors duration-base ease-out-expo",
+
+    /**
+     * The fill sweeps in from the left and, on leave, continues out to the
+     * right rather than retreating the way it came. That is the whole trick,
+     * and it is one property: the origin flips between the two states, so the
+     * same scaleX animation reads as "enter" one way and "exit" the other.
+     *
+     * `isolate` keeps the -z-10 behind the label but inside the button's own
+     * stacking context, so it cannot fall behind the page.
+     */
+    "before:absolute before:inset-0 before:-z-10 before:bg-[var(--btn-fill)]",
+    "before:origin-right before:scale-x-0",
+    "before:transition-transform before:duration-base before:ease-out-expo",
+    "hover:before:origin-left hover:before:scale-x-100",
+
+    "[&_svg]:transition-transform [&_svg]:duration-base [&_svg]:ease-out-expo",
     "hover:[&_svg]:translate-x-0.5",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
     variants: {
       variant: {
-        /** Default call to action: inverted block. */
-        solid: "bg-ink text-paper hover:bg-accent hover:text-accent-ink",
+        /**
+         * Each variant only has to name the colour that sweeps in; the base
+         * owns the mechanism. `hover:bg-*` is gone deliberately — animating the
+         * background and sweeping a fill over it at once produces two
+         * different colours arriving at two different speeds.
+         */
+        solid: "bg-ink text-paper [--btn-fill:var(--accent)] hover:text-accent-ink",
         /** Reserved for the single most important action on a page. */
-        accent: "bg-accent text-accent-ink hover:bg-accent-hover",
+        accent: "bg-accent text-accent-ink [--btn-fill:var(--accent-hover)]",
         outline:
-          "border border-line-strong text-ink hover:border-ink hover:bg-ink hover:text-paper",
+          "border border-line-strong text-ink [--btn-fill:var(--ink)] hover:border-ink hover:text-paper",
+        /** No fill: a ghost with a sweeping block behind it is not a ghost. */
         ghost: "text-ink-muted hover:text-ink",
       },
       size: {
