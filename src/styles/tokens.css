@@ -40,6 +40,23 @@
   --line: oklch(0.898 0.004 95); /* hairline rules, dividers */
   --line-strong: oklch(0.812 0.005 95); /* borders that need to be seen */
 
+  /**
+   * NO PAPER GRAIN — tried and reverted, deliberately.
+   *
+   * A tiled SVG turbulence on the body background is the cheapest "printed
+   * stock" cue in an editorial system, costs no request, and looks good.
+   * It also makes axe unable to resolve what any text sits on: contrast
+   * evaluation across the whole site went from 26 nodes checked to 26 nodes
+   * *incomplete*, in both themes. Violations stayed at zero because nothing
+   * was being measured any more.
+   *
+   * That check has already caught two real contrast bugs here. Trading a
+   * regression guard for a texture nobody consciously notices is a bad deal,
+   * and the failure mode is silent, which makes it a worse one. There is no
+   * way to keep both: any full-bleed background image hides the solid colour
+   * axe needs to walk up to.
+   */
+
   /* Signal */
   --accent: oklch(0.552 0.201 32); /* vermilion */
   --accent-hover: oklch(0.498 0.205 32);

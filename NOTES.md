@@ -108,10 +108,14 @@ match. Five things do not.
 
 ### Decisions for you
 
-- [x] **Job title resolved.** `siteConfig.role` is now *"Senior Software
-      Engineer (Frontend)"*, matching the CV exactly. Feeds the hero eyebrow,
-      the `<title>` ("Twana Ibrahim — Senior Software Engineer (Frontend)",
-      50 characters, inside the ~60 Google renders) and the structured data.
+- [x] **Job title resolved** — `siteConfig.role` is *"Software Engineer
+      (Frontend)"*, matching the header of the CV dated Aug 2026.
+- [ ] **Your CV contradicts itself in the first two lines.** The header says
+      *Software Engineer (Frontend)*; the PROFESSIONAL SUMMARY directly below
+      still opens *"Senior Software Engineer with over 5 years…"*. The site
+      follows the header. Fix the summary line in the PDF, or put "Senior"
+      back in the header and tell me — but the two should not disagree on the
+      same page, and a reader sees both at once.
 - [ ] **FIB description.** `projects.ts` deliberately says little. Confirm what
       you can say publicly about a banking client.
 - [ ] **Custom domain.** Currently `twana-ibrahim.vercel.app`. Set
@@ -321,5 +325,7 @@ Recorded so they are not relitigated later.
 | Blog | None for now | An empty or stale blog hurts. The MDX pipeline exists, so a route is one file away. |
 | Logo | Inlined `currentColor` SVG | One file serves both themes; no second request, no flash on toggle. Sources kept in `public/brand/`. |
 | Skill list | 4 groups, 6 items max | The old 40-badge wall said "I have heard of these things". Everything cut still appears in context on the projects, where it proves more. |
+| Paper grain | Tried, reverted | A tiled SVG turbulence on the body background is the cheapest "printed stock" cue there is, costs no request, and looked good. It also stops axe resolving what any text sits on: contrast went from 12 nodes checked to 0, and 26 to *incomplete*, in both themes — while violations stayed at zero, because nothing was being measured. That check has caught two real bugs here. Any full-bleed background image hides the solid colour axe walks up to, so there is no version of this that keeps both. Don't re-add it. |
+| Positioning | Roles, not contracts | Five years of employment at companies, not a freelance book. Leading with "contract engagements" invited questions about a track record that isn't there and undersold the one that is. |
 | `paper-inverted` in dark | Elevated dark, not a literal inversion | Inverting it turned the contact band into a full-bleed near-white slab on an otherwise dark page. Someone on dark theme chose it to avoid exactly that — a bright block three quarters down the page is glare, not emphasis. In dark it is now `oklch(0.255)`, a step above `paper-raised`, so the band still reads as its own moment and the ink stays light. Contrast is unaffected: 7.61:1 at `/70`, 14.12:1 at full. |
 | "Home" in the nav | Explicit item, not just the wordmark | The logo is only a home link to people who know the convention, and the mobile dialog covers the wordmark entirely — so there was no way back to the front page from inside the open menu. Note `isActive` special-cases `/`: every pathname starts with it, so the prefix match that keeps Work current on `/work/<slug>` would mark Home current everywhere. |
