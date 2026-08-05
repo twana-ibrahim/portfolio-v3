@@ -102,11 +102,28 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
 
   const layout = "group grid grid-cols-1 items-baseline gap-x-8 gap-y-4 py-8 md:grid-cols-12";
 
+  /**
+   * An accent hairline drawing in across the row's top rule on hover.
+   *
+   * Same gesture as `link-underline` — draws from the left, same easing — so
+   * the site has one idea about what "this responds to you" looks like rather
+   * than a different flourish per component. Applied only to rows that go
+   * somewhere: a dead row that lights up is a promise the markup does not
+   * keep. Sits on `-top-px` to cover the li's existing border rather than
+   * stack a second line beneath it.
+   */
+  const hoverRule = cn(
+    "relative before:absolute before:inset-x-0 before:-top-px before:h-px",
+    "before:origin-left before:scale-x-0 before:bg-accent",
+    "before:transition-transform before:duration-base before:ease-out-expo",
+    "hover:before:scale-x-100",
+  );
+
   // The <li> belongs to the caller: a <ul> may only contain <li>, and the
   // stagger wrapper has to *be* that element rather than sit inside it.
   if (target.kind === "internal") {
     return (
-      <Link href={target.href} className={layout}>
+      <Link href={target.href} className={cn(layout, hoverRule)}>
         {content}
       </Link>
     );
@@ -114,7 +131,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
 
   if (target.kind === "external") {
     return (
-      <a href={target.href} target="_blank" rel="noreferrer" className={layout}>
+      <a href={target.href} target="_blank" rel="noreferrer" className={cn(layout, hoverRule)}>
         {content}
       </a>
     );
