@@ -330,7 +330,7 @@ export function getProjectBySlug(slug: string) {
  * from its enum should be one file to fix, not two.
  */
 export const domainLabels: Record<(typeof projects)[number]["domain"], Localized<string>> = {
-  telecom: { en: "Telecom", ku: "تەلەکۆم" },
+  telecom: { en: "Telecom", ku: "تیلیکۆم" },
   fintech: { en: "Banking", ku: "بانک" },
   media: { en: "Streaming", ku: "ستریمینگ" },
   identity: { en: "Identity", ku: "ناسنامە" },

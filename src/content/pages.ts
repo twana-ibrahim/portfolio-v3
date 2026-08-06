@@ -23,7 +23,7 @@ export const pageCopy = parsePageCopy({
       en: { lead: "Systems that businesses", emphasis: "actually run on", trail: "." },
       ku: {
         lead: "ئەو سیستەمانەی کۆمپانیاکان",
-        emphasis: "بەڕاستی پێیان کار دەکەن",
+        emphasis: "بەڕاستی کاریان پێ دەکەن",
         trail: ".",
       },
     },
@@ -34,26 +34,30 @@ export const pageCopy = parsePageCopy({
      */
     intro: {
       en: "Most of this is internal software — back-office portals, agent tools, reporting systems and identity infrastructure, running inside banks, telecom operators and public bodies. None of it is public, so a missing link here is deliberate rather than an oversight.",
-      ku: "زۆربەی ئەمانە سۆفتوێری ناوخۆین — پۆرتاڵی کارگێڕی، ئامرازی نوێنەران، سیستەمی ڕاپۆرت و ژێرخانی ناسنامە، کە لەناو بانک، کۆمپانیای تەلەکۆم و دامەزراوە حکومییەکاندا کار دەکەن. هیچیان بۆ گشت کراوە نین، بۆیە نەبوونی بەستەر لێرەدا بە ئەنقەستە، نەک لەبیرچوونەوە.",
+      ku: "زۆربەی ئەمانە سۆفتوێری ناوخۆین — پۆرتاڵی کارگێڕی، ئامرازی نوێنەران، سیستەمی ڕاپۆرت و ژێرخانی ناسنامە، کە لەناو بانک، کۆمپانیای تیلیکۆم و دامەزراوە حکومییەکاندا کار دەکەن. هیچیان بۆ گشتی کراوە نین، بۆیە نەبوونی بەستەر لێرەدا بە ئەنقەستە، نەک لەبیرکرابێت.",
     },
     description: {
       en: "Selected engineering work across digital banking, telecom, streaming, identity and government systems — built between 2021 and today.",
-      ku: "کاری هەڵبژێردراو لە بانکی دیجیتاڵ، تەلەکۆم، ستریمینگ، ناسنامە و سیستەمە حکومییەکاندا — لە 2021 ـەوە تا ئێستا.",
+      ku: "کاری هەڵبژێردراو لە بانکی دیجیتاڵ، تیلیکۆم، ستریمینگ، ناسنامە و سیستەمە حکومییەکاندا — لە 2021 ـەوە تا ئێستا.",
     },
   },
 
   about: {
     title: {
       en: { lead: "{years} years building software people", emphasis: "have to", trail: "use." },
+      // Deliberately not the English claim. "have to" is the whole thesis of
+      // the English line — internal tools nobody chooses. Twana asked for
+      // "حەز دەکەن" (want to), which is warmer and reads better in Kurdish,
+      // so the two versions now argue slightly different things on purpose.
       ku: {
         lead: "{years} ساڵ دروستکردنی ئەو سۆفتوێرەی",
-        emphasis: "خەڵک ناچارن",
+        emphasis: "خەڵک حەز دەکەن",
         trail: "بەکاری بهێنن.",
       },
     },
     description: {
       en: "Frontend engineer in Kalar, Iraq. Five years on digital banking, telecom, streaming and identity systems — mostly React and TypeScript.",
-      ku: "ئەندازیاری Frontend لە کەلار. پێنج ساڵ کارکردن لەسەر سیستەمی بانکی، تەلەکۆم، ستریمینگ و ناسنامە — زۆربەی بە React و TypeScript.",
+      ku: "ئەندازیاری Frontend لە کەلار. پێنج ساڵ کارکردن لەسەر سیستەمی بانکی، تیلیکۆم، ستریمینگ و ناسنامە — زۆربەی بە React و TypeScript.",
     },
   },
 

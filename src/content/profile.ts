@@ -49,7 +49,7 @@ export const profile = parseProfile({
   /** One line, used in the footer and structured data. */
   tagline: {
     en: "Frontend engineer building the internal systems banks and operators run on.",
-    ku: "ئەندازیاری Frontend، دروستکەری ئەو سیستەمە ناوخۆییانەی کە بانک و تەلەکۆم پێیان کار دەکەن.",
+    ku: "ئەندازیاری Frontend، دروستکەری ئەو سیستەمە ناوخۆییانەی کە بانک و تیلیکۆم پێیان کار دەکەن.",
   },
 
   /**
@@ -109,7 +109,7 @@ export const profile = parseProfile({
      */
     detail: {
       en: "Open to remote roles, GMT+3",
-      ku: "ئامادەم بۆ کاری دوورەوە، \u2066GMT+3\u2069",
+      ku: "ئامادەم بۆ کارکردن لە دوورەوە، \u2066GMT+3\u2069",
     },
   },
 
@@ -124,13 +124,16 @@ export const profile = parseProfile({
       "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq. Five years in, almost all of it spent on software that other businesses run on — the dashboard a telecom operations team opens at the start of every shift, the app an agent uses to sell a SIM, the identity server that decides what six internal products will let you see.",
       "That kind of work has a particular shape. Nobody is delighted by an internal tool. They need it to be right, to stay responsive when the table has ten thousand rows in it, and to never offer a button the backend is going to refuse. So most of my effort goes into things that don't photograph well: access control that mirrors the API exactly, filtering that survives real data volumes, and structure the next person can change without breaking three screens they've never opened.",
       "Frontend is where I specialise, not where I stop. Node and Express, REST design, schemas in Postgres and Mongo — knowing what a response costs to produce changes what you ask for, and it is most of the difference between an interface that fits the system and one the backend team has to work around.",
-      "Right now I'm building customer-facing features for FIB, a digital bank — a project I moved onto at Gateway ICT and carried with me to Tailored Applications. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
+      // The previous version said the FIB project was one "I carried with me"
+      // between employers. It is the client's product, not something an
+      // engineer takes along, and the sentence read as a claim on it.
+      "Right now I'm building customer-facing features for FIB, a digital bank. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
     ],
     ku: [
-      "ئەندازیاری Frontend ـم و لە کەلارەوە کار دەکەم. پێنج ساڵە، زۆربەی ئەو ماوەیە لەسەر ئەو سۆفتوێرەی کە کۆمپانیاکان پێی کار دەکەن — ئەو داشبۆردەی تیمی کارگێڕی تەلەکۆم لە سەرەتای هەر شیفتێکدا دەیکاتەوە، ئەو ئەپەی نوێنەر SIM ی پێ دەفرۆشێت، ئەو سێرڤەری ناسنامەیەی بڕیار دەدات شەش بەرنامەی ناوخۆیی چیت پیشان بدەن.",
-      "ئەم جۆرە کارە شێوەی خۆی هەیە. کەس بە ئامرازێکی ناوخۆیی دڵخۆش نابێت. پێویستە ڕاست بێت، پێویستە خێرا بمێنێتەوە کاتێک خشتەکە دە هەزار ڕیزی تێدایە، و پێویستە هەرگیز دوگمەیەک پیشان نەدات کە باکئێند ڕەتی دەکاتەوە. بۆیە زۆربەی هەوڵم لەو شتانەدایە کە وێنەیان لێ ناگیرێت: کۆنترۆڵی دەستڕاگەیشتن کە بە تەواوی هاوتای API ـیە، فلتەرێک کە لە قەبارەی ڕاستەقینەدا دەمێنێتەوە، و پێکهاتەیەک کە کەسی دواتر بتوانێت بیگۆڕێت بەبێ ئەوەی سێ شاشەی تر بشکێنێت.",
+      "ئەندازیاری Frontend ـم و لە کەلارەوە کار دەکەم. پێنج ساڵە، زۆربەی ئەو ماوەیە لەسەر ئەو سۆفتوێرەی کە کۆمپانیاکان پێی کار دەکەن — ئەو داشبۆردەی تیمی کارگێڕی تیلیکۆم لە سەرەتای هەر شیفتێکدا دەیکاتەوە، ئەو ئەپەی نوێنەر SIM ی پێ دەفرۆشێت، و ئەو سێرڤەری ناسنامەیەی دیاری دەکات کە هەر بەکارهێنەرێک لە شەش بەرنامەی ناوخۆییدا دەتوانێت چی ببینێت.",
+      "ئەم جۆرە کارە تایبەتمەندی خۆی هەیە. کەس چاوەڕێی ئەوە ناکات ئامرازێکی ناوخۆیی سەرسامی بکات؛ ئەوەی لێی دەوێت ئەوەیە کە دروست کار بکات، خێرا بمێنێتەوە کاتێک خشتەکە دە هەزار ڕیزی تێدایە، و هەرگیز دوگمەیەک پیشان نەدات کە باکئێند ڕەتی دەکاتەوە. بۆیە زۆربەی هەوڵم لەو شتانەدایە کە وێنەیان لێ ناگیرێت: کۆنترۆڵی دەستڕاگەیشتن کە بە تەواوی هاوتای API ـیە، فلتەرێک کە لە قەبارەی داتای ڕاستەقینەدا دەمێنێتەوە، و پێکهاتەیەک کە گەشەپێدەری دواتر بتوانێت بیگۆڕێت بەبێ ئەوەی سێ شاشەی تر تێک بدات کە هەرگیز نەیکردوونەتەوە.",
       "Frontend بواری تایبەتمەندیمە، نەک سنووری زانیاریم. Node و Express، دیزاینی REST، سکیمای Postgres و Mongo — کاتێک بزانیت وەڵامێک چەند تێچوونی هەیە، ئەوە شێوەی داواکردنت دەگۆڕێت. ئەمەش زۆربەی ئەو جیاوازییەیە لەنێوان ڕووکارێک کە لەگەڵ سیستەمەکەدا دەگونجێت و ئەوەی کە تیمی باکئێند دەبێت بەدەوریدا بسووڕێتەوە.",
-      "ئێستا لەسەر ئەو بەشانەی FIB کار دەکەم کە کڕیار خۆی بەکاریان دەهێنێت — پڕۆژەیەک کە لە Gateway ICT دەستم پێکرد و لەگەڵ خۆم هێنایە Tailored Applications. پێش بانک، پلاتفۆرمەکانی فرۆشتنی فاستلینک بوو، ستریمینگ و ڕیکلام لە Gateway، و سیستەمی ڕاپۆرتی Angular لە iQ Group، کە لەوێ فێربووم کارکردن بەپێی پێوەر واتە چی.",
+      "ئێستا لەسەر ئەو بەشانەی FIB کار دەکەم کە کڕیار خۆی بەکاریان دەهێنێت. پێش بانک، پلاتفۆرمەکانی فرۆشتنی فاستلینک بوو، ستریمینگ و ڕیکلام لە Gateway، و سیستەمی ڕاپۆرتی Angular لە iQ Group — لەوێ فێربووم کە کارکردن بەپێی پێوەرێکی دیاریکراو واتە چی.",
     ],
   },
 });
