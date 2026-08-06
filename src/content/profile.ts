@@ -83,10 +83,17 @@ export const profile = parseProfile({
    * `{years}` is resolved from `siteConfig.careerStart` at render. It used to
    * read "Five years" as a literal, which agreed with the hero's derived stat
    * until the first of January and then quietly stopped.
+   *
+   * `⁦…⁩` are bidi isolates, and they are load-bearing. A Latin word
+   * inside RTL text is placed correctly on its own, but one ending in a
+   * *neutral* character is not: "MyTV+" rendered as "+MyTV", because the
+   * algorithm hands the plus to the surrounding Kurdish. The isolate fences the
+   * run off. Written as escapes rather than as the characters themselves, which
+   * are invisible in an editor and get deleted by accident.
    */
   summary: {
     en: "{years} years of frontend work on software other businesses depend on to operate — digital banking, telecom sales, streaming and advertising, identity and access management. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
-    ku: "{years} ساڵە ئەو سۆفتوێرە دروست دەکەم کە کۆمپانیاکان ڕۆژانە کاری پێ دەکەن — بانکی FIB، سیستەمی فرۆشتنی فاستلینک، ستریمینگی MyTV+ و سیستەمی ناسنامەی iQ Group. زۆربەی بە React و TypeScript، لەو سیستەمانەی کە ڕاستی تێدا گرنگترە لە جوانی.",
+    ku: "{years} ساڵە ئەو سۆفتوێرە دروست دەکەم کە کۆمپانیاکان ڕۆژانە کاری پێ دەکەن — بانکی FIB، سیستەمی فرۆشتنی فاستلینک، ستریمینگی \u2066MyTV+\u2069 و سیستەمی ناسنامەی iQ Group. زۆربەی بە React و TypeScript، لەو سیستەمانەی کە ڕاستی تێدا گرنگترە لە جوانی.",
   },
 
   availability: {
@@ -102,7 +109,7 @@ export const profile = parseProfile({
      */
     detail: {
       en: "Open to remote roles, GMT+3",
-      ku: "ئامادەم بۆ کاری دوورەوە، GMT+3",
+      ku: "ئامادەم بۆ کاری دوورەوە، \u2066GMT+3\u2069",
     },
   },
 

@@ -251,6 +251,19 @@ pre[data-theme] span {
 }
 
 /**
+ * Tightened tracking is a Latin-display idea and does not transfer.
+ *
+ * The `tracking-*` utilities write `--tw-tracking`, which the type utilities
+ * read *before* the scale's own letter-spacing — so a `tracking-tight` on a
+ * heading silently wins over the RTL values in tokens.css. Arabic script is
+ * cursive: pulling joined letters closer thickens the joins into blots rather
+ * than making the setting look considered.
+ */
+html[dir="rtl"] [class*="tracking-"] {
+  letter-spacing: normal;
+}
+
+/**
  * The one phrase per page that is set apart.
  *
  * In English it is Instrument Serif, italic — a seasoning, used once or twice

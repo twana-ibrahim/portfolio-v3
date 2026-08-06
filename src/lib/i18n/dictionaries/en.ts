@@ -17,6 +17,15 @@
  * `interpolate()`; values that inflect use `{ one, other }` and `plural()`.
  */
 export const en = {
+  /**
+   * Separator for inline pairs like "Kalar, Iraq".
+   *
+   * Kurdish uses the Arabic comma (U+060C). A Latin comma in RTL text is a
+   * neutral character, so the bidi algorithm parks it on the wrong side of the
+   * word and it reads as a stray mark.
+   */
+  listSeparator: ", ",
+
   a11y: {
     skipToContent: "Skip to content",
     mainNav: "Main",

@@ -248,3 +248,51 @@
   --shadow-subtle: 0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px oklch(0 0 0 / 0.03);
   --shadow-lifted: 0 2px 4px oklch(0 0 0 / 0.05), 0 12px 32px oklch(0 0 0 / 0.06);
 }
+
+/* ==========================================================================
+   3. THE SAME SCALE, RE-CUT FOR ARABIC SCRIPT
+
+   The type scale above is tuned for Geist. Handing those numbers to Sorani
+   produces something that is technically the same size and visually twice as
+   loud, because the two scripts do not distribute their mass the same way:
+
+   - Arabic has no lowercase, so every glyph occupies the full band a Latin
+     capital does. At an identical font-size it reads far larger, and the
+     display line ran wide enough to wrap — which breaks TextReveal outright,
+     since its lines are authored rather than measured and a wrapped line
+     escapes its clipping mask.
+
+   - `line-height: 0.86` works for Latin display type because the descenders
+     are shallow and rare. Sorani carries deep descenders (ج ح ع ی) plus
+     diacritics above, so at 0.86 the lines physically collide.
+
+   - Negative tracking is wrong for a cursive script at any size. The letters
+     are already joined; pulling them together thickens the joins into blots.
+
+   Selector is `html[dir="rtl"]` rather than `[dir="rtl"]`: `@theme` emits its
+   values on `:root`, which has the same specificity as a bare attribute
+   selector, and relying on source order across generated CSS is not a bet
+   worth taking.
+   ========================================================================== */
+
+html[dir="rtl"] {
+  --text-display: clamp(2.25rem, 6.4vw, 5.75rem);
+  --text-display--line-height: 1.14;
+  --text-display--letter-spacing: 0;
+
+  --text-title: clamp(1.75rem, 3.9vw, 3.25rem);
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: 0;
+
+  --text-heading: clamp(1.5rem, 2.7vw, 2.25rem);
+  --text-heading--line-height: 1.3;
+  --text-heading--letter-spacing: 0;
+
+  --text-subheading--line-height: 1.5;
+  --text-subheading--letter-spacing: 0;
+
+  --text-lead--line-height: 1.85;
+  --text-lead--letter-spacing: 0;
+
+  --text-body--line-height: 1.9;
+}

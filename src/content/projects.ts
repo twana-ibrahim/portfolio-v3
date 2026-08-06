@@ -175,7 +175,7 @@ export const projects = parseProjects([
     year: 2023,
     summary: {
       en: "Hotel management platform for rooms, guests and billing, integrated with in-room MyTV+ content delivery.",
-      ku: "پلاتفۆرمی بەڕێوەبردنی هوتێل بۆ ژوور، میوان و حیساب، بەستراوە بە خزمەتگوزاری MyTV+ ی ناو ژوورەکان.",
+      ku: "پلاتفۆرمی بەڕێوەبردنی هوتێل بۆ ژوور، میوان و حیساب، بەستراوە بە خزمەتگوزاری \u2066MyTV+\u2069 ی ناو ژوورەکان.",
     },
     role: FRONTEND,
     domain: "hospitality",
@@ -190,7 +190,7 @@ export const projects = parseProjects([
     year: 2023,
     summary: {
       en: "Public marketing site for the MyTV+ service, presenting packages and subscription plans with scroll-led motion.",
-      ku: "ماڵپەڕی فەرمی MyTV+ — پاکێج و پلانەکانی بەشداری پیشان دەدات، بە جووڵەیەک کە بە سکڕۆڵی بەکارهێنەر دەبزوێت.",
+      ku: "ماڵپەڕی فەرمی \u2066MyTV+\u2069 — پاکێج و پلانەکانی بەشداری پیشان دەدات، بە جووڵەیەک کە بە سکڕۆڵی بەکارهێنەر دەبزوێت.",
     },
     role: FRONTEND,
     domain: "media",

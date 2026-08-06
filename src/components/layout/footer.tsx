@@ -35,7 +35,9 @@ export async function Footer() {
           </p>
           <p className="label mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-subtle">
             <span>
-              {pick(profile.location.city, locale)}, {pick(profile.location.country, locale)}
+              {pick(profile.location.city, locale)}
+              {dictionary.listSeparator}
+              {pick(profile.location.country, locale)}
             </span>
             <span aria-hidden className="h-px w-3 bg-line-strong" />
             <LocalTime suffix={dictionary.footer.localTime} />

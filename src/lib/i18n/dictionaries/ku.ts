@@ -27,6 +27,8 @@ import type { Dictionary } from "./en";
  * ────────────────────────────────────────────────────────────────────────────
  */
 export const ku: Dictionary = {
+  listSeparator: "، ",
+
   a11y: {
     skipToContent: "بازدان بۆ ناوەڕۆک",
     mainNav: "سەرەکی",

@@ -44,7 +44,9 @@ export async function Hero() {
             <span>{pick(profile.role, locale)}</span>
             <span aria-hidden className="h-px w-4 bg-line-strong" />
             <span>
-              {pick(profile.location.city, locale)}, {pick(profile.location.country, locale)}
+              {pick(profile.location.city, locale)}
+              {dictionary.listSeparator}
+              {pick(profile.location.country, locale)}
             </span>
           </p>
         </Reveal>
