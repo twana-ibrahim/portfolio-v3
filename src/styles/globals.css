@@ -212,6 +212,48 @@ pre[data-theme] span {
   letter-spacing: 0.09em;
   font-weight: 500;
   text-transform: uppercase;
+
+  /**
+   * Arabic script is cursive, and `letter-spacing` prises the joins apart —
+   * ڕێکخراو stops being one word and becomes a row of disconnected shapes.
+   * `text-transform: uppercase` is a no-op here (the script has no case), but
+   * it goes too, so the rule reads as one decision rather than two.
+   *
+   * The `:not([dir="ltr"])` is what keeps the Latin metadata intact. Tags,
+   * the email address and the built-with line are marked `dir="ltr"` because
+   * their content is Latin regardless of page language, and for those the
+   * wide tracking is still the right treatment.
+   */
+  [dir="rtl"] &:not([dir="ltr"]) {
+    letter-spacing: 0;
+    text-transform: none;
+  }
+}
+
+/**
+ * The one phrase per page that is set apart.
+ *
+ * In English it is Instrument Serif, italic — a seasoning, used once or twice
+ * and never more. In Kurdish it cannot be. Instrument Serif has no Arabic
+ * glyphs at all, and more to the point Arabic script has no italic: slanting
+ * it is not emphasis, it is a rendering defect, and an oblique Sorani heading
+ * reads to a native eye the way stretched Helvetica reads to a designer.
+ *
+ * Weight is the conventional device in Arabic-script typography, so that is
+ * what the emphasis becomes. Same intent, same one-per-page restraint,
+ * executed in the way the script actually supports.
+ */
+@utility emphasis {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+
+  [dir="rtl"] & {
+    font-weight: 700;
+    font-style: normal;
+    letter-spacing: normal;
+  }
 }
 
 /** The 12-column page grid. Every section aligns to it. */

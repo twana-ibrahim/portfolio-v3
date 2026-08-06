@@ -147,9 +147,19 @@
      Mono  : Geist Mono — metadata, numbers, labels. The engineer's texture.
      Serif : Instrument Serif — used *once or twice* per page for emphasis.
              Restraint is the whole point; it is a seasoning, not an ingredient. */
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
-  --font-serif: var(--font-instrument-serif), Georgia, "Times New Roman", serif;
+  /* Vazirmatn sits in every stack rather than being swapped in for the Kurdish
+     pages. None of the three Geist/Instrument faces contain a single Arabic
+     glyph, so the browser's per-character fallback does the routing for free:
+     Latin renders in Geist, Sorani renders in Vazirmatn, and a line that mixes
+     them ("زۆربەی بە React") gets both without a wrapper element or a class.
+     Ordering matters — Vazirmatn also has Latin, and putting it first would
+     quietly restyle the English site. */
+  --font-sans:
+    var(--font-geist-sans), var(--font-kurdish), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:
+    var(--font-geist-mono), var(--font-kurdish), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-serif:
+    var(--font-instrument-serif), var(--font-kurdish), Georgia, "Times New Roman", serif;
 
   /* ---- Type scale ----
      Fluid via clamp() so there are no breakpoint jumps. Tracking tightens as
