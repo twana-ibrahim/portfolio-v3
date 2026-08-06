@@ -43,8 +43,10 @@ const button = cva(
     "before:transition-transform before:duration-base before:ease-out-expo",
     "hover:before:origin-left hover:before:scale-x-100 rtl:hover:before:origin-right",
 
+    // `translate` resolves in the untransformed frame, so an RTL variant is
+    // required — a mirrored icon still drifts right without one.
     "[&_svg]:transition-transform [&_svg]:duration-base [&_svg]:ease-out-expo",
-    "hover:[&_svg]:translate-x-0.5",
+    "hover:[&_svg]:translate-x-0.5 rtl:hover:[&_svg]:-translate-x-0.5",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {

@@ -108,7 +108,7 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
           <ArrowLeft
             size={13}
             aria-hidden
-            className="transition-transform duration-fast ease-out-expo group-hover:-translate-x-0.5 rtl:-scale-x-100"
+            className="transition-transform duration-fast ease-out-expo group-hover:-translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:translate-x-0.5"
           />
           {dictionary.work.allWork}
         </Link>

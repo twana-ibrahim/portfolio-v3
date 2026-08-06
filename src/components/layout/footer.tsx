@@ -81,8 +81,10 @@ export async function Footer() {
                     aria-hidden
                     // rtl:-scale-x-100 mirrors the arrow. A "leaves the site"
                     // arrow points away from the reading direction, so in RTL
-                    // it has to point up-left or it reads as "come back".
-                    className="translate-y-px transition-transform duration-fast ease-out-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:-scale-x-100"
+                    // it has to point up-left or it reads as "come back". The
+                    // hover nudge needs its own variant — `translate` resolves
+                    // after the mirror, so it does not flip with the glyph.
+                    className="translate-y-px transition-transform duration-fast ease-out-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:-scale-x-100 rtl:group-hover:-translate-x-0.5"
                   />
                 </a>
               </li>

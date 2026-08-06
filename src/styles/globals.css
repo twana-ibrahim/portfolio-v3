@@ -282,8 +282,19 @@ html[dir="rtl"] [class*="tracking-"] {
   font-weight: 400;
   letter-spacing: -0.02em;
 
+  /**
+   * 900, not 700. The display scale already sets 600, and against that a 700
+   * is invisible at heading sizes in Vazirmatn — the emphasis was there in the
+   * markup and did nothing on screen. Weight is the only device Arabic script
+   * offers here, so it has to be used at a distance that actually reads.
+   */
   [dir="rtl"] & {
-    font-weight: 700;
+    /* Named outright rather than left to per-glyph fallback. Instrument Serif
+       has no Arabic and is loaded at a single weight of 400, so leaning on the
+       fallback chain would put the 900 request on a face that cannot honour
+       it. Vazirmatn is variable and can. */
+    font-family: var(--font-kurdish), sans-serif;
+    font-weight: 900;
     font-style: normal;
     letter-spacing: normal;
   }
@@ -323,6 +334,13 @@ html[dir="rtl"] [class*="tracking-"] {
   background-repeat: no-repeat;
   background-size: 0% 1px;
   transition: background-size var(--duration-base) var(--ease-out-expo);
+
+  /* The rule grows from the reading edge, so it has to start on the right in
+     RTL. `background-position` is physical and has no logical equivalent —
+     left unset, the underline drew backwards across every Kurdish link. */
+  [dir="rtl"] & {
+    background-position: 100% 100%;
+  }
 
   &:hover,
   &:focus-visible {

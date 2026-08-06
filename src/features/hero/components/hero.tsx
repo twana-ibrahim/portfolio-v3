@@ -81,11 +81,16 @@ export async function Hero() {
               <Button asChild size="lg">
                 <Link href={localePath(locale, "/work")}>
                   {dictionary.home.selectedWork}
+                  {/* Rotated, not mirrored. `scale` is applied to the geometry
+                      *before* `rotate` — so mirroring a vertically symmetric
+                      glyph like ArrowDown changes nothing, and this arrow kept
+                      pointing down-right on the Kurdish page. Turning it the
+                      other way is the only thing that actually moves it. */}
                   <ArrowDown
                     size={16}
                     strokeWidth={2}
                     aria-hidden
-                    className="-rotate-45 rtl:-scale-x-100"
+                    className="-rotate-45 rtl:rotate-45"
                   />
                 </Link>
               </Button>

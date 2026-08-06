@@ -104,13 +104,17 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
               aria-hidden
               className={cn(
                 "transition-transform duration-base ease-out-expo",
+                // The nudge needs its own RTL variant. `translate` is applied
+                // last, in the untransformed frame, so mirroring the glyph
+                // does NOT flip which way it drifts — it would have crept
+                // right while pointing left.
                 "group-hover:-translate-y-0.5 group-hover:translate-x-0.5",
-                target.kind === "internal" && "rotate-45",
-                // An "leads away" arrow has to point away from the reading
-                // direction. Mirroring also flips the hover nudge, because
-                // `scale` is applied after `translate` — so it still drifts
-                // the way it points.
-                "rtl:-scale-x-100",
+                "rtl:group-hover:-translate-x-0.5",
+                // An arrow that leads away has to point away from the reading
+                // direction. Two different mechanisms, because `scale` applies
+                // before `rotate`: mirroring an already-rotated glyph lands it
+                // somewhere neither side wants.
+                target.kind === "internal" ? "rotate-45 rtl:rotate-225" : "rtl:-scale-x-100",
               )}
             />
           </span>
