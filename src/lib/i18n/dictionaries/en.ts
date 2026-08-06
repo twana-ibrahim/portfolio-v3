@@ -41,6 +41,7 @@ export const en = {
 
   home: {
     selectedWork: "Selected work",
+    getInTouch: "Get in touch",
     allProjects: "All {count} projects",
     experience: "Experience",
     yearsShipping: "Years shipping",
@@ -63,6 +64,12 @@ export const en = {
     read: "Read",
     readingMinutes: "{count} min",
     withheld: "Internal system — screenshots and links withheld",
+    /** Keys are the `arrangement` enum in content/schema.ts. */
+    arrangement: {
+      remote: "Remote",
+      "on-site": "On-site",
+      hybrid: "Hybrid",
+    },
   },
 
   about: {
@@ -74,7 +81,17 @@ export const en = {
     whatIReachFor: "What I reach for",
     fullHistory: "Full history",
     downloadCv: "Download CV",
-    present: "Present",
+    // "Present" is not here on purpose — it belongs to the same vocabulary as
+    // the month names, and lib/utils/format.ts owns that. Two sources for one
+    // calendar is how a date range ends up half-translated.
+    alsoWorkedWith: "Also worked with",
+    /** Keys are the `level` enum in content/schema.ts. */
+    languageLevels: {
+      Native: "Native",
+      Professional: "Professional",
+      "Limited working": "Limited working",
+      Elementary: "Elementary",
+    },
   },
 
   contact: {
@@ -98,6 +115,25 @@ export const en = {
     sent: "Message sent.",
     sentBody: "Thanks for reaching out — I read everything and usually reply within a day or two.",
     ctaLabel: "Start a conversation",
+
+    /**
+     * Read by a stranger who has just been told they did something wrong, so
+     * they say what to do rather than what failed.
+     *
+     * These live in the dictionary rather than in the Zod schema because the
+     * Server Action that parses the form cannot call `next/root-params` — the
+     * locale arrives as a form field, and the schema is built per request from
+     * whichever of these two sets it selects.
+     */
+    validation: {
+      name: "Please enter your name.",
+      nameTooLong: "That name is longer than this form supports.",
+      email: "Please enter an email address I can reply to.",
+      message: "A little more detail helps — 20 characters minimum.",
+      messageTooLong: "That is longer than this form accepts. Email me directly instead.",
+      checkFields: "Please check the fields below.",
+      failed: "Something went wrong sending that. Email me directly at {email}.",
+    },
   },
 
   footer: {

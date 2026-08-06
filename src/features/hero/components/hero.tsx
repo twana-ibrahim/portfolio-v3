@@ -4,25 +4,34 @@ import { Container } from "@/components/layout/container";
 import { Perspective } from "@/components/motion/perspective";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
+import { profile } from "@/content/profile";
 import { industryCount, projects } from "@/content/projects";
 import { siteConfig } from "@/lib/config/site";
+import { interpolate } from "@/lib/i18n/format";
+import { pick } from "@/lib/i18n/localized";
+import { localePath } from "@/lib/i18n/routing";
+import { getTranslations } from "@/lib/i18n/server";
 import { yearsSince } from "@/lib/utils/format";
 
-/**
- * All three derived from content, so none can go stale.
- *
- * Counted from `careerStart` rather than the first employment record, which
- * begins 2021-10 and ignores the year spent learning the stack. Flooring is
- * what makes the "+" honest — see yearsSince.
- */
-const stats = () => [
-  { value: `${yearsSince(siteConfig.careerStart)}+`, label: "Years shipping" },
-  { value: String(projects.length), label: "Projects delivered" },
-  { value: String(industryCount), label: "Industries" },
-];
+export async function Hero() {
+  const { locale, dictionary } = await getTranslations();
 
-export function Hero() {
-  const { headline, role, name, summary, availability, location } = siteConfig;
+  const headline = pick(profile.headline, locale);
+
+  /**
+   * All three derived from content, so none can go stale.
+   *
+   * Counted from `careerStart` rather than the first employment record, which
+   * begins 2021-10 and ignores the year spent learning the stack. Flooring is
+   * what makes the "+" honest — see yearsSince. The same figure fills the
+   * `{years}` token in the summary, so the prose and the stat cannot disagree.
+   */
+  const years = yearsSince(siteConfig.careerStart);
+  const stats = [
+    { value: `${years}+`, label: dictionary.home.yearsShipping },
+    { value: String(projects.length), label: dictionary.home.projectsDelivered },
+    { value: String(industryCount), label: dictionary.home.industries },
+  ];
 
   return (
     <section className="relative flex min-h-[92svh] flex-col justify-center pt-10 pb-16">
@@ -30,12 +39,12 @@ export function Hero() {
         {/* Eyebrow: who and where, before the reader has read a single word of prose. */}
         <Reveal>
           <p className="label flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-subtle">
-            <span>{name}</span>
+            <span>{pick(profile.name, locale)}</span>
             <span aria-hidden className="h-px w-4 bg-line-strong" />
-            <span>{role}</span>
+            <span>{pick(profile.role, locale)}</span>
             <span aria-hidden className="h-px w-4 bg-line-strong" />
             <span>
-              {location.city}, {location.country}
+              {pick(profile.location.city, locale)}, {pick(profile.location.country, locale)}
             </span>
           </p>
         </Reveal>
@@ -48,8 +57,10 @@ export function Hero() {
               depth
               lines={[
                 headline.lead,
-                // <em> is already italic; the serif face carries the contrast.
-                <em key="emphasis" className="font-serif font-normal tracking-[-0.02em]">
+                // Italic serif in English, heavier Vazirmatn in Kurdish — the
+                // `emphasis` utility switches on `dir`, because Arabic script
+                // has no italic form to switch to.
+                <em key="emphasis" className="emphasis">
                   {headline.emphasis}
                 </em>,
                 headline.trail,
@@ -60,17 +71,24 @@ export function Hero() {
 
         <div className="mt-12 grid gap-10 md:mt-16 md:grid-cols-12">
           <Reveal delay={0.5} className="md:col-span-6 lg:col-span-5">
-            <p className="text-ink-muted text-lead">{summary}</p>
+            <p className="text-ink-muted text-lead">
+              {interpolate(pick(profile.summary, locale), { years })}
+            </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
               <Button asChild size="lg">
-                <Link href="/work">
-                  Selected work
-                  <ArrowDown size={16} strokeWidth={2} aria-hidden className="-rotate-45" />
+                <Link href={localePath(locale, "/work")}>
+                  {dictionary.home.selectedWork}
+                  <ArrowDown
+                    size={16}
+                    strokeWidth={2}
+                    aria-hidden
+                    className="-rotate-45 rtl:-scale-x-100"
+                  />
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/contact">Get in touch</Link>
+                <Link href={localePath(locale, "/contact")}>{dictionary.home.getInTouch}</Link>
               </Button>
             </div>
           </Reveal>
@@ -81,18 +99,26 @@ export function Hero() {
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-positive opacity-60" />
                 <span className="relative inline-flex size-2 rounded-full bg-positive" />
               </span>
-              <span className="label text-ink">{availability.label}</span>
+              <span className="label text-ink">{pick(profile.availability.label, locale)}</span>
             </p>
-            <p className="mt-3 text-ink-muted text-sm">{availability.detail}</p>
+            <p className="mt-3 text-ink-muted text-sm">
+              {pick(profile.availability.detail, locale)}
+            </p>
 
             <dl className="mt-10 grid grid-cols-3 gap-4 border-line border-t pt-6 md:grid-cols-1 md:gap-5">
-              {stats().map((stat) => (
+              {stats.map((stat) => (
                 <div
                   key={stat.label}
                   className="md:flex md:items-baseline md:justify-between md:gap-4"
                 >
                   <dt className="label order-2 mt-1 text-ink-subtle md:mt-0">{stat.label}</dt>
-                  <dd className="order-1 font-medium text-subheading text-ink tabular-nums">
+                  <dd
+                    // dir="ltr": "5+" is a Latin numeral followed by a sign,
+                    // and the bidi algorithm moves the "+" to the wrong side
+                    // of the digit in an RTL paragraph.
+                    dir="ltr"
+                    className="order-1 font-medium text-subheading text-ink tabular-nums rtl:text-end"
+                  >
                     {stat.value}
                   </dd>
                 </div>

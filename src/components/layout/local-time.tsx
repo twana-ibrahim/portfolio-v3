@@ -13,7 +13,7 @@ import { siteConfig } from "@/lib/config/site";
 const formatter = new Intl.DateTimeFormat("en-GB", {
   hour: "2-digit",
   minute: "2-digit",
-  timeZone: siteConfig.location.timezone,
+  timeZone: siteConfig.timezone,
   hour12: false,
 });
 

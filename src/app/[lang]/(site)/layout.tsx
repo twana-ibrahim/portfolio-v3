@@ -1,10 +1,9 @@
-import { notFound } from "next/navigation";
-import { lang } from "next/root-params";
 import type { ReactNode } from "react";
 import { Footer } from "@/components/layout/footer";
 import { Header } from "@/components/layout/header";
-import { defaultLocale, isLocale } from "@/lib/config/i18n";
-import { getDictionary } from "@/lib/i18n/dictionary";
+import { profile } from "@/content/profile";
+import { pick } from "@/lib/i18n/localized";
+import { getTranslations } from "@/lib/i18n/server";
 
 /**
  * Regenerate once a day.
@@ -27,24 +26,23 @@ export const revalidate = 86400;
  * Kept in a route group rather than the root layout so that future routes
  * which should not have the site header — an OG image route, a bare print
  * view of the CV — can sit outside it without fighting the layout.
+ *
+ * The invalid-locale guard that used to live here is gone: the root layout
+ * already calls `notFound()` for anything that is not a real locale, and it
+ * renders first, so a second check here could only ever be dead code.
  */
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const current = await lang();
-  if (current && !isLocale(current)) notFound();
+  const { locale, dictionary } = await getTranslations();
 
-  const locale = isLocale(current ?? "") ? (current as typeof defaultLocale) : defaultLocale;
-  const dictionary = await getDictionary(locale);
-
-  // Header is a client component and cannot call next/root-params, so the
-  // locale and its strings are handed down from here rather than re-derived
-  // from the pathname on the client.
   return (
     <>
-      <Header locale={locale} dictionary={dictionary} />
+      {/* Header is a Client Component and cannot call next/root-params, so its
+          strings come down as props. Footer is not, and reads them itself. */}
+      <Header locale={locale} dictionary={dictionary} name={pick(profile.name, locale)} />
       <main id="main" className="flex-1">
         {children}
       </main>
-      <Footer locale={locale} dictionary={dictionary} />
+      <Footer />
     </>
   );
 }

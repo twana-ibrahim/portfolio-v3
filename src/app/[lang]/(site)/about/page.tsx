@@ -4,44 +4,58 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { Reveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
+import { StatementText } from "@/components/ui/statement";
 import { certifications, education, languages } from "@/content/experience";
+import { pageCopy } from "@/content/pages";
+import { profile } from "@/content/profile";
 import { SkillGrid } from "@/features/about";
 import { ContactCta } from "@/features/contact";
 import { ExperienceList } from "@/features/experience";
 import { siteConfig } from "@/lib/config/site";
+import { interpolate } from "@/lib/i18n/format";
+import { pick } from "@/lib/i18n/localized";
+import { getTranslations } from "@/lib/i18n/server";
 import { createMetadata } from "@/lib/seo/metadata";
-import { formatDateRange, formatYearMonth } from "@/lib/utils/format";
+import { formatDateRange, formatYearMonth, yearsSince } from "@/lib/utils/format";
 
-export const metadata: Metadata = createMetadata({
-  title: "About",
-  path: "/about",
-  description: siteConfig.summary,
-});
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale, dictionary } = await getTranslations();
+
+  return createMetadata({
+    title: dictionary.about.eyebrow,
+    path: "/about",
+    locale,
+    description: pick(pageCopy.about.description, locale),
+  });
+}
 
 /**
  * ── WORTH A PASS IN YOUR OWN VOICE ──────────────────────────────────────────
- * Every fact below is from your CV, so nothing here is invented. But it is
- * written in a voice I chose for you, and the About page is the one place
- * where sounding like a person beats sounding polished. Read it aloud. Where
- * it does not sound like you, change the words — not the facts.
+ * The bio moved to `src/content/profile.ts`, where it is Zod-parsed and exists
+ * in both languages. Every fact in it is from your CV, so nothing is invented,
+ * but it is written in a voice I chose for you — and the About page is the one
+ * place where sounding like a person beats sounding polished. Read both
+ * versions aloud. Where they do not sound like you, change the words.
  * ────────────────────────────────────────────────────────────────────────────
  */
-const bio = [
-  "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq. Five years in, almost all of it spent on software that other businesses run on — the dashboard a telecom operations team opens at the start of every shift, the app an agent uses to sell a SIM, the identity server that decides what six internal products will let you see.",
-  "That kind of work has a particular shape. Nobody is delighted by an internal tool. They need it to be right, to stay responsive when the table has ten thousand rows in it, and to never offer a button the backend is going to refuse. So most of my effort goes into things that don't photograph well: access control that mirrors the API exactly, filtering that survives real data volumes, and structure the next person can change without breaking three screens they've never opened.",
-  "Frontend is where I specialise, not where I stop. Node and Express, REST design, schemas in Postgres and Mongo — knowing what a response costs to produce changes what you ask for, and it is most of the difference between an interface that fits the system and one the backend team has to work around.",
-  "Right now I'm building customer-facing features for FIB, a digital bank — a project I moved onto at Gateway ICT and carried with me to Tailored Applications. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
-];
+export default async function AboutPage() {
+  const { locale, dictionary } = await getTranslations();
 
-export default function AboutPage() {
+  const years = yearsSince(siteConfig.careerStart);
+  const title = pick(pageCopy.about.title, locale);
+  const bio = pick(profile.bio, locale);
+
   return (
     <>
       <Container className="pt-16 pb-4 md:pt-24">
         <Reveal>
-          <p className="label text-ink-subtle">About</p>
+          <p className="label text-ink-subtle">{dictionary.about.eyebrow}</p>
           <h1 className="mt-6 max-w-4xl text-ink text-title">
-            Five years building software people{" "}
-            <em className="font-serif font-normal tracking-[-0.02em]">have to</em> use.
+            <StatementText
+              lead={interpolate(title.lead, { years })}
+              emphasis={title.emphasis}
+              trail={title.trail}
+            />
           </h1>
         </Reveal>
 
@@ -58,7 +72,7 @@ export default function AboutPage() {
             <div className="mt-10 flex flex-wrap gap-3">
               <Button asChild variant="outline">
                 <a href={siteConfig.resumePath} download>
-                  Download CV
+                  {dictionary.about.downloadCv}
                   <Download size={15} strokeWidth={2} aria-hidden />
                 </a>
               </Button>
@@ -66,19 +80,21 @@ export default function AboutPage() {
           </Reveal>
 
           <Reveal delay={0.18} className="md:col-span-4 md:col-start-9">
-            <h2 className="label border-line border-t pt-4 text-ink-subtle">Education</h2>
+            <h2 className="label border-line border-t pt-4 text-ink-subtle">
+              {dictionary.about.education}
+            </h2>
             {education.map((entry) => (
-              <div key={entry.institution} className="mt-5">
-                <p className="font-medium text-ink">{entry.institution}</p>
-                <p className="mt-1.5 text-ink-muted text-sm">{entry.qualification}</p>
+              <div key={pick(entry.institution, "en")} className="mt-5">
+                <p className="font-medium text-ink">{pick(entry.institution, locale)}</p>
+                <p className="mt-1.5 text-ink-muted text-sm">{pick(entry.qualification, locale)}</p>
                 <p className="label mt-3 text-ink-subtle">
-                  {formatDateRange(entry.start, entry.end)}
+                  {formatDateRange(entry.start, entry.end, locale)}
                 </p>
               </div>
             ))}
 
             <h2 className="label mt-12 border-line border-t pt-4 text-ink-subtle">
-              Certifications
+              {dictionary.about.certifications}
             </h2>
             <ul className="mt-5 space-y-3">
               {certifications.map((certification) => (
@@ -90,22 +106,28 @@ export default function AboutPage() {
                       rel="noreferrer"
                       className="group inline-flex items-start gap-1 text-ink text-sm"
                     >
-                      <span className="link-underline">{certification.name}</span>
+                      {/* dir="ltr": credential names stay in English in every
+                          locale so they match the certificate they link to. */}
+                      <span dir="ltr" className="link-underline">
+                        {certification.name}
+                      </span>
                       <ArrowUpRight
                         size={13}
                         aria-hidden
-                        className="shrink-0 translate-y-0.5 text-ink-subtle transition-transform duration-fast ease-out-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        className="shrink-0 translate-y-0.5 text-ink-subtle transition-transform duration-fast ease-out-expo group-hover:-translate-y-0.5 group-hover:translate-x-0.5 rtl:-scale-x-100"
                       />
                     </a>
                   ) : (
-                    <p className="text-ink text-sm">{certification.name}</p>
+                    <p dir="ltr" className="text-ink text-sm rtl:text-end">
+                      {certification.name}
+                    </p>
                   )}
                   <p className="label mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-ink-subtle">
-                    <span>{certification.issuer}</span>
+                    <span dir="ltr">{certification.issuer}</span>
                     {certification.awarded ? (
                       <>
                         <span aria-hidden className="h-px w-2 bg-line-strong" />
-                        <span>{formatYearMonth(certification.awarded)}</span>
+                        <span>{formatYearMonth(certification.awarded, locale)}</span>
                       </>
                     ) : null}
                   </p>
@@ -113,12 +135,19 @@ export default function AboutPage() {
               ))}
             </ul>
 
-            <h2 className="label mt-12 border-line border-t pt-4 text-ink-subtle">Languages</h2>
+            <h2 className="label mt-12 border-line border-t pt-4 text-ink-subtle">
+              {dictionary.about.languages}
+            </h2>
             <dl className="mt-5 space-y-2.5">
               {languages.map((language) => (
-                <div key={language.name} className="flex items-baseline justify-between gap-4">
-                  <dt className="text-ink text-sm">{language.name}</dt>
-                  <dd className="label text-ink-subtle">{language.level}</dd>
+                <div
+                  key={pick(language.name, "en")}
+                  className="flex items-baseline justify-between gap-4"
+                >
+                  <dt className="text-ink text-sm">{pick(language.name, locale)}</dt>
+                  <dd className="label text-ink-subtle">
+                    {dictionary.about.languageLevels[language.level]}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -126,11 +155,11 @@ export default function AboutPage() {
         </div>
       </Container>
 
-      <Section label="Capabilities" meta="What I reach for">
+      <Section label={dictionary.about.capabilities} meta={dictionary.about.whatIReachFor}>
         <SkillGrid />
       </Section>
 
-      <Section label="Experience" meta="Full history">
+      <Section label={dictionary.home.experience} meta={dictionary.about.fullHistory}>
         <ExperienceList />
       </Section>
 

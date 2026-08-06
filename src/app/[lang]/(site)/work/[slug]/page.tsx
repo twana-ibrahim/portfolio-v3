@@ -13,6 +13,10 @@ import { TagList } from "@/components/ui/tag";
 import { getProjectBySlug } from "@/content/projects";
 import { ContactCta } from "@/features/contact";
 import { getCaseStudies, getCaseStudy } from "@/lib/content/case-studies";
+import { interpolate } from "@/lib/i18n/format";
+import { pick } from "@/lib/i18n/localized";
+import { localePath } from "@/lib/i18n/routing";
+import { getTranslations } from "@/lib/i18n/server";
 import { createMetadata } from "@/lib/seo/metadata";
 
 /** Every case study is known at build time, so all of them prerender. */
@@ -23,17 +27,31 @@ export async function generateStaticParams() {
 
 export const dynamicParams = false;
 
+/**
+ * ── CASE STUDIES ARE ENGLISH-ONLY, FOR NOW ──────────────────────────────────
+ * The MDX bodies in `src/content/case-studies/` have no Kurdish counterpart,
+ * and the loader keys them by slug alone. The chrome around them localizes,
+ * the prose does not.
+ *
+ * This costs nothing today — every project carries `caseStudy: false`, so this
+ * route prerenders zero pages. Before the first one ships, decide whether the
+ * loader should look for `<slug>.ku.mdx` and fall back to English, or whether
+ * a case study simply links to the English version from both locales.
+ * ────────────────────────────────────────────────────────────────────────────
+ */
 export async function generateMetadata({
   params,
 }: PageProps<"/[lang]/work/[slug]">): Promise<Metadata> {
   const { slug } = await params;
+  const { locale } = await getTranslations();
   const study = await getCaseStudy(slug);
-  if (!study) return createMetadata({ title: "Not found", noIndex: true });
+  if (!study) return createMetadata({ title: "Not found", locale, noIndex: true });
 
   return createMetadata({
     title: study.title,
     description: study.description,
     path: `/work/${slug}`,
+    locale,
     type: "article",
     publishedTime: study.published,
   });
@@ -67,6 +85,7 @@ const mdxOptions: CompileOptions = {
 
 export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/[slug]">) {
   const { slug } = await params;
+  const { locale, dictionary } = await getTranslations();
 
   const [study, project] = [await getCaseStudy(slug), getProjectBySlug(slug)];
   if (!study || !project) notFound();
@@ -81,52 +100,66 @@ export default async function CaseStudyPage({ params }: PageProps<"/[lang]/work/
     <>
       <Container className="pt-12 pb-4 md:pt-16">
         <Link
-          href="/work"
+          // Was a bare "/work", which 404s through the proxy now that every
+          // route lives under a locale segment.
+          href={localePath(locale, "/work")}
           className="label group inline-flex items-center gap-2 text-ink-subtle transition-colors duration-fast hover:text-ink"
         >
           <ArrowLeft
             size={13}
             aria-hidden
-            className="transition-transform duration-fast ease-out-expo group-hover:-translate-x-0.5"
+            className="transition-transform duration-fast ease-out-expo group-hover:-translate-x-0.5 rtl:-scale-x-100"
           />
-          All work
+          {dictionary.work.allWork}
         </Link>
 
         <header className="mt-12 border-line border-b pb-12 md:mt-16">
-          <h1 className="max-w-4xl text-ink text-title">{study.title}</h1>
+          {/* The body is English-only — see the note above — so the heading
+              and article are marked as such regardless of page locale. */}
+          <h1 lang="en" dir="ltr" className="max-w-4xl text-ink text-title rtl:text-end">
+            {study.title}
+          </h1>
 
           <dl className="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
             <div>
-              <dt className="label text-ink-subtle">Client</dt>
-              <dd className="mt-2 text-ink text-sm">{project.client || "Personal project"}</dd>
+              <dt className="label text-ink-subtle">{dictionary.work.client}</dt>
+              <dd className="mt-2 text-ink text-sm">
+                {project.client || dictionary.work.personalProject}
+              </dd>
             </div>
             <div>
-              <dt className="label text-ink-subtle">Role</dt>
-              <dd className="mt-2 text-ink text-sm">{project.role}</dd>
+              <dt className="label text-ink-subtle">{dictionary.work.role}</dt>
+              <dd className="mt-2 text-ink text-sm">{pick(project.role, locale)}</dd>
             </div>
             <div>
-              <dt className="label text-ink-subtle">Year</dt>
-              <dd className="mt-2 text-ink text-sm tabular-nums">{project.year}</dd>
+              <dt className="label text-ink-subtle">{dictionary.work.year}</dt>
+              <dd dir="ltr" className="mt-2 text-ink text-sm tabular-nums rtl:text-end">
+                {project.year}
+              </dd>
             </div>
             <div>
-              <dt className="label text-ink-subtle">Read</dt>
-              <dd className="mt-2 text-ink text-sm">{study.readingMinutes} min</dd>
+              <dt className="label text-ink-subtle">{dictionary.work.read}</dt>
+              <dd className="mt-2 text-ink text-sm">
+                {interpolate(dictionary.work.readingMinutes, { count: study.readingMinutes })}
+              </dd>
             </div>
           </dl>
 
-          <TagList items={project.stack} className="mt-10" />
+          <TagList dir="ltr" items={project.stack} className="mt-10" />
 
           {project.confidential ? (
             <p className="label mt-8 inline-flex items-center gap-2 text-ink-subtle">
               <Lock size={12} strokeWidth={2} aria-hidden />
-              Internal system — screenshots and links withheld
+              {dictionary.work.withheld}
             </p>
           ) : null}
         </header>
       </Container>
 
       <Container width="prose" className="py-16 md:py-20">
-        <article>{content}</article>
+        <article lang="en" dir="ltr">
+          {content}
+        </article>
       </Container>
 
       <ContactCta />

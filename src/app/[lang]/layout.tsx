@@ -90,6 +90,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         <ThemeProvider>
           <a
             href="#main"
+            // inset-s-4 is the logical inset: top-left in English, top-right
+            // in Kurdish, without a direction-specific override.
             className="label sr-only focus:not-sr-only focus:fixed focus:inset-s-4 focus:top-4 focus:z-100 focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-ink"
           >
             {dictionary.a11y.skipToContent}

@@ -51,6 +51,7 @@ export const ku: Dictionary = {
 
   home: {
     selectedWork: "کاری هەڵبژێردراو",
+    getInTouch: "پەیوەندیم پێوە بکە",
     allProjects: "هەموو {count} پڕۆژەکە",
     experience: "ئەزموون",
     yearsShipping: "ساڵ ئەزموون",
@@ -75,6 +76,11 @@ export const ku: Dictionary = {
     read: "خوێندنەوە",
     readingMinutes: "{count} خولەک",
     withheld: "سیستەمی ناوخۆیی — وێنە و بەستەر بڵاو ناکرێنەوە",
+    arrangement: {
+      remote: "لە دوورەوە",
+      "on-site": "لە شوێنی کار",
+      hybrid: "تێکەڵ",
+    },
   },
 
   about: {
@@ -86,7 +92,13 @@ export const ku: Dictionary = {
     whatIReachFor: "ئەوەی بەکاری دەهێنم",
     fullHistory: "مێژووی تەواو",
     downloadCv: "داگرتنی CV",
-    present: "ئێستا",
+    alsoWorkedWith: "هەروەها کارم لەگەڵ ئەمانە کردووە",
+    languageLevels: {
+      Native: "زمانی دایک",
+      Professional: "ئاستی پیشەیی",
+      "Limited working": "ئاستی سنووردار",
+      Elementary: "سەرەتایی",
+    },
   },
 
   contact: {
@@ -111,6 +123,16 @@ export const ku: Dictionary = {
     sentBody:
       "سوپاس بۆ پەیوەندیکردن — هەموو نامەکان دەخوێنمەوە و بەزۆری لە ماوەی ڕۆژێک تا دوو ڕۆژدا وەڵام دەدەمەوە.",
     ctaLabel: "دەست بە گفتوگۆ بکە",
+
+    validation: {
+      name: "تکایە ناوت بنووسە.",
+      nameTooLong: "ئەم ناوە لەوە درێژترە کە ئەم فۆرمە هەڵیدەگرێت.",
+      email: "تکایە ئیمەیڵێک بنووسە کە بتوانم وەڵامت بدەمەوە.",
+      message: "کەمێک وردەکاری زیاتر یارمەتی دەدات — لانیکەم 20 پیت.",
+      messageTooLong: "ئەمە لەوە درێژترە کە ئەم فۆرمە وەریدەگرێت. تکایە ڕاستەوخۆ ئیمەیڵم بۆ بنێرە.",
+      checkFields: "تکایە خانەکانی خوارەوە بپشکنە.",
+      failed: "هەڵەیەک ڕوویدا لە ناردنی نامەکە. تکایە ڕاستەوخۆ ئیمەیڵم بۆ بنێرە: {email}",
+    },
   },
 
   footer: {

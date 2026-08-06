@@ -23,18 +23,25 @@ const button = cva(
     "transition-colors duration-base ease-out-expo",
 
     /**
-     * The fill sweeps in from the left and, on leave, continues out to the
-     * right rather than retreating the way it came. That is the whole trick,
-     * and it is one property: the origin flips between the two states, so the
-     * same scaleX animation reads as "enter" one way and "exit" the other.
+     * The fill sweeps in from the reading edge and, on leave, continues out
+     * the far side rather than retreating the way it came. That is the whole
+     * trick, and it is one property: the origin flips between the two states,
+     * so the same scaleX animation reads as "enter" one way and "exit" the
+     * other.
+     *
+     * `origin-*` is physical — there is no logical equivalent for
+     * transform-origin — so the RTL variants swap both ends. Without them the
+     * gesture runs backwards on the Kurdish pages: the fill would arrive from
+     * the end of the line and leave toward its start, against the direction
+     * the reader's eye is already travelling.
      *
      * `isolate` keeps the -z-10 behind the label but inside the button's own
      * stacking context, so it cannot fall behind the page.
      */
     "before:absolute before:inset-0 before:-z-10 before:bg-[var(--btn-fill)]",
-    "before:origin-right before:scale-x-0",
+    "before:origin-right before:scale-x-0 rtl:before:origin-left",
     "before:transition-transform before:duration-base before:ease-out-expo",
-    "hover:before:origin-left hover:before:scale-x-100",
+    "hover:before:origin-left hover:before:scale-x-100 rtl:hover:before:origin-right",
 
     "[&_svg]:transition-transform [&_svg]:duration-base [&_svg]:ease-out-expo",
     "hover:[&_svg]:translate-x-0.5",

@@ -1,9 +1,12 @@
 import { ArrowUpRight, Lock } from "lucide-react";
-import type { Route } from "next";
 import Link from "next/link";
 import { TagList } from "@/components/ui/tag";
 import { domainLabels } from "@/content/projects";
 import type { Project } from "@/content/schema";
+import type { Locale } from "@/lib/config/i18n";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+import { pick } from "@/lib/i18n/localized";
+import { localePath } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils/cn";
 import { ordinal } from "@/lib/utils/format";
 
@@ -14,12 +17,12 @@ import { ordinal } from "@/lib/utils/format";
  * previous site made — every project looked clickable and none were. A row
  * with nothing to show renders as text, not as a dead link.
  */
-function resolveTarget(project: Project) {
+function resolveTarget(project: Project, locale: Locale, dictionary: Dictionary) {
   if (project.caseStudy) {
     return {
       kind: "internal",
-      href: `/work/${project.slug}` as Route,
-      cta: "Read case study",
+      href: localePath(locale, `/work/${project.slug}`),
+      cta: dictionary.work.readCaseStudy,
     } as const;
   }
   const external = project.links.live ?? project.links.repo;
@@ -27,7 +30,7 @@ function resolveTarget(project: Project) {
     return {
       kind: "external",
       href: external,
-      cta: project.links.live ? "Visit site" : "View source",
+      cta: project.links.live ? dictionary.work.visitSite : dictionary.work.viewSource,
     } as const;
   }
   return { kind: "none" } as const;
@@ -36,16 +39,20 @@ function resolveTarget(project: Project) {
 type ProjectRowProps = {
   project: Project;
   index: number;
+  locale: Locale;
+  dictionary: Dictionary;
 };
 
-export function ProjectRow({ project, index }: ProjectRowProps) {
-  const target = resolveTarget(project);
+export function ProjectRow({ project, index, locale, dictionary }: ProjectRowProps) {
+  const target = resolveTarget(project, locale, dictionary);
   const interactive = target.kind !== "none";
 
   const content = (
     <>
       <div className="flex items-baseline gap-5 md:col-span-1">
-        <span className="label text-ink-subtle tabular-nums">{ordinal(index)}</span>
+        <span dir="ltr" className="label text-ink-subtle tabular-nums">
+          {ordinal(index)}
+        </span>
       </div>
 
       <div className="md:col-span-5">
@@ -58,19 +65,26 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
           {project.title}
         </h3>
         <p className="mt-1.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ink-subtle text-sm">
-          <span>{project.client || "Personal project"}</span>
+          <span>{project.client || dictionary.work.personalProject}</span>
           <span aria-hidden className="h-px w-3 bg-line-strong" />
-          <span>{domainLabels[project.domain]}</span>
+          <span>{pick(domainLabels[project.domain], locale)}</span>
         </p>
       </div>
 
       <div className="md:col-span-4">
-        <p className="text-ink-muted text-sm leading-relaxed">{project.summary}</p>
-        <TagList items={project.stack.slice(0, 4)} className="mt-4" />
+        <p className="text-ink-muted text-sm leading-relaxed">{pick(project.summary, locale)}</p>
+        {/* dir="ltr": every stack entry is a Latin technology name, and the
+            hairline separators between them are neutral characters that the
+            bidi algorithm reorders inside an RTL paragraph — "React · PWA"
+            renders as "PWA · React". Also keeps the label tracking, which the
+            RTL rule in globals.css otherwise strips. */}
+        <TagList dir="ltr" items={project.stack.slice(0, 4)} className="mt-4" />
       </div>
 
       <div className="flex items-center justify-between gap-4 md:col-span-2 md:justify-end">
-        <span className="label text-ink-subtle tabular-nums">{project.year}</span>
+        <span dir="ltr" className="label text-ink-subtle tabular-nums">
+          {project.year}
+        </span>
 
         {target.kind === "none" ? (
           // Keyed off `confidential`, not off having no link. Three of these
@@ -79,7 +93,7 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
           project.confidential ? (
             <span className="label inline-flex items-center gap-1.5 text-ink-subtle">
               <Lock size={11} strokeWidth={2} aria-hidden />
-              Internal
+              {dictionary.work.internal}
             </span>
           ) : null
         ) : (
@@ -92,6 +106,11 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
                 "transition-transform duration-base ease-out-expo",
                 "group-hover:-translate-y-0.5 group-hover:translate-x-0.5",
                 target.kind === "internal" && "rotate-45",
+                // An "leads away" arrow has to point away from the reading
+                // direction. Mirroring also flips the hover nudge, because
+                // `scale` is applied after `translate` — so it still drifts
+                // the way it points.
+                "rtl:-scale-x-100",
               )}
             />
           </span>
@@ -105,16 +124,18 @@ export function ProjectRow({ project, index }: ProjectRowProps) {
   /**
    * An accent hairline drawing in across the row's top rule on hover.
    *
-   * Same gesture as `link-underline` — draws from the left, same easing — so
-   * the site has one idea about what "this responds to you" looks like rather
-   * than a different flourish per component. Applied only to rows that go
-   * somewhere: a dead row that lights up is a promise the markup does not
-   * keep. Sits on `-top-px` to cover the li's existing border rather than
-   * stack a second line beneath it.
+   * Same gesture as `link-underline` — draws from the reading edge, same
+   * easing — so the site has one idea about what "this responds to you" looks
+   * like rather than a different flourish per component. `origin-left` is
+   * logical here via the RTL variant: a rule that draws from the left on a
+   * right-to-left page starts at the end of the line and reads backwards.
+   * Applied only to rows that go somewhere: a dead row that lights up is a
+   * promise the markup does not keep. Sits on `-top-px` to cover the li's
+   * existing border rather than stack a second line beneath it.
    */
   const hoverRule = cn(
     "relative before:absolute before:inset-x-0 before:-top-px before:h-px",
-    "before:origin-left before:scale-x-0 before:bg-accent",
+    "before:origin-left before:scale-x-0 before:bg-accent rtl:before:origin-right",
     "before:transition-transform before:duration-base before:ease-out-expo",
     "hover:before:scale-x-100",
   );

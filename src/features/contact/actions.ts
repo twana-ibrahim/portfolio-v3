@@ -1,13 +1,18 @@
 "use server";
 
 import { Resend } from "resend";
+import { profile } from "@/content/profile";
 import { getServerEnv } from "@/lib/config/env";
+import { defaultLocale, isLocale } from "@/lib/config/i18n";
 import { siteConfig } from "@/lib/config/site";
+import { getDictionarySync } from "@/lib/i18n/dictionary";
+import { interpolate } from "@/lib/i18n/format";
+import { pick } from "@/lib/i18n/localized";
 import {
   type ContactFieldErrors,
   type ContactInput,
   type ContactState,
-  contactSchema,
+  createContactSchema,
   MIN_ELAPSED_MS,
 } from "./schema";
 
@@ -20,6 +25,11 @@ function escapeHtml(value: string): string {
     .replace(/"/g, "&quot;");
 }
 
+/**
+ * The notification, which only Twana reads — so it stays in English whatever
+ * language the sender used. The message body is theirs and is passed through
+ * untouched (escaped, not translated).
+ */
 function buildEmail(input: ContactInput) {
   const rows: [string, string][] = [
     ["Name", input.name],
@@ -56,7 +66,18 @@ export async function submitContactForm(
   _previous: ContactState,
   formData: FormData,
 ): Promise<ContactState> {
-  const parsed = contactSchema.safeParse({
+  /**
+   * The locale arrives in the payload because `next/root-params` is not
+   * available inside a Server Action. Validated against the known set rather
+   * than trusted — it is client-supplied, and while the blast radius is only
+   * "which language the error message is in", indexing a record with an
+   * unchecked string is how that stops being true later.
+   */
+  const submitted = formData.get("locale");
+  const locale = typeof submitted === "string" && isLocale(submitted) ? submitted : defaultLocale;
+  const messages = getDictionarySync(locale).contact.validation;
+
+  const parsed = createContactSchema(messages).safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
     company: formData.get("company"),
@@ -75,7 +96,7 @@ export async function submitContactForm(
         fieldErrors[key] = issue.message;
       }
     }
-    return { status: "error", message: "Please check the fields below.", fieldErrors };
+    return { status: "error", message: messages.checkFields, fieldErrors };
   }
 
   const input = parsed.data;
@@ -86,12 +107,20 @@ export async function submitContactForm(
     return { status: "success" };
   }
 
+  const failed: ContactState = {
+    status: "error",
+    message: interpolate(messages.failed, { email: siteConfig.contact.email }),
+  };
+
   try {
     const env = getServerEnv();
     const resend = new Resend(env.RESEND_API_KEY);
 
     const { error } = await resend.emails.send({
-      from: `${siteConfig.name} Portfolio <${env.CONTACT_FROM_EMAIL}>`,
+      // Latin in every locale: this is a mail From name, and mail clients
+      // handle a non-ASCII display name inconsistently enough that it is not
+      // worth the risk of the message being filed as suspicious.
+      from: `${pick(profile.name, defaultLocale)} Portfolio <${env.CONTACT_FROM_EMAIL}>`,
       to: env.CONTACT_TO_EMAIL,
       replyTo: input.email,
       subject: `Enquiry from ${input.name}${input.company ? ` (${input.company})` : ""}`,
@@ -100,18 +129,12 @@ export async function submitContactForm(
 
     if (error) {
       console.error("[contact] Resend rejected the message:", error);
-      return {
-        status: "error",
-        message: `Something went wrong sending that. Email me directly at ${siteConfig.contact.email}.`,
-      };
+      return failed;
     }
 
     return { status: "success" };
   } catch (error) {
     console.error("[contact] Unexpected failure:", error);
-    return {
-      status: "error",
-      message: `Something went wrong sending that. Email me directly at ${siteConfig.contact.email}.`,
-    };
+    return failed;
   }
 }

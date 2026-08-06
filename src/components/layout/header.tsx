@@ -19,6 +19,12 @@ import { ordinal } from "@/lib/utils/format";
 type HeaderProps = {
   locale: Locale;
   dictionary: Dictionary;
+  /**
+   * Resolved by the server parent. A Client Component cannot call
+   * `next/root-params`, and importing the content module here would pull the
+   * whole Zod-parsed profile into the browser bundle for one string.
+   */
+  name: string;
 };
 
 /**
@@ -26,7 +32,7 @@ type HeaderProps = {
  * hairline once the page has scrolled. A permanently filled bar would cut the
  * hero's full-bleed type in half, which is the whole point of the layout.
  */
-export function Header({ locale, dictionary }: HeaderProps) {
+export function Header({ locale, dictionary, name }: HeaderProps) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -62,11 +68,11 @@ export function Header({ locale, dictionary }: HeaderProps) {
         <Link
           href={localePath(locale, "/")}
           className="group flex items-center gap-3 text-ink"
-          aria-label={`${siteConfig.name} — ${dictionary.a11y.home}`}
+          aria-label={`${name} — ${dictionary.a11y.home}`}
         >
           <Logo className="h-7 transition-colors duration-fast group-hover:text-accent" />
           <span className="hidden font-medium text-[0.9375rem] tracking-tight sm:block">
-            {siteConfig.name}
+            {name}
           </span>
         </Link>
 
@@ -128,7 +134,9 @@ export function Header({ locale, dictionary }: HeaderProps) {
                           onClick={() => setMenuOpen(false)}
                           className="flex items-baseline gap-5 py-6 text-heading text-ink"
                         >
-                          <span className="label text-ink-subtle">{ordinal(index)}</span>
+                          <span dir="ltr" className="label text-ink-subtle">
+                            {ordinal(index)}
+                          </span>
                           {dictionary.nav[item.key]}
                         </Link>
                       </li>
@@ -139,7 +147,8 @@ export function Header({ locale, dictionary }: HeaderProps) {
                 <Container className="border-line border-t py-8">
                   <a
                     href={`mailto:${siteConfig.contact.email}`}
-                    className="link-underline text-ink-muted"
+                    dir="ltr"
+                    className="link-underline text-ink-muted rtl:text-end"
                   >
                     {siteConfig.contact.email}
                   </a>

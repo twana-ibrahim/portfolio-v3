@@ -3,29 +3,39 @@ import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
 import { Container } from "@/components/layout/container";
 import { LocalTime } from "@/components/layout/local-time";
-import type { Locale } from "@/lib/config/i18n";
+import { profile } from "@/content/profile";
 import { navigation, siteConfig } from "@/lib/config/site";
-import type { Dictionary } from "@/lib/i18n/dictionary";
+import { pick } from "@/lib/i18n/localized";
 import { localePath } from "@/lib/i18n/routing";
+import { getTranslations } from "@/lib/i18n/server";
 
-const socialLinks = [
-  { label: "GitHub", href: siteConfig.socials.github },
-  { label: "LinkedIn", href: siteConfig.socials.linkedin },
-  { label: "Email", href: `mailto:${siteConfig.contact.email}` },
-] as const;
+/**
+ * A Server Component, unlike the header — nothing in here needs state, and
+ * the one live thing (the clock) is already its own client island. So it reads
+ * the locale itself rather than being handed it, which is the payoff of
+ * putting the locale segment above the root layout.
+ */
+export async function Footer() {
+  const { locale, dictionary } = await getTranslations();
 
-export function Footer({ locale, dictionary }: { locale: Locale; dictionary: Dictionary }) {
+  const socialLinks = [
+    { label: "GitHub", href: siteConfig.socials.github, latin: true },
+    { label: "LinkedIn", href: siteConfig.socials.linkedin, latin: true },
+    // Brand names stay; "Email" is a common noun and gets translated.
+    { label: dictionary.contact.email, href: `mailto:${siteConfig.contact.email}`, latin: false },
+  ];
+
   return (
     <footer className="mt-auto border-line border-t">
       <Container className="grid gap-12 py-14 md:grid-cols-12 md:py-16">
         <div className="md:col-span-5">
           <Logo className="h-7 text-ink" />
           <p className="mt-5 max-w-xs text-ink-muted text-sm leading-relaxed">
-            {siteConfig.tagline}
+            {pick(profile.tagline, locale)}
           </p>
           <p className="label mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-subtle">
             <span>
-              {siteConfig.location.city}, {siteConfig.location.country}
+              {pick(profile.location.city, locale)}, {pick(profile.location.country, locale)}
             </span>
             <span aria-hidden className="h-px w-3 bg-line-strong" />
             <LocalTime suffix={dictionary.footer.localTime} />
@@ -54,14 +64,16 @@ export function Footer({ locale, dictionary }: { locale: Locale; dictionary: Dic
           <h2 className="label text-ink-subtle">{dictionary.footer.elsewhere}</h2>
           <ul className="mt-5 space-y-3">
             {socialLinks.map((link) => (
-              <li key={link.label}>
+              <li key={link.href}>
                 <a
                   href={link.href}
                   target={link.href.startsWith("mailto:") ? undefined : "_blank"}
                   rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"}
                   className="group inline-flex items-center gap-1 py-1.5 text-ink-muted text-sm transition-colors duration-fast hover:text-ink"
                 >
-                  <span className="link-underline">{link.label}</span>
+                  <span className="link-underline" dir={link.latin ? "ltr" : undefined}>
+                    {link.label}
+                  </span>
                   <ArrowUpRight
                     size={13}
                     aria-hidden
@@ -79,7 +91,7 @@ export function Footer({ locale, dictionary }: { locale: Locale; dictionary: Dic
 
       <Container className="flex flex-col gap-3 border-line border-t py-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="label text-ink-subtle">
-          © {new Date().getFullYear()} {siteConfig.name}
+          © {new Date().getFullYear()} {pick(profile.name, locale)}
         </p>
         <p className="label text-ink-subtle" dir="ltr">
           {dictionary.footer.builtWith}

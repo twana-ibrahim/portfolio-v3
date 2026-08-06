@@ -1,15 +1,4 @@
-import { siteConfig } from "@/lib/config/site";
 import { cn } from "@/lib/utils/cn";
-
-type LogoProps = {
-  className?: string;
-  /**
-   * When the mark stands alone (e.g. a bare icon link) it needs an accessible
-   * name. When it sits next to the wordmark, the text already names it and the
-   * mark should be hidden from assistive tech to avoid a duplicate label.
-   */
-  title?: string;
-};
 
 /**
  * The monogram, inlined.
@@ -18,20 +7,23 @@ type LogoProps = {
  * means one less request, no flash when the theme flips, and `currentColor`
  * inheritance — so a single source file serves both themes instead of two
  * files that can drift apart.
+ *
+ * Always decorative. Every placement either sits inside a link that already
+ * carries the name as its accessible label, or next to the wordmark in text —
+ * so a <title> here would only produce a duplicate announcement. It used to
+ * take an optional `title` that no caller ever passed, which also made it the
+ * one component with a person's name hardcoded into it.
  */
-export function Logo({ className, title }: LogoProps) {
+export function Logo({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 40.572 44.93"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       className={cn("h-8 w-auto", className)}
-      // When no title is passed the mark is decorative: aria-hidden removes the
-      // whole subtree, <title> included, so adjacent text is the only label.
-      aria-hidden={title ? undefined : true}
+      aria-hidden="true"
       focusable={false}
     >
-      <title>{title ?? siteConfig.name}</title>
       <g transform="translate(-408.483 -191.677)" style={{ isolation: "isolate" }}>
         <g transform="translate(435.976 213.102)">
           <path d="M520,278.568l-.018,3.564,0-3.564Z" transform="translate(-519.985 -278.568)" />

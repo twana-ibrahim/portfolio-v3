@@ -13,22 +13,29 @@ import { skillGroupSchema } from "./schema";
  * individual projects, which is where it carries more weight anyway —
  * "Angular, RxJS, RBAC" under an identity provider proves something that the
  * same words in a badge cloud never could.
+ *
+ * Only the group titles are localized. The items are technology names, and a
+ * Kurdish developer writes "TanStack Query" exactly as an English one does —
+ * transliterating them into Arabic script would make the list unreadable to
+ * the only people qualified to judge it.
  */
 export const skillGroups = z.array(skillGroupSchema).parse([
   {
-    title: "Core",
+    title: { en: "Core", ku: "بنەڕەتی" },
     items: ["TypeScript", "React", "Next.js", "Angular · RxJS", "React Native", "Node.js"],
   },
   {
-    title: "Interface",
+    title: { en: "Interface", ku: "ڕووکار" },
     items: ["Tailwind CSS", "SCSS", "Design systems", "Accessibility", "Figma"],
   },
   {
-    title: "State & data",
+    // "State" is left in Latin on purpose: it is the word Kurdish developers
+    // use, and the nearest translation ("دۆخ") reads as a status field.
+    title: { en: "State & data", ku: "State و داتا" },
     items: ["TanStack Query", "Redux Toolkit", "Zustand", "REST APIs", "PostgreSQL"],
   },
   {
-    title: "Practice",
+    title: { en: "Practice", ku: "شێوازی کار" },
     items: ["Vitest · Jest", "Testing Library", "Performance work", "Code review", "Git · Jira"],
   },
 ]);

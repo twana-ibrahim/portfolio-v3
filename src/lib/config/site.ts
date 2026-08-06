@@ -1,9 +1,15 @@
 /**
- * Every fact about the person this site is for lives here.
+ * Every locale-independent fact about the person this site is for.
  *
- * Rule: no component hardcodes a name, URL, email, or handle. If it appears in
- * the UI and it is about Twana rather than about layout, it comes from here.
- * Swapping the domain, the email, or the tagline is then a one-file change.
+ * Rule: no component hardcodes a URL, email, handle or path. If it appears in
+ * the UI and it is about Twana rather than about layout, it comes from here —
+ * or, if it is a sentence rather than a fact, from `src/content/profile.ts`.
+ *
+ * The split is not cosmetic. This file is `as const`, which freezes every
+ * string to its own literal type; that is exactly what you want for an email
+ * address and exactly what makes a second locale impossible to assign. So
+ * anything that has to exist in two languages lives in `content/` instead,
+ * where it is Zod-parsed and a missing translation fails the build.
  */
 
 import type { Dictionary } from "@/lib/i18n/dictionaries/en";
@@ -17,63 +23,20 @@ export const SITE_URL = (
 export const siteConfig = {
   url: SITE_URL,
 
-  name: "Twana Ibrahim",
+  /** Wordmark fallback. Latin in both locales — it is a monogram, not a word. */
   initials: "TI",
-  /** Matches the CV header exactly. Change both together or neither. */
-  role: "Software Engineer (Frontend)",
 
   /**
    * When the clock starts for the "years shipping" figure.
    *
    * Earlier than the first paid role (2021-10) on purpose: 2021 was spent
-   * learning the stack that role was hired for. Change this one date and the
-   * hero stat follows.
+   * learning the stack that role was hired for. Change this one date and both
+   * the hero stat and the `{years}` token in the copy follow.
    */
   careerStart: "2021-01",
 
-  /** One line, used in the header meta and structured data. */
-  tagline: "Frontend engineer building the internal systems banks and operators run on.",
-
-  /**
-   * The hero statement.
-   *
-   * Concrete on purpose. "Passionate developer crafting beautiful digital
-   * experiences" describes nobody; naming the customer and what is at stake
-   * describes exactly one person. The emphasis line is the only place the
-   * serif appears on the page, so it has to carry the specificity.
-   */
-  headline: {
-    lead: "I build the systems",
-    emphasis: "banks and operators",
-    // Short on purpose. Each line is its own clipped box in the hero's mask
-    // reveal, so a line that wraps breaks the effect. "run their business on"
-    // wrapped at 1440px; this fits, and reads harder besides.
-    trail: "run on.",
-  },
-
-  /** Two or three sentences maximum. Anything longer belongs on /about. */
-  summary:
-    "Five years of frontend work on software other businesses depend on to operate — digital banking, telecom sales, streaming and advertising, identity and access management. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
-
-  location: {
-    city: "Kalar",
-    region: "Sulaymaniyah",
-    country: "Iraq",
-    /** IANA zone — drives the live local-time readout in the footer. */
-    timezone: "Asia/Baghdad",
-  },
-
-  availability: {
-    status: "open",
-    label: "Available for work",
-    /**
-     * Roles, not engagements. The career is five years of employment at
-     * companies, not a freelance book — leading with "contract" invites
-     * questions about a track record that is not there, and undersells the
-     * one that is.
-     */
-    detail: "Open to remote roles, GMT+3",
-  },
+  /** IANA zone — drives the live local-time readout in the footer. */
+  timezone: "Asia/Baghdad",
 
   contact: {
     email: "tuwana.ibrahim99@gmail.com",
