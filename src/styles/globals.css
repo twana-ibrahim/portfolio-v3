@@ -114,6 +114,26 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /**
+   * Reveals the content the entrance animations start by hiding.
+   *
+   * The rule above only zeroes durations, and an entrance here is neither a
+   * transition nor a CSS animation — it is an inline transform Motion writes.
+   * The server cannot know the user's preference, so it always renders the
+   * animated branch and serialises `opacity:0;transform:translateY(16px)` into
+   * the HTML. The client then renders the reduced branch instead, and React
+   * leaves those styles alone: it does not correct mismatched inline styles on
+   * a hydration pass in production.
+   *
+   * So the site loaded blank for anyone with reduced motion on. This is the
+   * only layer that can undo it, because it does not depend on React, on
+   * Motion, or on JavaScript running at all.
+   */
+  [data-motion] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* ==========================================================================

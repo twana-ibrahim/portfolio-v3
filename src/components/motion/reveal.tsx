@@ -19,6 +19,36 @@ import { cn } from "@/lib/utils/cn";
 
 const DISTANCE = 16;
 
+/**
+ * Marks every element that Motion may have given an entrance style.
+ *
+ * `globals.css` neutralises `[data-motion]` inside its reduced-motion block.
+ * That indirection is not decoration — it is the only thing that works.
+ *
+ * `useReducedMotion()` cannot know the preference while the server renders, so
+ * the server always emits the animated branch and Motion serialises its
+ * initial state into the HTML:
+ *
+ *   <div  style="opacity:0;transform:translateY(16px)">
+ *   <span style="transform:translateY(110%)">
+ *
+ * On the client the reduced branch then renders instead — and the styles stay
+ * exactly as the server wrote them. React does not correct mismatched inline
+ * styles on a hydration pass in a production build; it warns in development
+ * and moves on. So neither dropping the `style` prop nor authoring an
+ * overriding one removes them. Measured, not assumed: with the style prop
+ * present the DOM still read `transform:translateY(110%)`.
+ *
+ * The result was a blank site for every reduced-motion user — every Reveal
+ * stuck at opacity 0, every headline line still translated below its clipping
+ * mask. The existing CSS guard could not catch it either: it zeroes transition
+ * and animation durations, and an inline transform is neither.
+ *
+ * The marker goes on BOTH branches, because the leftover style is on the
+ * element the reduced branch hydrates into.
+ */
+const MOTION_MARKER = { "data-motion": "" } as const;
+
 const revealVariants: Variants = {
   hidden: { opacity: 0, y: DISTANCE },
   visible: {
@@ -41,7 +71,11 @@ export function Reveal({ children, delay = 0, className, ...props }: RevealProps
   const reduced = useReducedMotion();
 
   if (reduced) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div className={className} {...MOTION_MARKER}>
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -52,6 +86,7 @@ export function Reveal({ children, delay = 0, className, ...props }: RevealProps
       variants={revealVariants}
       transition={{ delay }}
       className={className}
+      {...MOTION_MARKER}
       {...props}
     >
       {children}
@@ -75,7 +110,11 @@ export function Stagger({ children, className, ...props }: RevealProps) {
   const reduced = useReducedMotion();
 
   if (reduced) {
-    return <div className={className}>{children}</div>;
+    return (
+      <div className={className} {...MOTION_MARKER}>
+        {children}
+      </div>
+    );
   }
 
   return (
@@ -85,6 +124,7 @@ export function Stagger({ children, className, ...props }: RevealProps) {
       viewport={VIEWPORT}
       variants={staggerVariants}
       className={className}
+      {...MOTION_MARKER}
       {...props}
     >
       {children}
@@ -114,18 +154,22 @@ export function StaggerItem({ children, className, as = "div" }: StaggerItemProp
 
   if (reduced) {
     return as === "li" ? (
-      <li className={className}>{children}</li>
+      <li className={className} {...MOTION_MARKER}>
+        {children}
+      </li>
     ) : (
-      <div className={className}>{children}</div>
+      <div className={className} {...MOTION_MARKER}>
+        {children}
+      </div>
     );
   }
 
   return as === "li" ? (
-    <motion.li variants={revealVariants} className={className}>
+    <motion.li variants={revealVariants} className={className} {...MOTION_MARKER}>
       {children}
     </motion.li>
   ) : (
-    <motion.div variants={revealVariants} className={className}>
+    <motion.div variants={revealVariants} className={className} {...MOTION_MARKER}>
       {children}
     </motion.div>
   );
@@ -180,10 +224,13 @@ export function TextReveal({
           }
         >
           {reduced ? (
-            <span className={cn("block", lineClassName)}>{line}</span>
+            <span className={cn("block", lineClassName)} {...MOTION_MARKER}>
+              {line}
+            </span>
           ) : (
             <motion.span
               className={cn("block", lineClassName)}
+              {...MOTION_MARKER}
               initial={{ y: "110%" }}
               animate={{ y: 0 }}
               transition={{
