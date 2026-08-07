@@ -318,11 +318,13 @@ renders the final state immediately, which is the state worth auditing.
       and Next rendered it per request — meaning a Google Fonts fetch on every
       scrape, for an image that never changes. Its own doc comment claimed it
       was "generated at build time". Both locales now prerender.
-- [ ] **The project row is cramped between 768 and 1023.** The 12-column grid
-      engages at `md:`, which leaves the summary column ~216px and wraps it to
-      five or six lines against a 92px meta column. Not broken, and no
-      overflow — but the layout only really breathes from `lg:` up. Worth
-      considering `lg:grid-cols-12` and letting 768–1023 stay stacked.
+- [x] **The project row no longer cramps between 768 and 1023.** The 12-column
+      grid engaged at `md:`, leaving the summary ~190px and wrapping one
+      sentence to five or six lines against a 92px meta column. Nothing
+      overflowed; it was just squeezed in the band with the least room. Moved
+      to `lg:grid-cols-12`, so 768–1023 stays stacked at full width. Measured
+      after: 688px summary at 768, 355px at 1024, 528px at 1440, no overflow at
+      any of the three.
 
 ---
 

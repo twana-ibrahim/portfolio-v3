@@ -49,13 +49,13 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
 
   const content = (
     <>
-      <div className="flex items-baseline gap-5 md:col-span-1">
+      <div className="flex items-baseline gap-5 lg:col-span-1">
         <span dir="ltr" className="label text-ink-subtle tabular-nums">
           {ordinal(index)}
         </span>
       </div>
 
-      <div className="md:col-span-5">
+      <div className="lg:col-span-5">
         <h3
           className={cn(
             "font-medium text-subheading text-ink tracking-tight",
@@ -71,7 +71,7 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
         </p>
       </div>
 
-      <div className="md:col-span-4">
+      <div className="lg:col-span-4">
         <p className="text-ink-muted text-sm leading-relaxed">{pick(project.summary, locale)}</p>
         {/* dir="ltr": every stack entry is a Latin technology name, and the
             hairline separators between them are neutral characters that the
@@ -81,7 +81,7 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
         <TagList dir="ltr" items={project.stack.slice(0, 4)} className="mt-4" />
       </div>
 
-      <div className="flex items-center justify-between gap-4 md:col-span-2 md:justify-end">
+      <div className="flex items-center justify-between gap-4 lg:col-span-2 lg:justify-end">
         <span dir="ltr" className="label text-ink-subtle tabular-nums">
           {project.year}
         </span>
@@ -123,7 +123,16 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
     </>
   );
 
-  const layout = "group grid grid-cols-1 items-baseline gap-x-8 gap-y-4 py-8 md:grid-cols-12";
+  /**
+   * The grid engages at `lg:`, not `md:`.
+   *
+   * Twelve columns across a 768px viewport leaves the summary about 190px,
+   * which wraps a single sentence to five or six lines against a 92px meta
+   * column. Nothing overflowed — it was just cramped, in the band where the
+   * row has the least room and the most to say. Staying stacked to 1024 costs
+   * height on tablets and buys back a readable measure.
+   */
+  const layout = "group grid grid-cols-1 items-baseline gap-x-8 gap-y-4 py-8 lg:grid-cols-12";
 
   /**
    * An accent hairline drawing in across the row's top rule on hover.
