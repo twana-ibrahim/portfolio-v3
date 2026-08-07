@@ -1,36 +1,18 @@
 import { parseProfile } from "./schema";
 
 /**
- * THE PERSON, IN PROSE.
+ * The person, in prose. Facts live in `lib/config/site.ts`; sentences live
+ * here, because they exist twice and `site.ts` is `as const`.
  *
- * Facts live in `lib/config/site.ts`. Sentences live here, because sentences
- * have to exist in both languages and `site.ts` is `as const`.
+ * The two versions are not translations of each other. English names the
+ * category ("banks and operators") because FIB and Fastlink mean nothing to
+ * that reader; Kurdish names the companies outright and drops the category,
+ * because to that reader the category is throat-clearing and the names are the
+ * whole point.
  *
- * ── HOW THE KURDISH DIFFERS, AND WHY ────────────────────────────────────────
- * The two versions are written for two readers who do not know the same
- * things, so they do not say the same things.
- *
- * The English headline is "I build the systems banks and operators run on".
- * It works because FIB and Fastlink are unknown to that reader, so naming the
- * *category* is the only way to convey scale. To a Kurdish reader, "banks and
- * operators" is corporate throat-clearing — they already know which companies
- * are here. What they cannot guess is that the app they topped their SIM up
- * with this morning was built by someone from Kalar. So the Kurdish headline
- * makes that the claim, and the summary underneath it drops the categories and
- * names FIB, Fastlink, MyTV+ and iQ Group outright — names that mean nothing
- * in English and everything here.
- *
- * The bio opens the same way. English needs "in Kalar, in the Sulaymaniyah
- * region of Iraq" to place him. Kurdish needs "لە کەلارەوە" and nothing more;
- * the rest would read as explaining Kurdistan to Kurds.
- * ────────────────────────────────────────────────────────────────────────────
- *
- * ── NEEDS TWANA'S OWN PASS ──────────────────────────────────────────────────
- * Every fact here is from your CV, so nothing is invented. But the Kurdish is
- * written in a register I chose, and register is not something a non-native
- * gets to be confident about — least of all in your own professional voice.
- * Read it aloud. Anywhere it sounds like a translation, change the words.
- * ────────────────────────────────────────────────────────────────────────────
+ * NEEDS TWANA'S PASS: the facts are from the CV, but the Kurdish register is
+ * one I chose, and register is not something a non-native should be confident
+ * about. Read it aloud; where it sounds translated, change the words.
  */
 export const profile = parseProfile({
   name: {
@@ -53,16 +35,9 @@ export const profile = parseProfile({
   },
 
   /**
-   * The hero statement.
-   *
-   * Concrete on purpose. "Passionate developer crafting beautiful digital
-   * experiences" describes nobody; naming what is at stake describes exactly
-   * one person. `emphasis` is the only phrase on the page that gets set apart,
-   * so it has to be the phrase worth remembering.
-   *
-   * Lines are authored, never measured — each is its own clipped box in the
+   * Lines are authored, never measured: each is its own clipped box in the
    * hero's mask reveal, so a line that wraps breaks the effect. Keep them
-   * short. "run their business on" wrapped at 1440px and was cut for it.
+   * short — "run their business on" wrapped at 1440px and was cut for it.
    */
   headline: {
     en: {
@@ -78,18 +53,13 @@ export const profile = parseProfile({
   },
 
   /**
-   * Two or three sentences maximum. Anything longer belongs on /about.
+   * `{years}` resolves from `siteConfig.careerStart` at render, so the prose
+   * cannot drift from the hero's stat every January.
    *
-   * `{years}` is resolved from `siteConfig.careerStart` at render. It used to
-   * read "Five years" as a literal, which agreed with the hero's derived stat
-   * until the first of January and then quietly stopped.
-   *
-   * `⁦…⁩` are bidi isolates, and they are load-bearing. A Latin word
-   * inside RTL text is placed correctly on its own, but one ending in a
-   * *neutral* character is not: "MyTV+" rendered as "+MyTV", because the
-   * algorithm hands the plus to the surrounding Kurdish. The isolate fences the
-   * run off. Written as escapes rather than as the characters themselves, which
-   * are invisible in an editor and get deleted by accident.
+   * The `⁦…⁩` are bidi isolates and are load-bearing: a Latin run
+   * ending in a neutral character renders "MyTV+" as "+MyTV", because the
+   * algorithm hands the plus to the surrounding Kurdish. Written as escapes —
+   * the characters themselves are invisible in an editor and get deleted.
    */
   summary: {
     en: "{years} years of frontend work on software other businesses depend on to operate — digital banking, telecom sales, streaming and advertising, identity and access management. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
@@ -101,12 +71,8 @@ export const profile = parseProfile({
       en: "Available for work",
       ku: "ئامادەم بۆ کار",
     },
-    /**
-     * Roles, not engagements. The career is five years of employment at
-     * companies, not a freelance book — leading with "contract" invites
-     * questions about a track record that is not there, and undersells the
-     * one that is.
-     */
+    /* Roles, not engagements: this is employment history, not a freelance
+       book, and leading with "contract" undersells it. */
     detail: {
       en: "Open to remote roles, GMT+3",
       ku: "ئامادەم بۆ کارکردن لە دوورەوە، \u2066GMT+3\u2069",
@@ -124,9 +90,6 @@ export const profile = parseProfile({
       "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq. Five years in, almost all of it spent on software that other businesses run on — the dashboard a telecom operations team opens at the start of every shift, the app an agent uses to sell a SIM, the identity server that decides what six internal products will let you see.",
       "That kind of work has a particular shape. Nobody is delighted by an internal tool. They need it to be right, to stay responsive when the table has ten thousand rows in it, and to never offer a button the backend is going to refuse. So most of my effort goes into things that don't photograph well: access control that mirrors the API exactly, filtering that survives real data volumes, and structure the next person can change without breaking three screens they've never opened.",
       "Frontend is where I specialise, not where I stop. Node and Express, REST design, schemas in Postgres and Mongo — knowing what a response costs to produce changes what you ask for, and it is most of the difference between an interface that fits the system and one the backend team has to work around.",
-      // The previous version said the FIB project was one "I carried with me"
-      // between employers. It is the client's product, not something an
-      // engineer takes along, and the sentence read as a claim on it.
       "Right now I'm building customer-facing features for FIB, a digital bank. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
     ],
     ku: [

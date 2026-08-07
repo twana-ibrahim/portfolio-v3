@@ -1,0 +1,10 @@
+# biome.json sets lineEnding "lf". Without this, git's autocrlf hands Windows
+# checkouts CRLF, biome rewrites them to LF, and every checkout shows the whole
+# tree as modified. Normalise on commit and check out LF everywhere.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.pdf binary
+*.woff2 binary

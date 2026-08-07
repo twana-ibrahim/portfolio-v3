@@ -1,17 +1,13 @@
 import { defaultLocale, type Locale } from "@/lib/config/i18n";
 
 /**
- * Calendar vocabulary, per locale.
+ * Hand-written rather than `Intl.DateTimeFormat`: Node's ICU data for `ckb` is
+ * not guaranteed in every build environment, and a month name that renders in
+ * Kurdish locally and English on Vercel looks fine in review and wrong in
+ * production.
  *
- * Hand-written rather than delegated to `Intl.DateTimeFormat`. Node's ICU data
- * for `ckb` is not guaranteed to be present in every build environment, and a
- * month name that silently falls back to English on Vercel but renders in
- * Kurdish locally is the worst possible failure mode — it looks fine in review
- * and wrong in production.
- *
- * The Kurdish names are the Levantine set used in Iraq (شوبات, ئازار, نیسان),
- * not the Persian-influenced alternatives. Unabbreviated, because Kurdish has
- * no settled three-letter forms and inventing them would look like a typo.
+ * The Levantine set used in Iraq, unabbreviated — Kurdish has no settled
+ * three-letter forms and inventing them would read as a typo.
  */
 const MONTHS: Record<Locale, readonly string[]> = {
   en: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -31,13 +27,8 @@ const MONTHS: Record<Locale, readonly string[]> = {
   ],
 };
 
-/**
- * Duration units and the open-ended end date.
- *
- * Kurdish does not inflect a noun after a numeral — "1 ساڵ" and "5 ساڵ" use
- * the same form — so the plural suffix is empty rather than absent, which
- * keeps both locales on one code path instead of branching on language.
- */
+/** Kurdish does not inflect a noun after a numeral, so both forms are equal —
+ *  which keeps the two locales on one code path. */
 const UNITS: Record<
   Locale,
   { year: string; years: string; month: string; months: string; present: string }
@@ -46,12 +37,8 @@ const UNITS: Record<
   ku: { year: "ساڵ", years: "ساڵ", month: "مانگ", months: "مانگ", present: "ئێستا" },
 };
 
-/**
- * Parses a schema-validated "YYYY-MM" string.
- *
- * The schema guarantees the shape, but `noUncheckedIndexedAccess` does not
- * know that, so the split is checked rather than asserted with `!`.
- */
+/** The schema guarantees the shape; `noUncheckedIndexedAccess` does not know
+ *  that, so this is checked rather than asserted with `!`. */
 function parseYearMonth(value: string): { year: number; month: number } {
   const [rawYear, rawMonth] = value.split("-");
   if (!rawYear || !rawMonth) {
@@ -61,12 +48,9 @@ function parseYearMonth(value: string): { year: number; month: number } {
 }
 
 /**
- * "2024-03" → "Mar 2024" / "ئازار 2024"
- *
- * Latin digits in both locales. Kurdish technical writing uses Arabic-Indic
- * (٢٠٢٤) and Latin interchangeably, but every figure on this site is set in
- * tabular mono and the phone number and credential dates are already Latin —
- * mixing numeral systems inside one layout reads as a bug, not a choice.
+ * "2024-03" → "Mar 2024" / "ئازار 2024". Latin digits in both locales: Kurdish
+ * uses Arabic-Indic and Latin interchangeably, and mixing the two systems in
+ * one layout reads as a bug rather than a choice.
  */
 export function formatYearMonth(value: string, locale: Locale = defaultLocale): string {
   const { year, month } = parseYearMonth(value);
@@ -83,10 +67,7 @@ export function formatDateRange(
   return `${formatYearMonth(start, locale)} — ${to}`;
 }
 
-/**
- * "1 yr 5 mos". Rendered next to each role so the reader does not have to do
- * date arithmetic to see how long something lasted.
- */
+/** "1 yr 5 mos", so the reader does not have to do the date arithmetic. */
 export function formatDuration(
   start: string,
   end: string | null,
@@ -110,15 +91,10 @@ export function formatDuration(
 }
 
 /**
- * Whole years elapsed since a "YYYY-MM" start.
- *
- * Floored, never rounded. The result is rendered as "N+", and rounding up
- * makes that claim false for half of every year — at 4 yrs 7 mos, "5+" says
- * five or more when it is neither.
- *
- * Not inclusive of the start month, unlike formatDuration: "how long did this
- * role last" and "how long have you been doing this" count differently at the
- * boundary.
+ * Floored, never rounded: the result renders as "N+", and rounding up makes
+ * that false for half of every year. Not inclusive of the start month, unlike
+ * formatDuration — "how long did this role last" and "how long have you done
+ * this" count differently at the boundary.
  */
 export function yearsSince(start: string, now = new Date()): number {
   const from = parseYearMonth(start);
