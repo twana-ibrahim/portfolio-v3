@@ -47,6 +47,17 @@ export function localized<T extends z.ZodType>(inner: T) {
 
 export const experienceSchema = z.object({
   company: z.string().min(1),
+  /**
+   * The employer's previous name, when the entity changed underneath a
+   * continuous period of employment — a rebrand, an acquisition, or a team
+   * transferred wholesale.
+   *
+   * Exists so that case can be one entry rather than two. Splitting it reads
+   * as a job change that did not happen; hiding it entirely would misname the
+   * company for the earlier half of the dates. Not localized: a registered
+   * company name is the same string in both languages.
+   */
+  formerly: z.string().min(1).optional(),
   role: localized(z.string().min(1)),
   location: localized(z.string().min(1)),
   arrangement: z.enum(["remote", "on-site", "hybrid"]),

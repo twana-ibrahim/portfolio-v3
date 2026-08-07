@@ -22,6 +22,14 @@ export const experience = parseExperience(
   [
     {
       company: "Tailored Applications",
+      /**
+       * Kept as its own entry rather than merged with the Gateway ICT row
+       * below it, which is what Twana wanted — but the transfer has to be
+       * stated rather than inferred. Two adjacent companies with touching
+       * dates read as a job change, and "left after fifteen months" is a
+       * signal a recruiter acts on. This one line is what stops it.
+       */
+      formerly: "Gateway ICT",
       role: { en: "Frontend Developer", ku: "گەشەپێدەری Frontend" },
       location: { en: "Erbil, Iraq", ku: "هەولێر، عێراق" },
       arrangement: "remote",
@@ -29,16 +37,15 @@ export const experience = parseExperience(
       end: null,
       highlights: {
         en: [
-          // Was "the same project I moved onto at Gateway ICT and carried
-          // across when I joined". A client's product is not something an
-          // engineer carries between employers, and the sentence read as a
-          // claim on it.
-          "Building customer-facing features for FIB, a digital bank — a product I already knew when I arrived, so there was no ramp to pay for.",
+          // Was "a project I moved onto at Gateway ICT and carried across
+          // when I joined". A client's product is not something an engineer
+          // carries between employers; the team was transferred to it.
+          "Building customer-facing features for FIB, a digital bank — continuing on the same product after the Gateway ICT team transferred here in July 2026.",
           "Working against a regulated backend, where validation, access control and an auditable trail are requirements rather than refinements.",
           "Extending the shared component library instead of adding one-off components to it, so the design system stays a system.",
         ],
         ku: [
-          "ئەو بەشانەی FIB دروست دەکەم کە کڕیار خۆی بەکاریان دەهێنێت — بەرهەمێک کە پێشتر ئاشنام پێی بوو، بۆیە ماوەی ئامادەکاری کورت بوو.",
+          "ئەو بەشانەی FIB دروست دەکەم کە کڕیار خۆی بەکاریان دەهێنێت — بەردەوامبوون لەسەر هەمان بەرهەم، دوای ئەوەی تیمی Gateway ICT لە تەمووزی 2026دا گوازرایەوە بۆ ئێرە.",
           "لەسەر سیستەمێکی بانکی ڕێکخراو کار دەکەم، کە پشکنینی داتا، کۆنترۆڵی دەستڕاگەیشتن و تۆماری کردارەکان مەرجن، نەک باشترکردنی زیادە.",
           "لەبری زیادکردنی کۆمپۆنێنتی تایبەت بە یەک شوێن، کتێبخانە هاوبەشەکە فراوان دەکەم، تاکو سیستەمی دیزاین بە سیستەم بمێنێتەوە.",
         ],

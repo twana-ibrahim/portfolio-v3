@@ -94,6 +94,8 @@ export const en = {
     // the month names, and lib/utils/format.ts owns that. Two sources for one
     // calendar is how a date range ends up half-translated.
     alsoWorkedWith: "Also worked with",
+    /** Renders under a company whose name changed mid-tenure. */
+    formerly: "Formerly {name}",
     /** Keys are the `level` enum in content/schema.ts. */
     languageLevels: {
       Native: "Native",

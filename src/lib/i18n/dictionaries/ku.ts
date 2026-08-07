@@ -95,6 +95,7 @@ export const ku: Dictionary = {
     fullHistory: "مێژووی تەواو",
     downloadCv: "داگرتنی CV",
     alsoWorkedWith: "هەروەها کارم لەگەڵ ئەمانە کردووە",
+    formerly: "پێشتر {name}",
     languageLevels: {
       Native: "زمانی دایک",
       Professional: "ئاستی پیشەیی",
