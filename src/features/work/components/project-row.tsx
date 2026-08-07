@@ -10,13 +10,8 @@ import { localePath } from "@/lib/i18n/routing";
 import { cn } from "@/lib/utils/cn";
 import { ordinal } from "@/lib/utils/format";
 
-/**
- * Resolves where a project row points, if anywhere.
- *
- * Three genuinely different states, and conflating them is the mistake the
- * previous site made — every project looked clickable and none were. A row
- * with nothing to show renders as text, not as a dead link.
- */
+/** Three genuinely different states. The previous site conflated them and
+ *  every project looked clickable while none were. */
 function resolveTarget(project: Project, locale: Locale, dictionary: Dictionary) {
   if (project.caseStudy) {
     return {
@@ -87,9 +82,9 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
         </span>
 
         {target.kind === "none" ? (
-          // Keyed off `confidential`, not off having no link. Three of these
-          // are public sites that simply have no URL recorded — badging those
-          // "Internal" states something untrue about the client's work.
+          // Keyed off `confidential`, not off having no link: three of these
+          // are public sites with no URL recorded, and badging them "Internal"
+          // says something untrue about the client's work.
           project.confidential ? (
             <span className="label inline-flex items-center gap-1.5 text-ink-subtle">
               <Lock size={11} strokeWidth={2} aria-hidden />
@@ -104,16 +99,12 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
               aria-hidden
               className={cn(
                 "transition-transform duration-base ease-out-expo",
-                // The nudge needs its own RTL variant. `translate` is applied
-                // last, in the untransformed frame, so mirroring the glyph
-                // does NOT flip which way it drifts — it would have crept
-                // right while pointing left.
+                // `translate` resolves in the untransformed frame, so
+                // mirroring the glyph does not flip which way it drifts.
                 "group-hover:-translate-y-0.5 group-hover:translate-x-0.5",
                 "rtl:group-hover:-translate-x-0.5",
-                // An arrow that leads away has to point away from the reading
-                // direction. Two different mechanisms, because `scale` applies
-                // before `rotate`: mirroring an already-rotated glyph lands it
-                // somewhere neither side wants.
+                // Two mechanisms, because `scale` applies before `rotate` —
+                // mirroring an already-rotated glyph lands it nowhere useful.
                 target.kind === "internal" ? "rotate-45 rtl:rotate-225" : "rtl:-scale-x-100",
               )}
             />
@@ -123,28 +114,16 @@ export function ProjectRow({ project, index, locale, dictionary }: ProjectRowPro
     </>
   );
 
-  /**
-   * The grid engages at `lg:`, not `md:`.
-   *
-   * Twelve columns across a 768px viewport leaves the summary about 190px,
-   * which wraps a single sentence to five or six lines against a 92px meta
-   * column. Nothing overflowed — it was just cramped, in the band where the
-   * row has the least room and the most to say. Staying stacked to 1024 costs
-   * height on tablets and buys back a readable measure.
-   */
+  /* `lg:`, not `md:`. Twelve columns at 768px leave the summary ~190px, which
+     wraps one sentence to six lines. Staying stacked to 1024 costs height and
+     buys back a readable measure. */
   const layout = "group grid grid-cols-1 items-baseline gap-x-8 gap-y-4 py-8 lg:grid-cols-12";
 
   /**
-   * An accent hairline drawing in across the row's top rule on hover.
-   *
-   * Same gesture as `link-underline` — draws from the reading edge, same
-   * easing — so the site has one idea about what "this responds to you" looks
-   * like rather than a different flourish per component. `origin-left` is
-   * logical here via the RTL variant: a rule that draws from the left on a
-   * right-to-left page starts at the end of the line and reads backwards.
-   * Applied only to rows that go somewhere: a dead row that lights up is a
-   * promise the markup does not keep. Sits on `-top-px` to cover the li's
-   * existing border rather than stack a second line beneath it.
+   * The same gesture as `link-underline`, so the site has one idea of what
+   * "this responds to you" looks like. The RTL variant flips the origin, or
+   * the rule draws from the end of the line. Only on rows that go somewhere —
+   * a dead row that lights up is a promise the markup does not keep.
    */
   const hoverRule = cn(
     "relative before:absolute before:inset-x-0 before:-top-px before:h-px",

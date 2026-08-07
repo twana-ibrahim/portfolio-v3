@@ -3,32 +3,23 @@ import { projects } from "./projects";
 import { certificationSchema, educationSchema, languageSchema, parseExperience } from "./schema";
 
 /**
- * EMPLOYMENT HISTORY, newest first.
+ * Newest first, written from the CV and then cut hard — its own bullets
+ * carried the usual filler about clean testable code and agile ceremonies,
+ * which every engineer claims and which therefore says nothing.
  *
- * Written from the CV, then edited hard. The CV's own bullets included the
- * usual filler — "writing clean, modular, testable code", "participating in
- * code reviews and agile ceremonies" — which every engineer on earth also
- * claims, so it says nothing. What survives here is the specific stuff: what
- * the software did, who used it, and which problems were actually difficult.
+ * Still worth your pass: where a line reads as a responsibility rather than an
+ * achievement, add the number that makes it one.
  *
- * Still worth your own pass. Anywhere a line reads as a responsibility rather
- * than an achievement, add the number that makes it one.
- *
- * Company names are not localized. "Gateway ICT" is how the company writes
- * itself in both languages, and transliterating a registered name into Arabic
- * script makes it harder to search for, not easier to read.
+ * Company names are not localized — transliterating a registered name into
+ * Arabic script makes it harder to search for, not easier to read.
  */
 export const experience = parseExperience(
   [
     {
       company: "Tailored Applications",
-      /**
-       * Kept as its own entry rather than merged with the Gateway ICT row
-       * below it, which is what Twana wanted — but the transfer has to be
-       * stated rather than inferred. Two adjacent companies with touching
-       * dates read as a job change, and "left after fifteen months" is a
-       * signal a recruiter acts on. This one line is what stops it.
-       */
+      /* Two adjacent companies with touching dates read as a job change, and
+         "left after fifteen months" is a signal a recruiter acts on. Stating
+         the transfer is what stops that. */
       formerly: "Gateway ICT",
       role: { en: "Frontend Developer", ku: "گەشەپێدەری Frontend" },
       location: { en: "Erbil, Iraq", ku: "هەولێر، عێراق" },
@@ -37,9 +28,6 @@ export const experience = parseExperience(
       end: null,
       highlights: {
         en: [
-          // Was "a project I moved onto at Gateway ICT and carried across
-          // when I joined". A client's product is not something an engineer
-          // carries between employers; the team was transferred to it.
           "Building customer-facing features for FIB, a digital bank — continuing on the same product after the Gateway ICT team transferred here in July 2026.",
           "Working against a regulated backend, where validation, access control and an auditable trail are requirements rather than refinements.",
           "Extending the shared component library instead of adding one-off components to it, so the design system stays a system.",
@@ -164,24 +152,13 @@ export const education = z.array(educationSchema).parse([
 ]);
 
 /**
- * Ordered by relevance to the work, not by date awarded.
+ * By relevance, not date. The verification URLs matter more than the names:
+ * anyone can type "Advanced React" into a list. Jira Fundamentals is last and
+ * unlinked because Atlassian issues no public credential — the one item a
+ * reader cannot check sits at the bottom rather than dressed up to match.
  *
- * Verification URLs matter more than the names do. Anyone can type "Advanced
- * React" into a list; a link that resolves to the issuer's own record is the
- * difference between a claim and a fact, and it costs one line of markup.
- *
- * Jira Fundamentals is last and unlinked because Atlassian issues no public
- * credential for it. It is the one item here a reader cannot check, which is
- * exactly why it sits at the bottom rather than being dressed up to match its
- * neighbours.
- *
- * Tracking parameters are stripped from the share URLs — a `utm_source=android`
- * on a credential link tells the reader which phone you were holding.
- *
- * Names stay in English in both locales. The name has to match the certificate
- * the link resolves to, and a reader who follows "Advanced React" to a page
- * headed "Advanced React" has verified something; one who follows a translated
- * name to a page in a different language has to do the matching themselves.
+ * Tracking parameters are stripped from the share URLs, and names stay in
+ * English so they match the certificate the link resolves to.
  */
 export const certifications = z.array(certificationSchema).parse([
   {

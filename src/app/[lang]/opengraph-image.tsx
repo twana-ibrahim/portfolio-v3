@@ -5,16 +5,10 @@ import { siteConfig } from "@/lib/config/site";
 import { type Localized, pick } from "@/lib/i18n/localized";
 
 /**
- * ENGLISH IN BOTH LOCALES, on purpose.
- *
- * Satori rasterises this, and it does no complex text shaping — it has no
- * HarfBuzz. Arabic script needs contextual joining to be legible at all, so
- * Sorani would come out as a row of disconnected isolated forms: not a
- * degraded card, an unreadable one. `alt` is a static export besides, so it
- * cannot see the locale even if the drawing could.
- *
- * A card in English on a Kurdish page is a small cost; a card of broken
- * glyphs would be worse than no card. Revisit if Satori gains shaping.
+ * English in both locales, on purpose. Satori has no HarfBuzz and does no
+ * complex shaping, so Sorani would rasterise as disconnected isolated forms —
+ * unreadable, not merely degraded. `alt` is a static export besides, so it
+ * cannot see the locale anyway. Revisit if Satori gains shaping.
  */
 const en = <T,>(value: Localized<T>) => pick(value, defaultLocale);
 
@@ -22,38 +16,22 @@ export const alt = `${en(profile.name)} — ${en(profile.role)}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-/**
- * Without this the `[lang]` segment is unresolved and Next renders the route
- * on demand instead of prerendering it — which means fetching the typeface
- * from Google Fonts on every scrape, for an image that never changes.
- *
- * The card is identical in both locales (see above), so this draws the same
- * picture twice at build. Two build-time fetches beats one per request.
- */
+/** Without this the `[lang]` segment is unresolved and Next renders on demand
+ *  — a Google Fonts fetch per scrape, for an image that never changes. */
 export function generateStaticParams() {
   return locales.map((locale) => ({ lang: locale }));
 }
 
-/**
- * Social card, generated at build time.
- *
- * This is the site's first impression in Slack, LinkedIn and iMessage far more
- * often than the homepage is, so it gets the same editorial treatment: paper
- * ground, hairline rules, one accent mark, type doing the work.
- */
+/** The site's first impression in Slack and LinkedIn far more often than the
+ *  homepage is, so it gets the same editorial treatment. */
 
 /**
- * Pulls the real typeface rather than falling back to a generic sans.
- *
- * Satori needs actual font bytes, and the Google Fonts CSS endpoint hands back
- * a URL we can follow. Only the glyphs we render are requested.
+ * Satori needs real font bytes, and only the glyphs rendered are requested.
  *
  * The User-Agent is deliberately absent: send a modern one and Google serves
  * WOFF2, which Satori cannot parse ("Unsupported OpenType signature wOF2").
- * Without it the endpoint falls back to TrueType, which it can.
- *
- * If the network is unavailable at build time this returns null and Satori
- * uses its default face — a plainer card beats a failed build.
+ * Returns null if the network is down at build — a plainer card beats a
+ * failed build.
  */
 async function loadGeist(text: string, weight: number): Promise<ArrayBuffer | null> {
   try {

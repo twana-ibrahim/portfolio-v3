@@ -4,16 +4,9 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Sharp corners, no gradients, no shadows on hover. In an editorial system the
- * button is a block of ink: the block itself never moves, and colour does the
- * work.
- *
- * The icon is the one exception, and it is a consistency fix rather than a
- * new idea. Every link on this site already nudges its arrow on hover; a
- * button that sat perfectly still next to them read as the less responsive
- * control, which is backwards for the primary action on the page. Same
- * distance and same easing as the links, so it is the existing gesture rather
- * than a second one.
+ * A block of ink: sharp corners, no gradients, and the block never moves —
+ * colour does the work. The icon nudge is the exception, matching the distance
+ * and easing every link already uses so it is one gesture, not two.
  */
 const button = cva(
   [
@@ -23,20 +16,12 @@ const button = cva(
     "transition-colors duration-base ease-out-expo",
 
     /**
-     * The fill sweeps in from the reading edge and, on leave, continues out
-     * the far side rather than retreating the way it came. That is the whole
-     * trick, and it is one property: the origin flips between the two states,
-     * so the same scaleX animation reads as "enter" one way and "exit" the
-     * other.
-     *
-     * `origin-*` is physical — there is no logical equivalent for
-     * transform-origin — so the RTL variants swap both ends. Without them the
-     * gesture runs backwards on the Kurdish pages: the fill would arrive from
-     * the end of the line and leave toward its start, against the direction
-     * the reader's eye is already travelling.
-     *
-     * `isolate` keeps the -z-10 behind the label but inside the button's own
-     * stacking context, so it cannot fall behind the page.
+     * The fill sweeps in from the reading edge and continues out the far side
+     * on leave rather than retreating — one scaleX animation, with the origin
+     * flipping between states. `origin-*` is physical with no logical
+     * equivalent, so the RTL variants swap both ends or the gesture runs
+     * against the reader's eye. `isolate` keeps the -z-10 inside the button's
+     * own stacking context.
      */
     "before:absolute before:inset-0 before:-z-10 before:bg-[var(--btn-fill)]",
     "before:origin-right before:scale-x-0 rtl:before:origin-left",
@@ -52,12 +37,9 @@ const button = cva(
   {
     variants: {
       variant: {
-        /**
-         * Each variant only has to name the colour that sweeps in; the base
-         * owns the mechanism. `hover:bg-*` is gone deliberately — animating the
-         * background and sweeping a fill over it at once produces two
-         * different colours arriving at two different speeds.
-         */
+        /* Variants name only the colour that sweeps in; the base owns the
+           mechanism. No `hover:bg-*` — animating the background *and* sweeping
+           a fill gives two colours arriving at two speeds. */
         solid: "bg-ink text-paper [--btn-fill:var(--accent)] hover:text-accent-ink",
         /** Reserved for the single most important action on a page. */
         accent: "bg-accent text-accent-ink [--btn-fill:var(--accent-hover)]",
@@ -78,11 +60,8 @@ const button = cva(
 
 type ButtonProps = ComponentProps<"button"> &
   VariantProps<typeof button> & {
-    /**
-     * Render the child element instead of a <button>, keeping the styles.
-     * Use for links: <Button asChild><Link href="/work">Work</Link></Button>.
-     * This is what keeps navigation semantically an anchor.
-     */
+    /** Renders the child instead of a <button>, so navigation stays an
+     *  anchor: <Button asChild><Link href="/work">Work</Link></Button>. */
     asChild?: boolean;
   };
 

@@ -2,39 +2,17 @@ import type { Localized } from "@/lib/i18n/localized";
 import { parseProjects } from "./schema";
 
 /**
- * THE WORK.
+ * Newest first. `featured: true` promotes to the home page — keep it to four.
+ * Summaries name what the software did and who used it, with no adjectives.
  *
- * Ordered newest first. `featured: true` promotes a project to the home page —
- * keep that to four. Everything else lives on /work.
+ * The Kurdish is not a translation. English has to carry the category
+ * ("telecom sales") because Fastlink means nothing to that reader; Kurdish
+ * spends those words on what the thing actually did instead, since the
+ * category is already known.
  *
- * Summaries say what the software *did* and who used it. No adjectives, no
- * "cutting-edge", no "seamless". A reader deciding whether to interview you
- * wants the noun and the verb; everything else is noise they have read a
- * hundred times today.
- *
- * ── ON THE KURDISH SUMMARIES ────────────────────────────────────────────────
- * Not translations. The two audiences do not know the same things, so the two
- * versions do not say the same things.
- *
- * An English reader has never heard of Fastlink, so the summary has to carry
- * the category — "telecom sales" — to mean anything. A Kurdish reader has a
- * Fastlink SIM in their pocket, so spending words on the category is spending
- * them on what they already know. The Kurdish text uses that room for the part
- * they cannot guess: what the thing actually did, in concrete nouns.
- *
- * The same trade runs the other way for `mytv-plus-app`, where the English
- * says "content delivery ecosystem" and the Kurdish says "the small screen and
- * the big one" — because to someone who has used MyTV+, that is the whole
- * distinction, and it is a sentence rather than a diagram.
- * ────────────────────────────────────────────────────────────────────────────
- *
- * ── STILL NEEDED ────────────────────────────────────────────────────────────
- * `metrics` are empty everywhere. This is the single highest-value thing you
- * can add: users, agents, records, transactions/day, load time before and
- * after. Left blank rather than guessed — a wrong figure in an interview is
- * far worse than no figure. Years are inferred from the employment timeline
- * and are worth a check.
- * ────────────────────────────────────────────────────────────────────────────
+ * STILL NEEDED: `metrics` are empty everywhere, and are the highest-value
+ * thing left to add. Blank rather than guessed — a wrong figure in an
+ * interview is worse than none. Years are inferred and worth a check.
  */
 
 /** The four role strings that repeat, so a wording change happens once. */
@@ -83,10 +61,9 @@ export const projects = parseProjects([
     metrics: [],
     confidential: true,
     featured: true,
-    // Was true, with a template at case-studies/fast-sim-pwa.mdx. Removed in
-    // favour of no case study at all: the work here was spec-and-ticket
-    // delivery, so the decision narrative the format needs would have had to
-    // be invented. Template recoverable at commit a85418b.
+    // No case study: the work was spec-and-ticket delivery, so the decision
+    // narrative the format needs would have had to be invented. Old template
+    // is at commit a85418b.
     caseStudy: false,
   },
   {
@@ -272,9 +249,8 @@ export const projects = parseProjects([
       en: "Placement platform matching university students to internships, with application tracking for students and host organisations.",
       ku: "پلاتفۆرمێک کە قوتابی زانکۆ بە شوێنی مەشقی هاوینە دەگەیەنێت، لەگەڵ بەدواداچوونی داواکاری بۆ قوتابی و لایەنی میوانداری.",
     },
-    // Named as coursework rather than as a client engagement. It is real work
-    // and it predates the first job, so calling it "Frontend Developer" next
-    // to a university's name reads as something it was not.
+    // Coursework, not a client engagement: "Frontend Developer" next to a
+    // university's name reads as something it was not.
     role: {
       en: "Final-year university project",
       ku: "پڕۆژەی ساڵی کۆتایی زانکۆ",
@@ -322,13 +298,8 @@ export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
 }
 
-/**
- * Human-readable industry labels, used wherever a project is listed.
- *
- * Kept here rather than in the UI dictionary: this is the vocabulary of the
- * content, and the enum it keys off lives in this folder. A label that drifts
- * from its enum should be one file to fix, not two.
- */
+/** Here rather than in the UI dictionary, so a label and the enum it keys off
+ *  are one file to fix rather than two. */
 export const domainLabels: Record<(typeof projects)[number]["domain"], Localized<string>> = {
   telecom: { en: "Telecom", ku: "تیلیکۆم" },
   fintech: { en: "Banking", ku: "بانک" },
@@ -343,15 +314,10 @@ export const domainLabels: Record<(typeof projects)[number]["domain"], Localized
 };
 
 /**
- * Work built for an employer or a client.
- *
- * Both hero stats count this set rather than `projects`. "Delivered" means
- * delivered to someone, and "personal" is not an industry — so counting the
- * two personal repos in one figure and excluding them from the other put two
- * numbers side by side that described different populations.
- *
- * `/work` still lists all of them, and the "all N projects" link still says
- * `projects.length`. That page is an index, not a claim.
+ * Both hero stats count this set, not `projects` — "delivered" means delivered
+ * to someone and "personal" is not an industry, so counting the two personal
+ * repos in one figure and not the other described two different populations.
+ * `/work` still lists all of them: that page is an index, not a claim.
  */
 const professionalProjects = projects.filter((project) => project.domain !== "personal");
 

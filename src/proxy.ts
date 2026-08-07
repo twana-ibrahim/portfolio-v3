@@ -2,37 +2,25 @@ import { type NextRequest, NextResponse } from "next/server";
 import { defaultLocale, isLocale, type Locale, locales } from "@/lib/config/i18n";
 
 /**
- * Remembers the locale the visitor last actually read.
+ * Remembers the locale last read. The toggle is a plain `<Link>` so nothing
+ * client-side runs when it is used — navigating here *is* the choice.
  *
- * The language toggle is a plain `<Link>` — deliberately, so it is crawlable
- * and middle-clickable — which means no client code runs when it is used.
- * Recording the choice here instead: navigating to a locale-prefixed path *is*
- * the choice, whether it came from the toggle or from a shared link.
- *
- * Without it, `Accept-Language` won every time. A Kurdish-browser visitor
- * could click "English", then return to the bare domain later and be sent
- * straight back to Kurdish — the site overruling them, repeatedly, with no way
- * for them to win.
+ * Without it `Accept-Language` won every time, so a Kurdish-browser visitor
+ * could click "English" and be sent back to Kurdish on their next visit.
  */
 const LOCALE_COOKIE = "NEXT_LOCALE";
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 /**
- * Locale negotiation.
+ * Every route lives under `/[lang]`, so a bare `/work` has to go somewhere.
+ * Falls back to English: guessing Kurdish for a browser that never asked is
+ * worse than the reverse.
  *
- * Every route now lives under `/[lang]`, so a bare `/work` has to be sent
- * somewhere. The choice comes from `Accept-Language`, falling back to English —
- * the audience that decides reads English, and guessing Kurdish for someone
- * whose browser never asked for it is worse than the reverse.
- *
- * Hand-rolled rather than pulling in Negotiator and intl-localematcher. Two
- * locales, neither with regional variants, is a `startsWith` — those libraries
- * earn their weight at ten locales with quality weights and script subtags,
- * not at two.
+ * Hand-rolled rather than Negotiator plus intl-localematcher — those earn
+ * their weight at ten locales with quality weights, not at two.
  */
 function negotiate(request: NextRequest): Locale {
-  // An explicit choice outranks what the browser was configured with, and
-  // outranks it permanently. This is the whole point of the cookie.
+  // An explicit choice outranks the browser's configuration, permanently.
   const remembered = request.cookies.get(LOCALE_COOKIE)?.value;
   if (remembered && isLocale(remembered)) return remembered;
 
@@ -67,9 +55,7 @@ export function proxy(request: NextRequest) {
   );
 
   if (active) {
-    // Only write when it actually changes. Setting a cookie on every request
-    // would attach Set-Cookie to responses that are otherwise plain cache
-    // hits, for no gain.
+    // Only on change: otherwise every plain cache hit carries a Set-Cookie.
     if (request.cookies.get(LOCALE_COOKIE)?.value === active) return;
 
     const response = NextResponse.next();
@@ -85,23 +71,16 @@ export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   url.pathname = `/${locale}${pathname === "/" ? "" : pathname}`;
 
-  // 307, not 308. The target depends on a cookie and a request header, so
-  // caching it permanently would pin the first visitor's language onto every
-  // later one behind the same CDN node.
+  // 307, not 308: the target depends on a cookie and a header, so caching it
+  // permanently would pin one visitor's language onto everyone behind the same
+  // CDN node. Vary says so explicitly, in case anything caches it anyway.
   const redirect = NextResponse.redirect(url, 307);
-  // Says out loud what the response varies on. 307 is not cacheable by default
-  // without explicit headers, so this is belt-and-braces — but the cost of a
-  // shared cache getting this wrong is every visitor seeing one stranger's
-  // language, which is worth a header to prevent.
   redirect.headers.set("Vary", "Accept-Language, Cookie");
   return redirect;
 }
 
 export const config = {
-  /**
-   * Skips Next internals and anything with a file extension. `sitemap.xml`,
-   * `robots.txt`, the OG image and the CV are not localized routes and must
-   * not be prefixed.
-   */
+  /** Skips Next internals and anything with an extension — sitemap.xml,
+   *  robots.txt, the OG image and the CV must not be locale-prefixed. */
   matcher: ["/((?!_next|api|.*\\..*).*)"],
 };

@@ -15,55 +15,37 @@ type LanguageToggleProps = {
 };
 
 /**
- * Language switch.
+ * Both languages with the current one lit, like a tab bar. A lone "English" on
+ * a Kurdish page reads equally as a label for where you are and a link to
+ * where you are not — the first reaction it got was "why is the Kurdish site
+ * in English?".
  *
- * Shows BOTH languages with the current one lit, rather than only the one you
- * would switch to. The single-label version was genuinely ambiguous: a lone
- * "English" sitting on a Kurdish page reads just as easily as a label for the
- * page you are on as a link to the page you are not — and the first reaction
- * it got was "why is the Kurdish site in English?". Two items with one active
- * cannot be misread; it is the same reason a tab bar shows every tab.
- *
- * Links, not buttons — they navigate, and a button would cost middle-click,
- * open-in-new-tab, and the ability to see where it goes. It also means the
- * Kurdish page is crawlable from the English one, which a JS toggle is not.
- *
- * Each label is written in its own language. "Kurdish" spelled in English is
- * for people who already read English, which is exactly the audience that does
- * not need the switch.
+ * Links, not buttons: middle-click, open-in-new-tab, and a Kurdish page that
+ * is crawlable from the English one. Each label is in its own language.
  */
 export function LanguageToggle({ locale, dictionary, className }: LanguageToggleProps) {
   const pathname = usePathname();
 
   /**
-   * Query string and hash, carried across the switch.
-   *
-   * Read from `window.location` after mount rather than via
-   * `useSearchParams()`. That hook opts its whole route out of static
-   * generation unless it sits inside its own Suspense boundary, and this
-   * component renders in the header of every page — the cost would be the
-   * entire site going dynamic to preserve a query string nothing sets yet.
-   *
-   * Before hydration the href is the clean path, which is the correct thing
-   * for a crawler to follow anyway. The hash comes free: it never reaches the
-   * server, so this is the only place it could have come from.
+   * Query and hash, carried across the switch. From `window.location` rather
+   * than `useSearchParams()`, which opts its whole route out of static
+   * generation without its own Suspense boundary — and this renders in every
+   * page's header. Pre-hydration the href is the clean path, which is what a
+   * crawler should follow anyway.
    */
   const [suffix, setSuffix] = useState("");
 
   useEffect(() => {
-    // Compared, not just depended on. A client-side navigation updates
-    // `pathname` and `window.location` in separate steps, so reading location
-    // blind can append the *previous* page's query to the next page's href.
-    // If they disagree, the navigation has not settled and there is nothing
-    // worth carrying yet.
+    // Compared, not just depended on: a navigation updates `pathname` and
+    // `window.location` in separate steps, so reading location blind can
+    // append the previous page's query to the next page's href.
     const { pathname: settled, search, hash } = window.location;
     setSuffix(settled === pathname ? search + hash : "");
   }, [pathname]);
 
   return (
-    // A labelled <nav>, not a div with role="group": this is a set of links
-    // that navigate, which is what nav is for, and the label means assistive
-    // tech says what the pair does before reading out two language names.
+    // A labelled <nav>, so assistive tech says what the pair does before
+    // reading out two language names.
     <nav aria-label={dictionary.a11y.switchLanguage} className={cn("flex items-center", className)}>
       {locales.map((candidate, index) => {
         const meta = localeMeta[candidate];
