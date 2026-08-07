@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { profile } from "@/content/profile";
-import { defaultLocale } from "@/lib/config/i18n";
+import { defaultLocale, locales } from "@/lib/config/i18n";
 import { siteConfig } from "@/lib/config/site";
 import { type Localized, pick } from "@/lib/i18n/localized";
 
@@ -21,6 +21,18 @@ const en = <T,>(value: Localized<T>) => pick(value, defaultLocale);
 export const alt = `${en(profile.name)} — ${en(profile.role)}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+/**
+ * Without this the `[lang]` segment is unresolved and Next renders the route
+ * on demand instead of prerendering it — which means fetching the typeface
+ * from Google Fonts on every scrape, for an image that never changes.
+ *
+ * The card is identical in both locales (see above), so this draws the same
+ * picture twice at build. Two build-time fetches beats one per request.
+ */
+export function generateStaticParams() {
+  return locales.map((locale) => ({ lang: locale }));
+}
 
 /**
  * Social card, generated at build time.

@@ -281,12 +281,13 @@ renders the final state immediately, which is the state worth auditing.
 
 ### QA pass — open, needs a decision rather than a fix
 
-- [ ] **Dates freeze at build time.** The footer's `© {new Date()...}` and the
-      hero's `yearsOfExperience()` both run during a static prerender, so they
-      are baked at deploy. The hero comment says "derived so it is never a
-      stale hardcoded 5+" — it is still stale, just stamped at build instead of
-      typed by hand. Harmless if the site is redeployed a few times a year;
-      wrong every January otherwise.
+- [x] **Dates no longer freeze at build time.** The footer's `© {new Date()...}`
+      and the hero's years stat both ran during a static prerender, so they were
+      stamped at deploy — the hero comment claimed "derived so it is never a
+      stale hardcoded 5+" while being stale in a different way. `[lang]/layout.tsx`
+      now sets `revalidate = 86_400`, so every page goes stale in the background
+      and rebuilds once a day. Pages are still served from cache; nobody waits
+      for it. Note this does **not** fix the hardcoded "Five years" prose below.
 - [x] **"5+" no longer overstates.** Was counting from the first employment
       record (2021-10) and *rounding*, so 4 yrs 10 mos rendered as "5+" —
       claiming five or more when it was neither. Now counts from
@@ -299,15 +300,24 @@ renders the final state immediately, which is the state worth auditing.
       "Five years in" reads better than "5 years in", and substituting a
       numeral into a sentence to save one edit a year is a bad trade. Put a
       reminder somewhere.
-- [ ] **"Projects delivered" counts the personal ones** (16), while
-      `industryCount` excludes them. Two stats sitting side by side counting
-      different populations.
+- [x] **The two project stats now count the same population.** "Projects
+      delivered" counted all 16 including the personal repos, while
+      `industryCount` excluded them — two figures side by side describing
+      different sets. Both now derive from `professionalProjects` in
+      `projects.ts`: 14 delivered, 9 industries. `/work` still lists all 16 and
+      the "all N projects" link still says 16, which is right — that page is an
+      index, not a claim.
 - [ ] Hitting `/work/<anything>` logs `Internal: NoFallbackError` server-side
       before correctly returning 404. Cosmetic, but it will be log noise on
       Vercel once crawlers find the old case-study URL.
-- [ ] **Stale comment in `projects.ts`.** `industryCount`'s doc comment calls
-      it *the "six industries" stat*; it computes **9**. The number on screen
-      is right — the comment is describing an older content set.
+- [x] **Stale comment in `projects.ts` fixed.** `industryCount`'s doc called it
+      *the "six industries" stat* while computing 9 — it was describing an
+      older content set.
+- [x] **The OG image was rendering on demand.** `[lang]/opengraph-image.tsx`
+      had no `generateStaticParams`, so the `[lang]` segment stayed unresolved
+      and Next rendered it per request — meaning a Google Fonts fetch on every
+      scrape, for an image that never changes. Its own doc comment claimed it
+      was "generated at build time". Both locales now prerender.
 - [ ] **The project row is cramped between 768 and 1023.** The 12-column grid
       engages at `md:`, which leaves the summary column ~216px and wraps it to
       five or six lines against a 92px meta column. Not broken, and no

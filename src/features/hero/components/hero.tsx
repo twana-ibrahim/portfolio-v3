@@ -5,7 +5,7 @@ import { Perspective } from "@/components/motion/perspective";
 import { Reveal, TextReveal } from "@/components/motion/reveal";
 import { Button } from "@/components/ui/button";
 import { profile } from "@/content/profile";
-import { industryCount, projects } from "@/content/projects";
+import { deliveredCount, industryCount } from "@/content/projects";
 import { siteConfig } from "@/lib/config/site";
 import { interpolate } from "@/lib/i18n/format";
 import { pick } from "@/lib/i18n/localized";
@@ -25,11 +25,14 @@ export async function Hero() {
    * begins 2021-10 and ignores the year spent learning the stack. Flooring is
    * what makes the "+" honest — see yearsSince. The same figure fills the
    * `{years}` token in the summary, so the prose and the stat cannot disagree.
+   *
+   * The latter two both count professional work only, so they describe the
+   * same population — see `professionalProjects`.
    */
   const years = yearsSince(siteConfig.careerStart);
   const stats = [
     { value: `${years}+`, label: dictionary.home.yearsShipping },
-    { value: String(projects.length), label: dictionary.home.projectsDelivered },
+    { value: String(deliveredCount), label: dictionary.home.projectsDelivered },
     { value: String(industryCount), label: dictionary.home.industries },
   ];
 

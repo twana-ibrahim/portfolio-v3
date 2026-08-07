@@ -11,6 +11,20 @@ import { SiteJsonLd } from "@/lib/seo/json-ld";
 import { createMetadata } from "@/lib/seo/metadata";
 import "@/styles/globals.css";
 
+/**
+ * Regenerate every page once a day.
+ *
+ * Two figures on the site are computed from the current date: the footer's
+ * copyright year and the years-of-experience stat, which also fills the
+ * `{years}` token in the hero summary. Under a pure static prerender both are
+ * stamped at deploy time — so a site deployed in December claims the wrong
+ * year from January 1st until someone happens to push.
+ *
+ * Pages are still served from cache; this only lets them go stale in the
+ * background and rebuild. Nobody waits for it.
+ */
+export const revalidate = 86_400;
+
 const sans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

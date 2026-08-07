@@ -342,7 +342,21 @@ export const domainLabels: Record<(typeof projects)[number]["domain"], Localized
   personal: { en: "Personal", ku: "کەسی" },
 };
 
-/** Distinct industries shipped into — the "six industries" stat on the hero. */
-export const industryCount = new Set(
-  projects.filter((project) => project.domain !== "personal").map((project) => project.domain),
-).size;
+/**
+ * Work built for an employer or a client.
+ *
+ * Both hero stats count this set rather than `projects`. "Delivered" means
+ * delivered to someone, and "personal" is not an industry — so counting the
+ * two personal repos in one figure and excluding them from the other put two
+ * numbers side by side that described different populations.
+ *
+ * `/work` still lists all of them, and the "all N projects" link still says
+ * `projects.length`. That page is an index, not a claim.
+ */
+const professionalProjects = projects.filter((project) => project.domain !== "personal");
+
+/** The "projects delivered" stat. */
+export const deliveredCount = professionalProjects.length;
+
+/** The "industries" stat. Currently 9. */
+export const industryCount = new Set(professionalProjects.map((project) => project.domain)).size;
