@@ -67,8 +67,18 @@ export const pageCopy = parsePageCopy({
       ku: "با قسە لەسەر ئەوە بکەین کە تۆ دروستی دەکەیت.",
     },
     where: {
-      en: "Kalar, Sulaymaniyah, Iraq. GMT+3 — a working day that overlaps comfortably with Europe and the Gulf, and the morning in North America.",
-      ku: "کەلار، سلێمانی. کاتی کارکردنم بە کاتی ناوخۆییە، و لەگەڵ ئەوروپا و کەنداویشدا دەگونجێت — لەگەڵ هەردووکیان کارم کردووە.",
+      /**
+       * Overlap only. An earlier draft ended the Kurdish with "لەگەڵ
+       * هەردووکیان کارم کردووە" — "I have worked with both of them" — which is
+       * not true: every employer on the CV is Iraq-based. The English
+       * overclaimed more quietly, saying the day reaches "the morning in North
+       * America"; at GMT+3 against Eastern the gap is 7–8 hours, so 17:00 here
+       * is 09:00–10:00 there and only the last hour or two touches it.
+       *
+       * Both now say what a clock says and nothing about who has hired him.
+       */
+      en: "Kalar, Sulaymaniyah, Iraq — GMT+3. A full working day's overlap with the Gulf, most of one with Europe, and the end of mine meets the start of the morning on the US East Coast.",
+      ku: "کەلار، سلێمانی، عێراق — ⁦GMT+3⁩. ڕۆژی کارم بە تەواوی لەگەڵ کەنداودا دەگونجێت، زۆربەی لەگەڵ ئەوروپا، و کۆتایی ڕۆژەکەم دەکەوێتە سەرەتای بەیانی کەناری ڕۆژهەڵاتی ئەمریکا.",
     },
     description: {
       en: "Get in touch about remote frontend engineering roles. Based in Kalar, Sulaymaniyah, Iraq and open to new work.",
