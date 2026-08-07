@@ -5,47 +5,25 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Entrance animations.
- *
- * These are one-shot: they play once when the element scrolls into view and
- * then stop. Nothing here is scroll-*linked*, which is the expensive kind —
- * a scroll-linked transform recalculates on every frame of every scroll, and
- * on a mid-range Android that is the difference between 60fps and 40.
- *
- * The distances are small on purpose (16px, not 80px). A large travel distance
- * reads as a website announcing its own animation; a small one just feels like
- * the page settling.
+ * One-shot entrances, never scroll-linked. 16px of travel, not 80: a long
+ * distance reads as a site announcing its animation, a short one as the page
+ * settling.
  */
 
 const DISTANCE = 16;
 
 /**
- * Marks every element that Motion may have given an entrance style.
+ * Neutralised by `[data-motion]` in the reduced-motion block of globals.css,
+ * and that indirection is the only thing that works.
  *
- * `globals.css` neutralises `[data-motion]` inside its reduced-motion block.
- * That indirection is not decoration — it is the only thing that works.
+ * The server cannot know the preference, so it emits the animated branch and
+ * Motion serialises `opacity:0;transform:translateY(16px)` into the HTML. The
+ * client renders the reduced branch and those styles stay — React does not
+ * correct mismatched inline styles on hydration in production. The site loaded
+ * blank for every reduced-motion user.
  *
- * `useReducedMotion()` cannot know the preference while the server renders, so
- * the server always emits the animated branch and Motion serialises its
- * initial state into the HTML:
- *
- *   <div  style="opacity:0;transform:translateY(16px)">
- *   <span style="transform:translateY(110%)">
- *
- * On the client the reduced branch then renders instead — and the styles stay
- * exactly as the server wrote them. React does not correct mismatched inline
- * styles on a hydration pass in a production build; it warns in development
- * and moves on. So neither dropping the `style` prop nor authoring an
- * overriding one removes them. Measured, not assumed: with the style prop
- * present the DOM still read `transform:translateY(110%)`.
- *
- * The result was a blank site for every reduced-motion user — every Reveal
- * stuck at opacity 0, every headline line still translated below its clipping
- * mask. The existing CSS guard could not catch it either: it zeroes transition
- * and animation durations, and an inline transform is neither.
- *
- * The marker goes on BOTH branches, because the leftover style is on the
- * element the reduced branch hydrates into.
+ * On both branches, because the leftover style sits on the element the reduced
+ * branch hydrates into.
  */
 const MOTION_MARKER = { "data-motion": "" } as const;
 
@@ -101,11 +79,8 @@ const staggerVariants: Variants = {
   visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
 
-/**
- * Parent for a list whose children should cascade in. Pairs with <StaggerItem>.
- * Prefer this over hand-tuned per-item delays: adding or removing a row then
- * needs no renumbering.
- */
+/** Cascades its children in. Pairs with <StaggerItem>, so adding a row needs
+ *  no renumbering of hand-tuned delays. */
 export function Stagger({ children, className, ...props }: RevealProps) {
   const reduced = useReducedMotion();
 
@@ -132,20 +107,13 @@ export function Stagger({ children, className, ...props }: RevealProps) {
   );
 }
 
-/**
- * Deliberately narrower than RevealProps: the two element types do not share
- * an event-handler surface, so inheriting `motion.div`'s props makes `li`
- * untypeable. Nothing passes more than this anyway.
- */
+/** Narrower than RevealProps: the two element types share no event-handler
+ *  surface, so inheriting motion.div's props makes `li` untypeable. */
 type StaggerItemProps = {
   children: ReactNode;
   className?: string;
-  /**
-   * `li` exists because a `<ul>` may only contain `<li>`. Wrapping each row in
-   * a motion `div` and leaning on `display: contents` fixes the layout but not
-   * the semantics — the list stops being a list, and a screen reader stops
-   * announcing how many items are in it.
-   */
+  /** `li` because a `<ul>` may only contain `<li>`. `display: contents` fixes
+   *  the layout but not the semantics — the list stops being a list. */
   as?: "div" | "li";
 };
 
@@ -178,31 +146,22 @@ export function StaggerItem({ children, className, as = "div" }: StaggerItemProp
 /* -------------------------------------------------------------------------- */
 
 type TextRevealProps = {
-  /**
-   * One entry per visual line. Lines are authored rather than measured: any
-   * runtime line-splitting either blocks paint or reflows after fonts load,
-   * and both are worse than deciding the break yourself.
-   */
+  /** One entry per visual line, authored rather than measured: runtime
+   *  splitting either blocks paint or reflows after the webfont loads. */
   lines: readonly ReactNode[];
   className?: string;
   lineClassName?: string;
   delay?: number;
   /**
-   * Steps each line back in Z so they parallax when an ancestor tilts.
-   * Only meaningful inside <Perspective>; harmless without it.
-   *
-   * The offset goes on the clipping wrapper, not the inner span. `overflow:
-   * hidden` forces its own children to flatten, so a Z applied inside the mask
-   * would be silently dropped — the wrapper has to carry the depth itself.
+   * Steps each line back in Z so they parallax inside <Perspective>; harmless
+   * without it. The offset goes on the clipping wrapper — `overflow: hidden`
+   * flattens its children, so a Z applied inside the mask is dropped.
    */
   depth?: boolean;
 };
 
-/**
- * The hero's line-by-line mask reveal — each line rises out from behind a
- * clipped box. Used exactly once per page. Repeating it turns a statement
- * into a tic.
- */
+/** The hero's mask reveal. Used once per page; repeating it turns a statement
+ *  into a tic. */
 export function TextReveal({
   lines,
   className,

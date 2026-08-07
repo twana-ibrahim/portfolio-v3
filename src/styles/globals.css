@@ -4,10 +4,6 @@
 /* next-themes writes `class="dark"` onto <html>. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ==========================================================================
-   BASE
-   ========================================================================== */
-
 @layer base {
   *,
   ::before,
@@ -50,14 +46,9 @@
     text-wrap: pretty;
   }
 
-  /**
-   * Tailwind v4 dropped `cursor: pointer` from buttons in preflight — a
-   * deliberate change to match native OS behaviour, where buttons do not
-   * show a hand. Restored here on purpose: on the web the hand is what people
-   * read as "this is clickable", and every button on this site is a web
-   * control rather than an OS one. Disabled buttons keep the default, because
-   * a hand over something inert is a lie.
-   */
+  /* Tailwind v4 preflight drops this to match native OS buttons. Restored:
+     on the web the hand is what reads as clickable. Disabled keeps the
+     default, because a hand over something inert is a lie. */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
@@ -92,15 +83,11 @@
   }
 }
 
-/* ==========================================================================
-   ACCESSIBILITY — non-negotiable
-
-   The !important here is deliberate and is the one place it is allowed in the
-   codebase: a user asking their OS to reduce motion must win over every
-   component-level animation, including ones added later by someone who forgot.
-   Biome's noImportantStyles rule is disabled for this file in biome.json.
-   ========================================================================== */
-
+/**
+ * The one place !important is allowed: a user asking their OS to reduce motion
+ * must beat every component-level animation, including ones added later by
+ * someone who forgot. Biome's rule is disabled for this file in biome.json.
+ */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -116,19 +103,11 @@
   }
 
   /**
-   * Reveals the content the entrance animations start by hiding.
-   *
-   * The rule above only zeroes durations, and an entrance here is neither a
-   * transition nor a CSS animation — it is an inline transform Motion writes.
-   * The server cannot know the user's preference, so it always renders the
-   * animated branch and serialises `opacity:0;transform:translateY(16px)` into
-   * the HTML. The client then renders the reduced branch instead, and React
-   * leaves those styles alone: it does not correct mismatched inline styles on
-   * a hydration pass in production.
-   *
-   * So the site loaded blank for anyone with reduced motion on. This is the
-   * only layer that can undo it, because it does not depend on React, on
-   * Motion, or on JavaScript running at all.
+   * Without this the site loaded blank under reduced motion. The server cannot
+   * know the preference, so it renders the animated branch and serialises
+   * `opacity:0` into the HTML; React does not correct mismatched inline styles
+   * on hydration. Zeroing durations above cannot help — the entrance is an
+   * inline transform, not a transition. This layer needs no JavaScript.
    */
   [data-motion] {
     opacity: 1 !important;
@@ -136,14 +115,8 @@
   }
 }
 
-/* ==========================================================================
-   SYNTAX HIGHLIGHTING
-
-   rehype-pretty-code runs Shiki once with two themes and emits both colours as
-   custom properties. Switching here rather than re-highlighting per theme means
-   the theme toggle costs nothing. Specificity does the work — no !important.
-   ========================================================================== */
-
+/* Shiki runs once with two themes and emits both as custom properties, so the
+   theme toggle costs nothing. Specificity does the work — no !important. */
 code[data-theme] span,
 pre[data-theme] span {
   color: var(--shiki-light);
@@ -154,17 +127,12 @@ pre[data-theme] span {
   color: var(--shiki-dark);
 }
 
-/* ==========================================================================
-   UTILITIES — the handful of patterns repeated across the whole site.
-   Anything used fewer than three times belongs in a component, not here.
-   ========================================================================== */
-
 /**
- * Duration utilities.
+ * Utilities: patterns repeated across the whole site. Anything used fewer than
+ * three times belongs in a component.
  *
- * Tailwind v4 ships an `--ease-*` theme namespace but no `--duration-*` one,
- * so `duration-fast` would silently emit nothing. Defining them here keeps
- * timing on the token system instead of scattering `duration-[380ms]` around.
+ * Tailwind v4 has an `--ease-*` namespace but no `--duration-*` one, so
+ * `duration-fast` would silently emit nothing without these.
  */
 @utility duration-instant {
   transition-duration: var(--duration-instant);
@@ -182,18 +150,9 @@ pre[data-theme] span {
   transition-duration: var(--duration-reveal);
 }
 
-/**
- * Mobile navigation dialog.
- *
- * The markup previously carried `animate-in`, `fade-in`, `animate-out` and
- * `fade-out`. Those come from `tailwindcss-animate`, which is not installed
- * and never was — the classes emitted zero CSS, so the dialog appeared and
- * vanished instantly while looking, in the source, like it animated.
- *
- * Written by hand rather than adding the plugin: it is two keyframes used in
- * one place, against a dependency that would ship a whole animation library
- * for them.
- */
+/* Hand-written rather than pulling in tailwindcss-animate for two keyframes
+   used in one place. The markup previously carried that plugin's classes
+   without it installed, so the dialog snapped while looking animated. */
 @keyframes dialog-in {
   from {
     opacity: 0;
@@ -234,15 +193,10 @@ pre[data-theme] span {
   text-transform: uppercase;
 
   /**
-   * Arabic script is cursive, and `letter-spacing` prises the joins apart —
-   * ڕێکخراو stops being one word and becomes a row of disconnected shapes.
-   * `text-transform: uppercase` is a no-op here (the script has no case), but
-   * it goes too, so the rule reads as one decision rather than two.
-   *
-   * The `:not([dir="ltr"])` is what keeps the Latin metadata intact. Tags,
-   * the email address and the built-with line are marked `dir="ltr"` because
-   * their content is Latin regardless of page language, and for those the
-   * wide tracking is still the right treatment.
+   * Arabic is cursive: `letter-spacing` prises the joins apart and ڕێکخراو
+   * becomes a row of disconnected shapes. The `:not([dir="ltr"])` keeps the
+   * wide tracking on Latin metadata — tags, the email, the built-with line —
+   * which stays Latin whatever the page language.
    */
   [dir="rtl"] &:not([dir="ltr"]) {
     letter-spacing: 0;
@@ -250,31 +204,17 @@ pre[data-theme] span {
   }
 }
 
-/**
- * Tightened tracking is a Latin-display idea and does not transfer.
- *
- * The `tracking-*` utilities write `--tw-tracking`, which the type utilities
- * read *before* the scale's own letter-spacing — so a `tracking-tight` on a
- * heading silently wins over the RTL values in tokens.css. Arabic script is
- * cursive: pulling joined letters closer thickens the joins into blots rather
- * than making the setting look considered.
- */
+/* `tracking-*` writes `--tw-tracking`, which the type utilities read before
+   the scale's own letter-spacing — so a `tracking-tight` silently beats the
+   RTL values in tokens.css, thickening cursive joins into blots. */
 html[dir="rtl"] [class*="tracking-"] {
   letter-spacing: normal;
 }
 
 /**
- * The one phrase per page that is set apart.
- *
- * In English it is Instrument Serif, italic — a seasoning, used once or twice
- * and never more. In Kurdish it cannot be. Instrument Serif has no Arabic
- * glyphs at all, and more to the point Arabic script has no italic: slanting
- * it is not emphasis, it is a rendering defect, and an oblique Sorani heading
- * reads to a native eye the way stretched Helvetica reads to a designer.
- *
- * Weight is the conventional device in Arabic-script typography, so that is
- * what the emphasis becomes. Same intent, same one-per-page restraint,
- * executed in the way the script actually supports.
+ * The one phrase per page that is set apart: Instrument Serif italic in
+ * English, weight in Kurdish. Arabic script has no italic — slanting it is a
+ * rendering defect, not emphasis — and weight is the conventional device.
  */
 @utility emphasis {
   font-family: var(--font-serif);
@@ -282,17 +222,10 @@ html[dir="rtl"] [class*="tracking-"] {
   font-weight: 400;
   letter-spacing: -0.02em;
 
-  /**
-   * 900, not 700. The display scale already sets 600, and against that a 700
-   * is invisible at heading sizes in Vazirmatn — the emphasis was there in the
-   * markup and did nothing on screen. Weight is the only device Arabic script
-   * offers here, so it has to be used at a distance that actually reads.
-   */
+  /* 900, not 700: the display scale already sets 600, and a 700 is invisible
+     against it in Vazirmatn. The face is named outright because Instrument
+     Serif ships one weight and cannot honour the request. */
   [dir="rtl"] & {
-    /* Named outright rather than left to per-glyph fallback. Instrument Serif
-       has no Arabic and is loaded at a single weight of 400, so leaning on the
-       fallback chain would put the 900 request on a face that cannot honour
-       it. Vazirmatn is variable and can. */
     font-family: var(--font-kurdish), sans-serif;
     font-weight: 900;
     font-style: normal;
@@ -323,11 +256,7 @@ html[dir="rtl"] [class*="tracking-"] {
   width: 100%;
 }
 
-/**
- * Underline that draws itself from the left on hover. Used on every inline
- * link and nav item — it is the site's signature micro-interaction, so it
- * lives here rather than being reimplemented per component.
- */
+/** The site's one hover gesture, so it lives here rather than per component. */
 @utility link-underline {
   background-image: linear-gradient(currentColor, currentColor);
   background-position: 0 100%;
@@ -335,9 +264,8 @@ html[dir="rtl"] [class*="tracking-"] {
   background-size: 0% 1px;
   transition: background-size var(--duration-base) var(--ease-out-expo);
 
-  /* The rule grows from the reading edge, so it has to start on the right in
-     RTL. `background-position` is physical and has no logical equivalent —
-     left unset, the underline drew backwards across every Kurdish link. */
+  /* `background-position` is physical with no logical equivalent, so the
+     underline drew backwards across every Kurdish link without this. */
   [dir="rtl"] & {
     background-position: 100% 100%;
   }

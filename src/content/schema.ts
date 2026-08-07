@@ -1,77 +1,40 @@
 import { z } from "zod";
 
 /**
- * CONTENT SCHEMAS
- *
- * Every piece of portfolio content is parsed through these at module load.
- * A typo in a date, a missing summary, or an orphaned case-study slug fails
- * `pnpm build` rather than rendering something broken in production.
- *
- * This is the entire reason a CMS is unnecessary here: the type system and
- * these schemas give the same guarantees a CMS's content model would, with
- * git history, code review and zero infrastructure.
+ * Content is parsed through these at module load, so malformed data fails
+ * `pnpm build` rather than rendering broken in production.
  */
 
-/** "2024-03" — year and month is the right precision for a CV. */
 const YearMonth = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "Expected YYYY-MM");
-
-/** An end date of `null` means "present". */
 const EndDate = YearMonth.nullable();
-
 const Slug = z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Expected a lowercase kebab-case slug");
-
-/* -------------------------------------------------------------------------- */
-/*  Localization                                                              */
-/* -------------------------------------------------------------------------- */
 
 /**
  * Requires a value in every locale.
  *
- * The locales are written out rather than derived from the `locales` array,
- * because that is what makes adding a third language a compile error here
- * first — one obvious failure in one file, instead of an English sentence
- * quietly surviving in the middle of a translated page.
+ * Locales are written out rather than derived from the `locales` array, so
+ * adding a third language is a compile error here first — one obvious failure
+ * in one file, instead of English quietly surviving inside a translated page.
  *
- * What is NOT wrapped is as deliberate as what is. Product names (`title`),
- * client names, technology names and certification titles stay in one form:
- * "React" is "React" in Kurdish, and translating "Advanced React" would make
- * the credential impossible to match against the certificate it links to.
+ * What is not wrapped is as deliberate as what is: product, client and
+ * technology names stay in one form.
  */
 export function localized<T extends z.ZodType>(inner: T) {
   return z.object({ en: inner, ku: inner });
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Experience                                                                */
-/* -------------------------------------------------------------------------- */
-
 export const experienceSchema = z.object({
   company: z.string().min(1),
-  /**
-   * The employer's previous name, when the entity changed underneath a
-   * continuous period of employment — a rebrand, an acquisition, or a team
-   * transferred wholesale.
-   *
-   * Exists so that case can be one entry rather than two. Splitting it reads
-   * as a job change that did not happen; hiding it entirely would misname the
-   * company for the earlier half of the dates. Not localized: a registered
-   * company name is the same string in both languages.
-   */
+  /** Previous name, when the entity changed under a continuous tenure. */
   formerly: z.string().min(1).optional(),
   role: localized(z.string().min(1)),
   location: localized(z.string().min(1)),
   arrangement: z.enum(["remote", "on-site", "hybrid"]),
   start: YearMonth,
   end: EndDate,
-  /**
-   * What was actually shipped, in the applicant's own voice. Two to four
-   * bullets. Each one should survive the question "so what?".
-   *
-   * Localized as a whole list rather than per bullet, so a locale is free to
-   * make a point in three sentences where the other needs four.
-   */
+  /** Localized as a whole list, so a locale may use more or fewer bullets. */
   highlights: localized(z.array(z.string().min(1)).min(1).max(5)),
-  /** Slugs from `projects`. Renders the work done during this role. */
+  /** Slugs from `projects`. Cross-checked in `parseExperience`. */
   projects: z.array(Slug).default([]),
 });
 
@@ -86,14 +49,6 @@ export const educationSchema = z.object({
 
 export type Education = z.infer<typeof educationSchema>;
 
-/* -------------------------------------------------------------------------- */
-/*  Projects                                                                  */
-/* -------------------------------------------------------------------------- */
-
-/**
- * A single hard number. These are what separate a portfolio from a list of
- * nouns, so the schema makes them a first-class field rather than prose.
- */
 export const metricSchema = z.object({
   value: z.string().min(1),
   label: localized(z.string().min(1)),
@@ -102,22 +57,11 @@ export const metricSchema = z.object({
 export const projectSchema = z.object({
   slug: Slug,
   title: z.string().min(1),
-  /** Who it was built for. Empty string for personal work. */
+  /** Empty string for personal work. */
   client: z.string(),
   year: z.number().int().min(2018).max(2100),
-  /**
-   * One sentence, indicative mood, no marketing adjectives.
-   *
-   * The bound is per locale and counts characters, which is the honest measure
-   * for Arabic script — Sorani runs a little shorter than English for the same
-   * meaning, so the same ceiling is not a tighter constraint in practice.
-   */
   summary: localized(z.string().min(20).max(220)),
   role: localized(z.string().min(1)),
-  /**
-   * The industry the software serves. Surfaced in the UI next to the client,
-   * because "eight industries in five years" is a claim the list itself proves.
-   */
   domain: z.enum([
     "telecom",
     "fintech",
@@ -139,77 +83,46 @@ export const projectSchema = z.object({
       repo: z.url().optional(),
     })
     .default({}),
-  /**
-   * Internal enterprise work that cannot be shown or linked. Drives the "no
-   * public link" affordance in the UI, so absent links read as deliberate
-   * rather than as an oversight.
-   */
+  /** Drives the "no public link" affordance, so a missing link reads as intent. */
   confidential: z.boolean().default(false),
-  /** Surfaces on the home page. Keep this to four or fewer. */
+  /** Surfaces on the home page. Keep to four or fewer. */
   featured: z.boolean().default(false),
-  /** True when `src/content/case-studies/<slug>.mdx` exists. Enforced below. */
+  /** True when `src/content/case-studies/<slug>.mdx` exists. */
   caseStudy: z.boolean().default(false),
 });
 
 export type Project = z.infer<typeof projectSchema>;
 export type Metric = z.infer<typeof metricSchema>;
 
-/* -------------------------------------------------------------------------- */
-/*  Skills                                                                    */
-/* -------------------------------------------------------------------------- */
-
 export const skillGroupSchema = z.object({
   title: localized(z.string().min(1)),
-  /**
-   * Six items maximum, on purpose. A forty-badge wall communicates "I have
-   * heard of these things"; a short, ordered list communicates judgement.
-   *
-   * Not localized: these are technology names, and a Kurdish developer writes
-   * "TypeScript" in Latin exactly as an English one does.
-   */
+  /** Six maximum: a long list says "I have heard of these things". */
   items: z.array(z.string().min(1)).min(1).max(6),
 });
 
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
 
-/* -------------------------------------------------------------------------- */
-/*  Credentials                                                               */
-/* -------------------------------------------------------------------------- */
-
 export const certificationSchema = z.object({
-  /**
-   * Not localized, and not a translation candidate. The name has to match the
-   * certificate the `verifyUrl` resolves to, or the link stops being proof.
-   */
+  /** Must match the certificate `verifyUrl` resolves to, so never translated. */
   name: z.string().min(1),
   issuer: z.string().min(1),
-  /** "YYYY-MM" awarded. An undated credential reads as filler. */
   awarded: YearMonth.optional(),
-  /**
-   * Public verification URL. This is the whole value of a certification —
-   * anyone can type a course name, and a link is the difference between a
-   * claim and a fact. Optional because not every issuer provides one.
-   */
+  /** Public verification link — the difference between a claim and a fact. */
   verifyUrl: z.url().optional(),
 });
 
 export const languageSchema = z.object({
   name: localized(z.string().min(1)),
-  /** Mirrors the CEFR-adjacent wording recruiters expect on a CV. */
   level: z.enum(["Native", "Professional", "Limited working", "Elementary"]),
 });
 
 export type Certification = z.infer<typeof certificationSchema>;
 export type Language = z.infer<typeof languageSchema>;
 
-/* -------------------------------------------------------------------------- */
-/*  Long-form copy                                                            */
-/* -------------------------------------------------------------------------- */
-
 /**
- * A heading split into three parts, because one phrase in the middle is set
- * apart — italic serif in English, heavier weight in Kurdish, since Arabic
- * script has no italic. `trail` may be empty when the emphasis ends the line.
+ * A heading split so one phrase can be set apart: italic serif in English,
+ * heavier weight in Kurdish, since Arabic script has no italic. `trail` may be
+ * empty when the emphasis ends the line.
  */
 export const statementSchema = z.object({
   lead: z.string().min(1),
@@ -220,13 +133,9 @@ export const statementSchema = z.object({
 export type Statement = z.infer<typeof statementSchema>;
 
 /**
- * The person, in prose.
- *
- * Separate from `lib/config/site.ts`, which holds the facts that do not change
- * with language — the URL, the email, the IANA timezone, the path to the CV.
- * Anything a reader reads as a sentence lives here instead, because it has to
- * exist twice and `site.ts` is `as const`, which would freeze every string to
- * its own literal type and make a second locale impossible to assign.
+ * Prose lives here rather than in `lib/config/site.ts`, which is `as const` —
+ * that would freeze every string to its own literal type and make a second
+ * locale impossible to assign.
  */
 export const profileSchema = z.object({
   name: localized(z.string().min(1)),
@@ -254,12 +163,8 @@ export function parseProfile(input: unknown): Profile {
 }
 
 /**
- * Per-page prose: the one heading and the one paragraph each page opens with.
- *
- * Not in the UI dictionary. A dictionary entry is a label that happens to
- * appear in several places; these are the pages' actual writing, and keeping
- * them next to the rest of the content is what stops the dictionary turning
- * into a second, undisciplined content store.
+ * Per-page prose, kept out of the UI dictionary. A dictionary entry is a label
+ * reused in several places; this is the pages' actual writing.
  */
 export const pageCopySchema = z.object({
   work: z.object({
@@ -288,15 +193,7 @@ export function parsePageCopy(input: unknown): PageCopy {
   return pageCopySchema.parse(input);
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Collection-level validation                                               */
-/* -------------------------------------------------------------------------- */
-
-/**
- * Parses the project list and enforces the invariants a per-item schema
- * cannot see: unique slugs, and every `experience.projects` reference
- * resolving to a real project.
- */
+/** Enforces the invariant a per-item schema cannot see: unique slugs. */
 export function parseProjects(input: unknown[]): Project[] {
   const projects = z.array(projectSchema).parse(input);
 
@@ -311,6 +208,7 @@ export function parseProjects(input: unknown[]): Project[] {
   return projects;
 }
 
+/** Fails the build on an experience entry pointing at a project that is gone. */
 export function parseExperience(input: unknown[], projects: Project[]): Experience[] {
   const experience = z.array(experienceSchema).parse(input);
   const slugs = new Set(projects.map((project) => project.slug));
@@ -328,18 +226,13 @@ export function parseExperience(input: unknown[], projects: Project[]): Experien
   return experience;
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Case study frontmatter (MDX)                                              */
-/* -------------------------------------------------------------------------- */
-
 export const caseStudyFrontmatterSchema = z.object({
   title: z.string().min(1),
-  /** Must match a `slug` in `projects`. Checked at read time. */
+  /** Must equal the filename slug. Checked at read time. */
   project: Slug,
-  /** Used verbatim as the meta description, so it has a hard length bound. */
+  /** Used verbatim as the meta description, hence the hard bound. */
   description: z.string().min(50).max(160),
   published: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Expected YYYY-MM-DD"),
-  /** Estimated read time is computed, never authored. */
 });
 
 export type CaseStudyFrontmatter = z.infer<typeof caseStudyFrontmatterSchema>;

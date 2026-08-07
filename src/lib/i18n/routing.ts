@@ -1,5 +1,12 @@
 import type { Route } from "next";
-import type { Locale } from "@/lib/config/i18n";
+import { type Locale, locales } from "@/lib/config/i18n";
+
+/**
+ * Built from `locales` rather than written out. A hardcoded `(en|ku)` is
+ * invisible to the type system, so adding a third locale would leave this
+ * silently stripping nothing and emitting `/ar/ar/work`.
+ */
+const LOCALE_PREFIX = new RegExp(`^/(${locales.join("|")})(?=/|$)`);
 
 /**
  * Prefixes an app path with its locale.
@@ -31,6 +38,6 @@ export function localePath(locale: Locale, path: AppPath): Route {
  * arrives, the toggle is not quietly wrong.
  */
 export function swapLocale(pathname: string, next: Locale, suffix = ""): Route {
-  const withoutLocale = pathname.replace(/^\/(en|ku)(?=\/|$)/, "");
+  const withoutLocale = pathname.replace(LOCALE_PREFIX, "");
   return `/${next}${withoutLocale}${suffix}` as Route;
 }

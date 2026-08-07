@@ -1,81 +1,48 @@
 /**
- * DESIGN TOKENS — the single source of truth for the entire visual system.
+ * DESIGN TOKENS — the single source of truth for the visual system.
  *
- * Nothing below this file should ever contain a raw hex code, pixel value for
- * type, or magic easing curve. If a component needs a new value, it gets added
- * here first. That rule is what keeps a design system from rotting.
+ * No component should contain a raw hex code, type size or easing curve. If a
+ * value is missing, it gets added here first.
  *
- * Direction: Editorial / Swiss.
- *   - Warm-neutral paper and ink rather than pure #fff / #000 (less glare,
- *     reads as print rather than as a screen).
- *   - One signal accent (vermilion). Used sparingly: it means "look here".
- *   - Sharp corners. Hairline rules. Type does the work.
- *
- * All colors are OKLCH so that lightness steps are perceptually even and the
- * dark theme is a genuine remap rather than an inversion.
+ * All colours are OKLCH, so lightness steps are perceptually even and the dark
+ * theme is a genuine remap rather than an inversion.
  */
-
-/* ==========================================================================
-   1. RUNTIME COLOR — the only values that change between themes
-   ========================================================================== */
 
 :root {
   color-scheme: light;
 
   /**
-   * Surfaces — matte, not brilliant.
-   *
-   * Pulled off near-white and given a little more chroma on the warm axis.
-   * Paper stock is never 0.985 with no colour in it; that reads as a lit
-   * screen. The point of the change is that the page stops glowing and starts
-   * looking like something printed.
-   *
-   * Darkening paper lowers every contrast ratio against it, which took
-   * ink-subtle from 4.65:1 to 4.36:1 and under AA. It moved to 0.54 to
-   * compensate — the two values are a pair and neither should be edited alone.
+   * Paper is matte, not near-white: 0.985 with no chroma reads as a lit screen
+   * rather than printed stock. Darkening it lowers every ratio measured
+   * against it, which is why `--ink-subtle` sits at 0.54. The two are a pair —
+   * do not edit one alone.
    */
-  --paper: oklch(0.963 0.005 95); /* page background */
-  --paper-raised: oklch(0.932 0.006 95); /* cards, wells */
-  --paper-inverted: oklch(0.17 0.006 95); /* inverted sections */
+  --paper: oklch(0.963 0.005 95);
+  --paper-raised: oklch(0.932 0.006 95);
+  --paper-inverted: oklch(0.17 0.006 95);
 
-  /* Text — three levels, never more */
-  --ink: oklch(0.17 0.006 95); /* primary */
-  --ink-muted: oklch(0.487 0.008 95); /* secondary, body copy at scale */
-  /* Carries `label` at 0.75rem, which WCAG counts as normal text — so this
-     level needs the full 4.5:1, not the 3:1 large-text allowance. Was 0.646,
-     which measured 3.15:1 and failed on every page. */
-  --ink-subtle: oklch(0.54 0.006 95); /* metadata, labels — 4.54:1 on matte paper */
+  --ink: oklch(0.17 0.006 95);
+  --ink-muted: oklch(0.487 0.008 95);
+  /* Carries `label` at 0.75rem, which WCAG counts as normal text — so it needs
+     the full 4.5:1, not the 3:1 large-text allowance. Measures 4.54:1. */
+  --ink-subtle: oklch(0.54 0.006 95);
   --ink-inverted: oklch(0.985 0.002 95);
 
-  /* Structure */
-  /* Stepped down with paper, so the rules keep the same weight against it. */
-  --line: oklch(0.878 0.005 95); /* hairline rules, dividers */
-  --line-strong: oklch(0.792 0.006 95); /* borders that need to be seen */
+  --line: oklch(0.878 0.005 95);
+  --line-strong: oklch(0.792 0.006 95);
 
   /**
-   * NO PAPER GRAIN — tried and reverted, deliberately.
-   *
-   * A tiled SVG turbulence on the body background is the cheapest "printed
-   * stock" cue in an editorial system, costs no request, and looks good.
-   * It also makes axe unable to resolve what any text sits on: contrast
-   * evaluation across the whole site went from 26 nodes checked to 26 nodes
-   * *incomplete*, in both themes. Violations stayed at zero because nothing
-   * was being measured any more.
-   *
-   * That check has already caught two real contrast bugs here. Trading a
-   * regression guard for a texture nobody consciously notices is a bad deal,
-   * and the failure mode is silent, which makes it a worse one. There is no
-   * way to keep both: any full-bleed background image hides the solid colour
-   * axe needs to walk up to.
+   * No paper grain. A tiled SVG turbulence on the body looks right and stops
+   * axe resolving what any text sits on — contrast went from 26 nodes checked
+   * to 26 incomplete, in both themes, with violations still reading zero
+   * because nothing was being measured. Any full-bleed background does this.
    */
 
-  /* Signal */
-  --accent: oklch(0.552 0.201 32); /* vermilion */
+  --accent: oklch(0.552 0.201 32);
   --accent-hover: oklch(0.498 0.205 32);
-  --accent-ink: oklch(0.99 0.002 95); /* text placed on accent */
+  --accent-ink: oklch(0.99 0.002 95);
   --accent-wash: oklch(0.552 0.201 32 / 0.08);
 
-  /* Status */
   --positive: oklch(0.58 0.14 155);
 }
 
@@ -86,26 +53,23 @@
   --paper-raised: oklch(0.196 0.005 95);
 
   /**
-   * Does NOT inverse-map in dark, unlike every other pair here.
-   *
-   * A literal inversion turns the contact band into a full-bleed near-white
-   * block on an otherwise dark page — the reader chose dark to avoid exactly
-   * that, and a bright slab three quarters of the way down is glare, not
-   * emphasis. In dark it becomes the most elevated dark surface instead: a
-   * step above paper-raised, so the band still reads as its own moment, and
-   * the ink stays light rather than flipping.
+   * Deliberately not inverse-mapped. A literal inversion turns the contact
+   * band into a near-white slab on an otherwise dark page — glare, not
+   * emphasis, for someone who chose dark to avoid exactly that. Here it is the
+   * most elevated dark surface instead, so the band still reads as its own
+   * moment and the ink stays light.
    */
   --paper-inverted: oklch(0.255 0.006 95);
 
   --ink: oklch(0.962 0.003 95);
   --ink-muted: oklch(0.702 0.006 95);
-  --ink-subtle: oklch(0.585 0.006 95); /* was 0.545 — measured 3.96:1 */
-  --ink-inverted: oklch(0.962 0.003 95); /* light ink — see paper-inverted */
+  --ink-subtle: oklch(0.585 0.006 95);
+  --ink-inverted: oklch(0.962 0.003 95);
 
   --line: oklch(0.268 0.006 95);
   --line-strong: oklch(0.372 0.007 95);
 
-  /* Lifted and slightly desaturated: full-chroma vermilion vibrates on black. */
+  /* Lifted and desaturated: full-chroma vermilion vibrates on black. */
   --accent: oklch(0.688 0.178 34);
   --accent-hover: oklch(0.742 0.168 34);
   --accent-ink: oklch(0.152 0.008 34);
@@ -114,13 +78,7 @@
   --positive: oklch(0.72 0.15 155);
 }
 
-/* ==========================================================================
-   2. THEME — maps runtime values into Tailwind utilities and adds the
-      static scales (type, spacing, motion) that do not change per theme.
-   ========================================================================== */
-
 @theme inline {
-  /* ---- Color utilities: bg-paper, text-ink, border-line, ... ---- */
   --color-paper: var(--paper);
   --color-paper-raised: var(--paper-raised);
   --color-paper-inverted: var(--paper-inverted);
@@ -142,18 +100,13 @@
 }
 
 @theme {
-  /* ---- Typefaces ----
-     Sans  : Geist — a neo-grotesque. The Swiss workhorse.
-     Mono  : Geist Mono — metadata, numbers, labels. The engineer's texture.
-     Serif : Instrument Serif — used *once or twice* per page for emphasis.
-             Restraint is the whole point; it is a seasoning, not an ingredient. */
-  /* Vazirmatn sits in every stack rather than being swapped in for the Kurdish
-     pages. None of the three Geist/Instrument faces contain a single Arabic
-     glyph, so the browser's per-character fallback does the routing for free:
-     Latin renders in Geist, Sorani renders in Vazirmatn, and a line that mixes
-     them ("زۆربەی بە React") gets both without a wrapper element or a class.
-     Ordering matters — Vazirmatn also has Latin, and putting it first would
-     quietly restyle the English site. */
+  /**
+   * Vazirmatn sits in every stack rather than being swapped in for Kurdish.
+   * None of the Geist/Instrument faces carry an Arabic glyph, so per-character
+   * fallback does the routing for free and a mixed line gets both without a
+   * wrapper. Order matters: Vazirmatn also has Latin, and putting it first
+   * would quietly restyle the English site.
+   */
   --font-sans:
     var(--font-geist-sans), var(--font-kurdish), ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono:
@@ -161,8 +114,7 @@
   --font-serif:
     var(--font-instrument-serif), var(--font-kurdish), Georgia, "Times New Roman", serif;
 
-  /* ---- Type scale ----
-     Fluid via clamp() so there are no breakpoint jumps. Tracking tightens as
+  /* Fluid via clamp(), so there are no breakpoint jumps. Tracking tightens as
      size grows, which is what makes large type look set rather than scaled. */
   --text-display: clamp(3.25rem, 10.5vw, 9.5rem);
   --text-display--line-height: 0.86;
@@ -191,90 +143,56 @@
   --text-body: 1rem;
   --text-body--line-height: 1.65;
 
-  /* Uppercase mono labels: "SELECTED WORK", "2021—26". Wide tracking is
-     mandatory at this size or it reads as noise. */
+  /* Wide tracking is mandatory at this size or the uppercase reads as noise. */
   --text-meta: 0.75rem;
   --text-meta--line-height: 1.2;
   --text-meta--letter-spacing: 0.09em;
   --text-meta--font-weight: 500;
 
-  /* ---- Layout ---- */
-  --container-page: 90rem; /* 1440px — the outer bound of the grid */
-  --container-prose: 42rem; /* ~68ch — case study reading measure */
+  --container-page: 90rem;
+  --container-prose: 42rem;
 
-  /* ---- Radius ----
-     Swiss is sharp. These exist so nothing looks accidentally rounded. */
   --radius-none: 0px;
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-full: 9999px;
 
-  /* ---- Motion ----
-     Two curves cover everything. expo for entrances (fast start, long settle),
-     quart for UI state changes. Nothing bounces — bounce reads as playful,
-     and this site is not playful. */
+  /* expo for entrances, quart for state changes. Nothing bounces. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  /**
-   * Depth.
-   *
-   * The hero headline sits on a plane that tilts toward the cursor, with each
-   * authored line at its own Z so they parallax against one another rather
-   * than moving as one flat card. A long perspective keeps it dimensional
-   * without the fisheye that short values give at this type size.
-   */
-  --perspective-type: 1600px;
-  --depth-step: 26px;
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 
+  /* A long perspective keeps the hero dimensional without the fisheye short
+     values give at display type sizes. */
+  --perspective-type: 1600px;
+  --depth-step: 26px;
+
   --duration-instant: 100ms;
-  /**
-   * The hover/interaction duration — every `duration-fast` in the codebase is
-   * a hover, focus or state transition.
-   *
-   * Raised from 180ms. Under ~200ms a colour change reads as a switch being
-   * thrown; the extra time is what makes it read as considered instead. Paired
-   * with ease-out-expo at the call sites, which decelerates hard and is doing
-   * most of the work here — the curve matters more than the number.
-   */
+  /* Every `duration-fast` is a hover or focus transition. Under ~200ms a
+     colour change reads as a switch being thrown rather than a response. */
   --duration-fast: 260ms;
   --duration-base: 380ms;
   --duration-slow: 700ms;
   --duration-reveal: 900ms;
 
-  /* ---- Elevation ----
-     Editorial layouts use almost no shadow. These are deliberately faint. */
   --shadow-subtle: 0 1px 2px oklch(0 0 0 / 0.04), 0 4px 12px oklch(0 0 0 / 0.03);
   --shadow-lifted: 0 2px 4px oklch(0 0 0 / 0.05), 0 12px 32px oklch(0 0 0 / 0.06);
 }
 
-/* ==========================================================================
-   3. THE SAME SCALE, RE-CUT FOR ARABIC SCRIPT
-
-   The type scale above is tuned for Geist. Handing those numbers to Sorani
-   produces something that is technically the same size and visually twice as
-   loud, because the two scripts do not distribute their mass the same way:
-
-   - Arabic has no lowercase, so every glyph occupies the full band a Latin
-     capital does. At an identical font-size it reads far larger, and the
-     display line ran wide enough to wrap — which breaks TextReveal outright,
-     since its lines are authored rather than measured and a wrapped line
-     escapes its clipping mask.
-
-   - `line-height: 0.86` works for Latin display type because the descenders
-     are shallow and rare. Sorani carries deep descenders (ج ح ع ی) plus
-     diacritics above, so at 0.86 the lines physically collide.
-
-   - Negative tracking is wrong for a cursive script at any size. The letters
-     are already joined; pulling them together thickens the joins into blots.
-
-   Selector is `html[dir="rtl"]` rather than `[dir="rtl"]`: `@theme` emits its
-   values on `:root`, which has the same specificity as a bare attribute
-   selector, and relying on source order across generated CSS is not a bet
-   worth taking.
-   ========================================================================== */
-
+/**
+ * THE SAME SCALE, RE-CUT FOR ARABIC SCRIPT.
+ *
+ * Sorani has no lowercase, so every glyph fills the band a Latin capital does
+ * and reads far larger at an identical size — the display line ran wide enough
+ * to wrap, which breaks TextReveal, whose lines are authored rather than
+ * measured and whose wrapped line escapes its clipping mask. Deep descenders
+ * (ج ح ع ی) plus diacritics collide at 0.86. Negative tracking is wrong for a
+ * cursive script at any size: the letters are already joined.
+ *
+ * `html[dir="rtl"]`, not `[dir="rtl"]` — `@theme` emits onto `:root`, which
+ * has the same specificity as a bare attribute selector, and source order
+ * across generated CSS is not a bet worth taking.
+ */
 html[dir="rtl"] {
   --text-display: clamp(2.25rem, 6.4vw, 5.75rem);
   --text-display--line-height: 1.14;
