@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type Locale, localeMeta, locales } from "@/lib/config/i18n";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 import { swapLocale } from "@/lib/i18n/routing";
@@ -35,6 +35,31 @@ type LanguageToggleProps = {
 export function LanguageToggle({ locale, dictionary, className }: LanguageToggleProps) {
   const pathname = usePathname();
 
+  /**
+   * Query string and hash, carried across the switch.
+   *
+   * Read from `window.location` after mount rather than via
+   * `useSearchParams()`. That hook opts its whole route out of static
+   * generation unless it sits inside its own Suspense boundary, and this
+   * component renders in the header of every page — the cost would be the
+   * entire site going dynamic to preserve a query string nothing sets yet.
+   *
+   * Before hydration the href is the clean path, which is the correct thing
+   * for a crawler to follow anyway. The hash comes free: it never reaches the
+   * server, so this is the only place it could have come from.
+   */
+  const [suffix, setSuffix] = useState("");
+
+  useEffect(() => {
+    // Compared, not just depended on. A client-side navigation updates
+    // `pathname` and `window.location` in separate steps, so reading location
+    // blind can append the *previous* page's query to the next page's href.
+    // If they disagree, the navigation has not settled and there is nothing
+    // worth carrying yet.
+    const { pathname: settled, search, hash } = window.location;
+    setSuffix(settled === pathname ? search + hash : "");
+  }, [pathname]);
+
   return (
     // A labelled <nav>, not a div with role="group": this is a set of links
     // that navigate, which is what nav is for, and the label means assistive
@@ -60,7 +85,7 @@ export function LanguageToggle({ locale, dictionary, className }: LanguageToggle
               </span>
             ) : (
               <Link
-                href={swapLocale(pathname, candidate)}
+                href={swapLocale(pathname, candidate, suffix)}
                 // Tells assistive tech and search engines that the destination
                 // is in a different language from the page linking to it.
                 hrefLang={meta.htmlLang}

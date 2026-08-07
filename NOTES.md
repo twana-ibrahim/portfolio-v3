@@ -279,6 +279,33 @@ catches an element mid-fade and reports a contrast failure that existed for
 300ms — the suite flipped green to red purely on worker count. Reduced motion
 renders the final state immediately, which is the state worth auditing.
 
+### i18n review — done, and what it left open
+
+- [x] **An explicit language choice now sticks.** The toggle is a plain
+      `<Link>`, so nothing client-side ran when it was used and
+      `Accept-Language` won every time: a Kurdish-browser visitor could click
+      "English", return to the bare domain later, and be sent straight back to
+      Kurdish — the site overruling them, repeatedly. `proxy.ts` now writes
+      `NEXT_LOCALE` on any locale-prefixed request and reads it ahead of the
+      header. Written only when it changes, so ordinary requests stay free of
+      `Set-Cookie`. The redirect also declares `Vary: Accept-Language, Cookie`.
+- [x] **The language toggle keeps query and hash.** `usePathname()` returns
+      neither, so switching language on `/en/work?domain=telecom#row-3` landed
+      on a bare `/ku/work`. Read from `window.location` after mount rather than
+      via `useSearchParams()` — that hook would opt every page rendering the
+      header out of static generation. Latent today (nothing sets a query
+      parameter); fixed before it isn't.
+- [ ] **A longer Kurdish headline will silently break `TextReveal`.** Its
+      lines are authored, not measured, and `tokens.css` re-cuts the display
+      scale for Arabic specifically so the Sorani headline stops wrapping. It
+      fits today. One longer word and it wraps, the mask animates a two-line
+      block inside a one-line clip, and nothing warns anyone. Worth a dev-time
+      length assertion on `profile.headline` before launch.
+- [ ] **Latin runs inside Sorani prose are not marked `lang="en"`.** "React"
+      inside a Kurdish sentence renders and reads correctly, but a screen
+      reader in Sorani pronounces it with Kurdish phonetics. Common, rarely
+      fixed, low priority for this audience — recorded so it is a decision.
+
 ### QA pass — open, needs a decision rather than a fix
 
 - [x] **Dates no longer freeze at build time.** The footer's `© {new Date()...}`
@@ -307,9 +334,27 @@ renders the final state immediately, which is the state worth auditing.
       `projects.ts`: 14 delivered, 9 industries. `/work` still lists all 16 and
       the "all N projects" link still says 16, which is right — that page is an
       index, not a claim.
-- [ ] Hitting `/work/<anything>` logs `Internal: NoFallbackError` server-side
-      before correctly returning 404. Cosmetic, but it will be log noise on
-      Vercel once crawlers find the old case-study URL.
+- [x] **Every 404 on the site was a blank white page.** Chasing the
+      `NoFallbackError` log noise turned up the real bug underneath it:
+      `not-found.tsx` was at `[lang]/`, and with `[lang]` as a root-param
+      segment Next never registers a boundary there — the build emits
+      `/_not-found` and never `/[lang]/_not-found`. That file had never once
+      rendered. Every mistyped URL got Next's built-in error shell with an
+      empty `<body>`: no chrome, no way back, in either language.
+
+      Now at `app/not-found.tsx`, rendering its own document. It has to: the
+      layout that imports `globals.css` is `[lang]/layout.tsx`, which by
+      definition does not apply to a route that failed to match — the first
+      version of the fix shipped correct text with **zero stylesheets**
+      attached. It carries its own fonts and CSS, and answers in both
+      languages, because the segment that would name the locale is precisely
+      the one that did not match.
+- [ ] `Internal: NoFallbackError` still logs once per unknown `/work/<slug>`.
+      Accepted, and the alternative was tested: `dynamicParams = true` silences
+      it, but then the request reaches the page, `notFound()` throws, and
+      **no** not-found boundary resolves anywhere in the `[lang]` tree — the
+      visitor gets the blank shell again. A page that renders beats a log
+      nobody reads. Recheck on the next Next.js major.
 - [x] **Stale comment in `projects.ts` fixed.** `industryCount`'s doc called it
       *the "six industries" stat* while computing 9 — it was describing an
       older content set.

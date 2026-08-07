@@ -25,6 +25,24 @@ export async function generateStaticParams() {
   return studies.map((study) => ({ slug: study.slug }));
 }
 
+/**
+ * Off, deliberately, and it is the lesser of two flawed options.
+ *
+ * `notFound()` thrown from inside the `[lang]` tree does not resolve to any
+ * not-found boundary in this app — not at `[lang]/`, not in the route group,
+ * not at the app root. Next serves its built-in error shell with an empty
+ * `<body>`. Turning this on lets the request reach the page, so the throw
+ * happens, so the visitor gets that blank page.
+ *
+ * Off, the slug never matches a route at all, and the miss is handled by
+ * `app/not-found.tsx` — which renders. The cost is one
+ * `Internal: NoFallbackError` line in the server log per unknown slug: real
+ * noise, and worth it. A page the visitor can read beats a log the visitor
+ * never sees.
+ *
+ * Recheck on the next Next.js major. If `notFound()` starts resolving, turn
+ * this on and the 404 gains the site's header and footer.
+ */
 export const dynamicParams = false;
 
 /**

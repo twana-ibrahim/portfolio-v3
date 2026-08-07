@@ -23,8 +23,14 @@ export function localePath(locale: Locale, path: AppPath): Route {
  * The same page in the other locale, for the language toggle and hreflang.
  * Strips whatever locale prefix is on the current pathname and applies the
  * requested one, so switching language holds your place on the site.
+ *
+ * `suffix` carries the query string and hash. `usePathname()` returns neither,
+ * so without it switching language on `/en/work?domain=telecom#row-3` lands on
+ * a bare `/ku/work` — the filter and the anchor both silently dropped. Nothing
+ * on the site takes a query parameter today; this exists so that the day one
+ * arrives, the toggle is not quietly wrong.
  */
-export function swapLocale(pathname: string, next: Locale): Route {
+export function swapLocale(pathname: string, next: Locale, suffix = ""): Route {
   const withoutLocale = pathname.replace(/^\/(en|ku)(?=\/|$)/, "");
-  return `/${next}${withoutLocale}` as Route;
+  return `/${next}${withoutLocale}${suffix}` as Route;
 }
