@@ -3,11 +3,8 @@ import { useId } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * Form controls, editorial style: a baseline rule instead of a box.
- *
- * The rule thickens and takes the ink colour on focus, and turns accent on
- * error. Nothing else moves — no ring, no shadow, no shifting layout, which
- * means an appearing error message never pushes the rest of the form down.
+ * A baseline rule instead of a box. Nothing moves on focus or error — no ring,
+ * no shadow — so an appearing error message never pushes the form down.
  */
 const controlStyles = [
   "w-full bg-transparent pb-2.5 text-ink",
@@ -71,5 +68,5 @@ export function Input(props: ComponentProps<"input">) {
 }
 
 export function Textarea(props: ComponentProps<"textarea">) {
-  return <textarea {...props} className={cn("min-h-36 resize-y pt-2", props.className)} />;
+  return <textarea {...props} className={cn("min-h-36 resize-none pt-2", props.className)} />;
 }

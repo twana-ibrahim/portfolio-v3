@@ -1,15 +1,9 @@
 /**
- * Every locale-independent fact about the person this site is for.
+ * Locale-independent facts. No component hardcodes a URL, email or path.
  *
- * Rule: no component hardcodes a URL, email, handle or path. If it appears in
- * the UI and it is about Twana rather than about layout, it comes from here —
- * or, if it is a sentence rather than a fact, from `src/content/profile.ts`.
- *
- * The split is not cosmetic. This file is `as const`, which freezes every
- * string to its own literal type; that is exactly what you want for an email
- * address and exactly what makes a second locale impossible to assign. So
- * anything that has to exist in two languages lives in `content/` instead,
- * where it is Zod-parsed and a missing translation fails the build.
+ * Sentences live in `content/profile.ts` instead: this file is `as const`,
+ * which freezes every string to its own literal type — right for an email
+ * address, and what makes a second locale impossible to assign.
  */
 
 import type { Dictionary } from "@/lib/i18n/dictionaries/en";
@@ -26,13 +20,8 @@ export const siteConfig = {
   /** Wordmark fallback. Latin in both locales — it is a monogram, not a word. */
   initials: "TI",
 
-  /**
-   * When the clock starts for the "years shipping" figure.
-   *
-   * Earlier than the first paid role (2021-10) on purpose: 2021 was spent
-   * learning the stack that role was hired for. Change this one date and both
-   * the hero stat and the `{years}` token in the copy follow.
-   */
+  /** Earlier than the first paid role (2021-10) on purpose. Drives both the
+   *  hero stat and the `{years}` token in the copy. */
   careerStart: "2021-01",
 
   /** IANA zone — drives the live local-time readout in the footer. */
@@ -58,12 +47,9 @@ export const siteConfig = {
 } as const;
 
 /**
- * Primary navigation. Order here is order on screen, desktop and mobile.
- *
- * "Home" is listed explicitly rather than left to the wordmark. The logo is
- * only a home link to people who already know that convention, and on mobile
- * the dialog covers the wordmark entirely — so without this there is no way
- * back to the front page from inside the menu.
+ * Order here is order on screen. "Home" is explicit rather than left to the
+ * wordmark: the mobile dialog covers the wordmark entirely, so without it
+ * there is no way back to the front page from inside the menu.
  */
 export const navigation = [
   { href: "/", key: "home" },
