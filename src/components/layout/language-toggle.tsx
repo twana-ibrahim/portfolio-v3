@@ -68,6 +68,11 @@ export function LanguageToggle({ locale, dictionary, className }: LanguageToggle
             ) : (
               <Link
                 href={swapLocale(pathname, candidate, suffix)}
+                // Same page, another language — not a new destination. Without
+                // this Next scrolls to the top and the reader loses their
+                // place. Position lands close, not exact: the Kurdish pages
+                // run a couple of hundred pixels shorter.
+                scroll={false}
                 // Tells assistive tech and search engines that the destination
                 // is in a different language from the page linking to it.
                 hrefLang={meta.htmlLang}
