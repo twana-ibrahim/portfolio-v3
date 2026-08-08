@@ -42,8 +42,8 @@ export const profile = parseProfile({
   headline: {
     en: {
       lead: "I build the systems",
-      emphasis: "banks and operators",
-      trail: "run on.",
+      emphasis: "people rely on",
+      trail: "every day.",
     },
     ku: {
       lead: "ئەو سیستەمانە دروست دەکەم",
