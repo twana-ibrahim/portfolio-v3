@@ -35,13 +35,20 @@ function Formerly({ template, name }: { template: string; name: string }) {
  * decoration; this spends it on the highlights, which is the only part anyone
  * actually reads.
  */
-export async function ExperienceList() {
+type ExperienceListProps = {
+  /** Most recent N roles. Omit for the full history — `experience` is
+   *  newest-first, so this slices from the top. */
+  limit?: number;
+};
+
+export async function ExperienceList({ limit }: ExperienceListProps = {}) {
   const { locale, dictionary } = await getTranslations();
+  const roles = limit ? experience.slice(0, limit) : experience;
 
   return (
     <Stagger>
       <ol className="border-line border-b">
-        {experience.map((role) => {
+        {roles.map((role) => {
           const projectTitles = role.projects
             .map((slug) => getProjectBySlug(slug)?.title)
             .filter((title): title is string => Boolean(title));

@@ -1,7 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Section } from "@/components/layout/section";
-import { experience } from "@/content/experience";
 import { featuredProjects, projects } from "@/content/projects";
 import { ContactCta } from "@/features/contact";
 import { ExperienceList } from "@/features/experience";
@@ -19,9 +18,6 @@ import { getTranslations } from "@/lib/i18n/server";
  */
 export default async function HomePage() {
   const { locale, dictionary } = await getTranslations();
-
-  const firstYear = experience.at(-1)?.start.slice(0, 4) ?? "";
-  const latestYear = new Date().getFullYear().toString().slice(2);
 
   return (
     <>
@@ -46,11 +42,19 @@ export default async function HomePage() {
       <Section
         id="experience"
         label={dictionary.home.experience}
-        // dir="ltr": an en-dashed year range is two Latin numbers around a
-        // neutral character, which the bidi algorithm flips in an RTL line.
-        meta={<span dir="ltr">{`${firstYear}—${latestYear}`}</span>}
+        meta={
+          <Link
+            href={localePath(locale, "/about")}
+            className="link-underline inline-flex items-center gap-1.5 hover:text-ink"
+          >
+            {dictionary.about.fullHistory}
+            <ArrowRight size={12} strokeWidth={2} aria-hidden className="rtl:-scale-x-100" />
+          </Link>
+        }
       >
-        <ExperienceList />
+        {/* Two most recent. The full history is /about's job — rendering it
+            here as well put the same list on the page twice. */}
+        <ExperienceList limit={2} />
       </Section>
 
       <ContactCta />

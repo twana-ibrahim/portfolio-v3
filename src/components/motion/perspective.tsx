@@ -90,13 +90,16 @@ export function Perspective({ children, className, intensity = 1 }: PerspectiveP
     };
   }, [active, pointerX, pointerY]);
 
-  if (!active) {
-    return <div className={className}>{children}</div>;
-  }
-
+  /**
+   * One tree shape in both states. `active` is false until the pointer query
+   * resolves, and returning a different structure then changes the element
+   * type here — React discards the headline and remounts it, restarting the
+   * mask from hidden. Invisible on a fast machine, a visible snap-back on a
+   * slow one. Only the transform is conditional.
+   */
   return (
-    <div className={cn("[perspective:var(--perspective-type)]", className)}>
-      <motion.div style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}>
+    <div className={cn(active && "perspective-type", className)}>
+      <motion.div style={active ? { rotateX, rotateY, transformStyle: "preserve-3d" } : undefined}>
         {children}
       </motion.div>
     </div>

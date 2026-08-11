@@ -28,17 +28,19 @@ export const experience = parseExperience(
       end: null,
       highlights: {
         en: [
-          "Building customer-facing features for FIB, a digital bank — continuing on the same product after the Gateway ICT team transferred here in July 2026.",
+          "Building the internal web applications behind FIB, a digital bank: a BackOffice hub for data, users and system oversight, and admin dashboards for its Business and Corporate products.",
+          "Continuing on the same product after the Gateway ICT team transferred here in July 2026.",
           "Working against a regulated backend, where validation, access control and an auditable trail are requirements rather than refinements.",
           "Extending the shared component library instead of adding one-off components to it, so the design system stays a system.",
         ],
         ku: [
-          "ئەو بەشانەی FIB دروست دەکەم کە کڕیار خۆی بەکاریان دەهێنێت — بەردەوامبوون لەسەر هەمان بەرهەم، دوای ئەوەی تیمی Gateway ICT لە تەمووزی 2026دا گوازرایەوە بۆ ئێرە.",
+          "ئەو ئەپلیکەیشنە ناوخۆییانەی وێب دروست دەکەم کە لە پشت FIB ـەوەن: ناوەندێکی BackOffice بۆ داتا، بەکارهێنەران و سەرپەرشتی سیستەم، و داشبۆردی کارگێڕی بۆ بەرهەمەکانی Business و Corporate.",
+          "بەردەوامبوون لەسەر هەمان بەرهەم، دوای ئەوەی تیمی Gateway ICT لە تەمووزی 2026دا گوازرایەوە بۆ ئێرە.",
           "لەسەر سیستەمێکی بانکی ڕێکخراو کار دەکەم، کە پشکنینی داتا، کۆنترۆڵی دەستڕاگەیشتن و تۆماری کردارەکان مەرجن، نەک باشترکردنی زیادە.",
           "لەبری زیادکردنی کۆمپۆنێنتی تایبەت بە یەک شوێن، کتێبخانە هاوبەشەکە فراوان دەکەم، تاکو سیستەمی دیزاین بە سیستەم بمێنێتەوە.",
         ],
       },
-      projects: ["fib"],
+      projects: ["fib-backoffice", "fib-business", "fib-corporate"],
     },
     {
       company: "Gateway ICT",
@@ -59,7 +61,7 @@ export const experience = parseExperience(
           "ڕێسای کۆمپۆنێنت و فایلم بۆ تیمەکە دانا، و بەپێی هەمان ڕێساکان کۆدەکانم پێداچوونەوە بۆ دەکردن.",
         ],
       },
-      projects: ["mytv-plus-app", "mytv-plus-ads"],
+      projects: ["mytv-plus-app", "mytv-plus-ims", "mytv-plus-website", "mytv-plus-ads"],
     },
     {
       company: "Fastlink Telecom",
@@ -103,13 +105,7 @@ export const experience = parseExperience(
           "کاراییم باشتر کرد بە بارکردنی درەنگ، کاشکردنی ئەنجامەکان و سنووردارکردنی state لەو ڕووکارانەی کە شتی زۆر بە یەکجار پیشان دەدەن.",
         ],
       },
-      projects: [
-        "mytv-plus-app",
-        "mytv-plus-website",
-        "mytv-plus-ads",
-        "hotel-system",
-        "heart-beats",
-      ],
+      projects: ["mytv-plus-ads", "hotel-system"],
     },
     {
       company: "iQ Group",

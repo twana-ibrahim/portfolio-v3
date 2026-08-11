@@ -28,22 +28,52 @@ const PERSONAL = {
 
 export const projects = parseProjects([
   {
-    slug: "fib",
-    title: "FIB",
+    slug: "fib-backoffice",
+    title: "FIB BackOffice",
     client: "First Iraqi Bank",
     year: 2026,
     summary: {
-      en: "Customer-facing features for a digital bank, built against a regulated backend where validation, access control and an auditable trail are requirements.",
-      ku: "ئەو بەشانەی بانکی دیجیتاڵ کە کڕیار خۆی بەکاریان دەهێنێت — لەسەر سیستەمێک کە پشکنینی داتا، کۆنترۆڵی دەستڕاگەیشتن و تۆماری هەموو کردارێکی تێدا مەرجن.",
+      en: "The bank's central hub for managing and monitoring FIB data and users — data management, system oversight and user administration, reachable only over a provided VPN.",
+      ku: "ناوەندی سەرەکی بانک بۆ بەڕێوەبردن و چاودێریکردنی داتا و بەکارهێنەرانی FIB — بەڕێوەبردنی داتا، سەرپەرشتی سیستەم و کارگێڕی بەکارهێنەران، تەنها لە ڕێگەی VPN ـێکی دیاریکراوەوە دەستی پێ دەگات.",
     },
     role: FRONTEND,
     domain: "fintech",
     surface: "web-app",
-    stack: ["React", "TypeScript", "Next.js", "Design systems"],
+    stack: ["React", "TypeScript", "Redux Toolkit", "SASS"],
     metrics: [],
     confidential: true,
     featured: true,
     caseStudy: false,
+  },
+  {
+    slug: "fib-business",
+    title: "FIB Business",
+    client: "First Iraqi Bank",
+    year: 2026,
+    summary: {
+      en: "Administration dashboard for FIB Business — the internal console behind the bank's business banking product.",
+      ku: "داشبۆردی کارگێڕی بۆ \u2066FIB Business\u2069 — ئەو کۆنسۆڵە ناوخۆییەی لە پشت بەرهەمی بانکی بازرگانییەوەیە.",
+    },
+    role: FRONTEND,
+    domain: "fintech",
+    surface: "web-app",
+    stack: ["React", "TypeScript", "Redux Toolkit", "SASS"],
+    confidential: true,
+  },
+  {
+    slug: "fib-corporate",
+    title: "FIB Corporate",
+    client: "First Iraqi Bank",
+    year: 2026,
+    summary: {
+      en: "Administration dashboard for FIB Corporate — the internal console behind the bank's corporate banking product.",
+      ku: "داشبۆردی کارگێڕی بۆ \u2066FIB Corporate\u2069 — ئەو کۆنسۆڵە ناوخۆییەی لە پشت بەرهەمی بانکی کۆرپۆرەیتەوەیە.",
+    },
+    role: FRONTEND,
+    domain: "fintech",
+    surface: "web-app",
+    stack: ["React", "JavaScript", "Redux", "SASS"],
+    confidential: true,
   },
   {
     slug: "fast-sim-pwa",
@@ -57,7 +87,7 @@ export const projects = parseProjects([
     role: FRONTEND,
     domain: "telecom",
     surface: "pwa",
-    stack: ["React", "TypeScript", "PWA", "TanStack Query", "Role-based access"],
+    stack: ["React", "TypeScript", "PWA", "Role-based access"],
     metrics: [],
     confidential: true,
     featured: true,
@@ -78,7 +108,7 @@ export const projects = parseProjects([
     role: FRONTEND,
     domain: "telecom",
     surface: "web-app",
-    stack: ["React", "TypeScript", "Redux Toolkit", "Data tables"],
+    stack: ["React", "TypeScript", "Redux Toolkit"],
     confidential: true,
   },
   {
@@ -93,7 +123,7 @@ export const projects = parseProjects([
     role: FRONTEND,
     domain: "telecom",
     surface: "web-app",
-    stack: ["React", "TypeScript", "Redux Toolkit", "Geo-fencing"],
+    stack: ["React", "TypeScript", "Redux Toolkit"],
     confidential: true,
   },
   {
@@ -108,14 +138,19 @@ export const projects = parseProjects([
     role: FRONTEND,
     domain: "hospitality",
     surface: "web-app",
-    stack: ["React", "TypeScript", "Zustand", "TailwindCSS"],
+    stack: ["React", "TypeScript", "Redux Toolkit", "MaterialUI"],
     confidential: true,
   },
   {
     slug: "mytv-plus-app",
-    title: "MyTV+",
+    /* "App" and not the bare product name, which reads as the service beside
+       "MyTV+ Ads Platform" and "MyTV+ Brand Site". It also fixes a bidi bug:
+       titles render without an isolate, so a Latin run *ending* in "+" showed
+       as "+MyTV" on /ku. A trailing word puts the plus between two Latin runs,
+       where it stays put. */
+    title: "MyTV+ App",
     client: "Gateway ICT",
-    year: 2023,
+    year: 2025,
     summary: {
       en: "Streaming interfaces for web and television, covering live channels, films and series across the MyTV+ content delivery ecosystem.",
       ku: "ڕووکاری ستریمینگ بۆ وێب و تەلەفزیۆن — کەناڵی ڕاستەوخۆ، فیلم و زنجیرە، لەسەر شاشەی بچووک و گەورە بە یەک ئەزموون.",
@@ -131,6 +166,21 @@ export const projects = parseProjects([
     caseStudy: false,
   },
   {
+    slug: "mytv-plus-ims",
+    title: "MyTV+ IMS",
+    client: "Gateway ICT",
+    year: 2025,
+    summary: {
+      en: "Information management system for MyTV+ — the internal, web-based console where the team organises and publishes everything the streaming service serves to its apps.",
+      ku: "سیستەمی بەڕێوەبردنی زانیاری بۆ \u2066MyTV+\u2069 — ئەو کۆنسۆڵە ناوخۆییەی لەسەر وێب، کە تیمەکە ناوەڕۆکی خزمەتگوزارییەکەی پێ ڕێک دەخات و بڵاو دەکاتەوە.",
+    },
+    role: FRONTEND,
+    domain: "media",
+    surface: "web-app",
+    stack: ["React", "TypeScript", "Redux Toolkit", "MaterialUI"],
+    confidential: true,
+  },
+  {
     slug: "mytv-plus-ads",
     title: "MyTV+ Ads Platform",
     client: "Gateway ICT",
@@ -142,7 +192,7 @@ export const projects = parseProjects([
     role: FRONTEND,
     domain: "media",
     surface: "platform",
-    stack: ["React", "TypeScript", "TanStack Query"],
+    stack: ["React", "JavaScript", "Redux"],
     confidential: true,
   },
   {
@@ -164,7 +214,7 @@ export const projects = parseProjects([
     slug: "mytv-plus-website",
     title: "MyTV+ Brand Site",
     client: "Gateway ICT",
-    year: 2023,
+    year: 2025,
     summary: {
       en: "Public marketing site for the MyTV+ service, presenting packages and subscription plans with scroll-led motion.",
       ku: "ماڵپەڕی فەرمی \u2066MyTV+\u2069 — پاکێج و پلانەکانی بەشداری پیشان دەدات، بە جووڵەیەک کە بە سکڕۆڵی بەکارهێنەر دەبزوێت.",
@@ -172,7 +222,7 @@ export const projects = parseProjects([
     role: FRONTEND,
     domain: "media",
     surface: "website",
-    stack: ["Next.js", "React", "GSAP", "TailwindCSS"],
+    stack: ["Next.js", "React", "TypeScript", "GSAP", "TailwindCSS"],
   },
   {
     slug: "heart-beats",
@@ -203,7 +253,7 @@ export const projects = parseProjects([
     },
     domain: "identity",
     surface: "platform",
-    stack: ["Angular", "TypeScript", "RxJS", "RBAC", "REST APIs"],
+    stack: ["Angular", "TypeScript", "RxJS", "RBAC"],
     metrics: [],
     confidential: true,
     featured: true,
@@ -289,6 +339,45 @@ export const projects = parseProjects([
     stack: ["React Native", "Expo", "TypeScript", "Convex"],
     links: { repo: "https://github.com/twana-ibrahim/spotlight-app" },
   },
+  /* One site rebuilt, not two different ones — hence the versions in the
+     titles. v3 is this site and is deliberately absent: its live link would
+     return the reader to the page they are already on. */
+  {
+    slug: "portfolio-v2",
+    title: "Portfolio v2",
+    client: "",
+    year: 2025,
+    summary: {
+      en: "The second version, rebuilt on Next.js 16 and React 19: a wider project gallery covering web, mobile and brand work, with the experience and skills sections reworked.",
+      ku: "دووەم وەشان، لەسەر \u2066Next.js 16\u2069 و \u2066React 19\u2069 لە نوێوە دروستکرا: گەلەریەکی فراوانتری پڕۆژە بۆ وێب، مۆبایل و براند، بە بەشی ئەزموون و شارەزایی نوێکراوەوە.",
+    },
+    role: PERSONAL,
+    domain: "personal",
+    surface: "website",
+    stack: ["Next.js", "React", "TypeScript", "TailwindCSS", "Framer Motion"],
+    links: {
+      live: "https://twana-ibrahim-v2.vercel.app/",
+      repo: "https://github.com/twana-ibrahim/portfolio-v2",
+    },
+  },
+  {
+    slug: "portfolio-v1",
+    title: "Portfolio v1",
+    client: "",
+    year: 2024,
+    summary: {
+      en: "The first version: projects, skills and employment history on one page, with a contact form wired to Resend and a downloadable CV. Installable as a PWA.",
+      ku: "یەکەم وەشانی ماڵپەڕەکە: پڕۆژە، شارەزایی و مێژووی کار لە یەک لاپەڕەدا، لەگەڵ فۆڕمی پەیوەندی و داگرتنی CV. وەک ئەپ دادەمەزرێت.",
+    },
+    role: PERSONAL,
+    domain: "personal",
+    surface: "website",
+    stack: ["Next.js", "React", "TypeScript", "TailwindCSS", "Framer Motion", "Resend"],
+    links: {
+      live: "https://twana-ibrahim-v1.vercel.app/",
+      repo: "https://github.com/twana-ibrahim/portfolio-v1",
+    },
+  },
 ]);
 
 /** Home page selection. Ordered as authored, capped defensively. */
@@ -303,7 +392,9 @@ export function getProjectBySlug(slug: string) {
 export const domainLabels: Record<(typeof projects)[number]["domain"], Localized<string>> = {
   telecom: { en: "Telecom", ku: "تیلیکۆم" },
   fintech: { en: "Banking", ku: "بانک" },
-  media: { en: "Streaming", ku: "ستریمینگ" },
+  /* "Media", not "Streaming": the domain is the sector, and only the App
+     streams. IMS is back-office and the Brand Site is marketing. */
+  media: { en: "Media", ku: "میدیا" },
   identity: { en: "Identity", ku: "ناسنامە" },
   government: { en: "Government", ku: "حکومی" },
   healthcare: { en: "Healthcare", ku: "تەندروستی" },
