@@ -29,15 +29,6 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-/**
- * ── WORTH A PASS IN YOUR OWN VOICE ──────────────────────────────────────────
- * The bio moved to `src/content/profile.ts`, where it is Zod-parsed and exists
- * in both languages. Every fact in it is from your CV, so nothing is invented,
- * but it is written in a voice I chose for you — and the About page is the one
- * place where sounding like a person beats sounding polished. Read both
- * versions aloud. Where they do not sound like you, change the words.
- * ────────────────────────────────────────────────────────────────────────────
- */
 export default async function AboutPage() {
   const { locale, dictionary } = await getTranslations();
 
