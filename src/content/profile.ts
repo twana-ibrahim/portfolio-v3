@@ -85,18 +85,25 @@ export const profile = parseProfile({
     country: { en: "Iraq", ku: "عێراق" },
   },
 
+  /**
+   * Skills and named projects rather than an employment history — the full
+   * Experience list renders directly beneath this on /about, and the project
+   * detail lives on /work, which the third paragraph points at instead of
+   * repeating. The skills named here are the spine only; SkillGrid, further
+   * down the same page, carries the full list.
+   */
   bio: {
     en: [
-      "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq. Five years in, almost all of it spent on software that other businesses run on — the dashboard a telecom operations team opens at the start of every shift, the app an agent uses to sell a SIM, the identity server that decides what six internal products will let you see.",
-      "That kind of work has a particular shape. Nobody is delighted by an internal tool. They need it to be right, to stay responsive when the table has ten thousand rows in it, and to never offer a button the backend is going to refuse. So most of my effort goes into things that don't photograph well: access control that mirrors the API exactly, filtering that survives real data volumes, and structure the next person can change without breaking three screens they've never opened.",
-      "Frontend is where I specialise, not where I stop. Node and Express, REST design, schemas in Postgres and Mongo — knowing what a response costs to produce changes what you ask for, and it is most of the difference between an interface that fits the system and one the backend team has to work around.",
-      "Right now I'm building customer-facing features for FIB, a digital bank. Before banking it was telecom sales platforms at Fastlink, streaming and advertising at Gateway, and Angular reporting systems at iQ Group, where I learned what shipping to a specification actually means.",
+      "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq, working remotely with teams in Erbil. React and TypeScript are where I'm strongest, and I've pointed them mostly at operational software — the systems a company runs on rather than the ones it advertises.",
+      "In practice that comes down to a specific set of things: role-based interfaces that mirror backend permissions exactly, filtering and reporting that stay quick once the dataset is real rather than seeded, and shared component libraries that hold a product together as more people commit to it. I've built in Next.js, Redux Toolkit, Zustand and TanStack Query, and in Angular and RxJS before that. On the server side I'm comfortable in Node and Express, designing REST endpoints and modelling schemas in Postgres and Mongo — enough to know what I'm asking the backend for and what it costs to answer.",
+      "Right now I'm building the internal web applications behind FIB, a digital bank — a BackOffice hub for its data, users and system oversight, plus admin dashboards for the Business and Corporate products. Before that: the MyTV+ streaming apps for web and television and the advertising platform behind them, the SIM and eSIM sales systems Fastlink's agents and dealers use daily, and the identity server that handled registration and permissions across a family of internal products at iQ Group. Each of those, and the rest of the work, is on the work page.",
+      "What matters to me on a team is that the next person can follow what I did — fewer clever solutions, more agreed ones, and the reasoning written down wherever the code can't carry it.",
     ],
     ku: [
-      "ئەندازیاری Frontend ـم و لە کەلارەوە کار دەکەم. پێنج ساڵە، زۆربەی ئەو ماوەیە لەسەر ئەو سۆفتوێرەی کە کۆمپانیاکان پێی کار دەکەن — ئەو داشبۆردەی تیمی کارگێڕی تیلیکۆم لە سەرەتای هەر شیفتێکدا دەیکاتەوە، ئەو ئەپەی نوێنەر SIM ی پێ دەفرۆشێت، و ئەو سێرڤەری ناسنامەیەی دیاری دەکات کە هەر بەکارهێنەرێک لە شەش بەرنامەی ناوخۆییدا دەتوانێت چی ببینێت.",
-      "ئەم جۆرە کارە تایبەتمەندی خۆی هەیە. کەس چاوەڕێی ئەوە ناکات ئامرازێکی ناوخۆیی سەرسامی بکات؛ ئەوەی لێی دەوێت ئەوەیە کە دروست کار بکات، خێرا بمێنێتەوە کاتێک خشتەکە دە هەزار ڕیزی تێدایە، و هەرگیز دوگمەیەک پیشان نەدات کە باکئێند ڕەتی دەکاتەوە. بۆیە زۆربەی هەوڵم لەو شتانەدایە کە وێنەیان لێ ناگیرێت: کۆنترۆڵی دەستڕاگەیشتن کە بە تەواوی هاوتای API ـیە، فلتەرێک کە لە قەبارەی داتای ڕاستەقینەدا دەمێنێتەوە، و پێکهاتەیەک کە گەشەپێدەری دواتر بتوانێت بیگۆڕێت بەبێ ئەوەی سێ شاشەی تر تێک بدات کە هەرگیز نەیکردوونەتەوە.",
-      "Frontend بواری تایبەتمەندیمە، نەک سنووری زانیاریم. Node و Express، دیزاینی REST، سکیمای Postgres و Mongo — کاتێک بزانیت وەڵامێک چەند تێچوونی هەیە، ئەوە شێوەی داواکردنت دەگۆڕێت. ئەمەش زۆربەی ئەو جیاوازییەیە لەنێوان ڕووکارێک کە لەگەڵ سیستەمەکەدا دەگونجێت و ئەوەی کە تیمی باکئێند دەبێت بەدەوریدا بسووڕێتەوە.",
-      "ئێستا لەسەر ئەو بەشانەی FIB کار دەکەم کە کڕیار خۆی بەکاریان دەهێنێت. پێش بانک، پلاتفۆرمەکانی فرۆشتنی فاستلینک بوو، ستریمینگ و ڕیکلام لە Gateway، و سیستەمی ڕاپۆرتی Angular لە iQ Group — لەوێ فێربووم کە کارکردن بەپێی پێوەرێکی دیاریکراو واتە چی.",
+      "ئەندازیاری Frontend ـم، لە کەلارەوە بۆ تیمەکانی هەولێر لە دوورەوە کار دەکەم. React و TypeScript ئەو شوێنەن کە بەهێزترم تێیاندا، و زۆربەی کارەکانم لەسەر سۆفتوێری کارگێڕی بووە — ئەو سیستەمانەی کۆمپانیایەک پێیان کار دەکات، نەک ئەوانەی ڕیکلامیان بۆ دەکات.",
+      "بە کردەوە ئەمە چەند شتێکی دیاریکراو دەگرێتەوە: ڕووکارێک کە بەپێی ڕۆڵ کار دەکات و بە تەواوی هاوتای مۆڵەتەکانی باکئێندە، فلتەر و ڕاپۆرتێک کە خێرا دەمێنێتەوە کاتێک داتاکە ڕاستەقینەیە نەک نموونە، و کتێبخانەی کۆمپۆنێنتی هاوبەش کە بەرهەمەکە یەکدەست ڕادەگرێت کاتێک کەسی زیاتر کاری تێدا دەکات. لە ⁦Next.js⁩، ⁦Redux Toolkit⁩، Zustand و ⁦TanStack Query⁩ کارم کردووە، و پێشتر لە Angular و RxJS. لەلای سێرڤەرەوەش لە Node و Express ئاسوودەم، لە دیزاینکردنی REST و داڕشتنی سکیما لە Postgres و Mongo — ئەوەندەی بزانم داوای چی لە باکئێند دەکەم و بەرهەمهێنانی چەند تێدەچێت.",
+      "ئێستا ئەو ئەپلیکەیشنە ناوخۆییانەی وێب دروست دەکەم کە لە پشت FIB ـەوەن — ناوەندێکی BackOffice بۆ داتا، بەکارهێنەران و سەرپەرشتی سیستەم، لەگەڵ داشبۆردی کارگێڕی بۆ بەرهەمەکانی Business و Corporate. پێش ئەوە: ئەپەکانی ستریمینگی ⁦MyTV+⁩ بۆ وێب و تەلەفزیۆن و ئەو پلاتفۆرمە ڕیکلامییەی لە پشتیانەوەیە، سیستەمەکانی فرۆشتنی SIM و eSIM کە نوێنەر و فرۆشیارەکانی فاستلینک ڕۆژانە بەکاریان دەهێنن، و ئەو سێرڤەری ناسنامەیەی خۆتۆمارکردن و مۆڵەتەکانی چەند بەرنامەیەکی ناوخۆیی ⁦iQ Group⁩ ی بەڕێوە دەبرد. هەریەکەیان، لەگەڵ کارەکانی تر، لە لاپەڕەی کارەکاندا هەن.",
+      "ئەوەی لەناو تیمدا لای من گرنگە، ئەوەیە کە کەسی دواتر بتوانێت شوێن کارەکەم بکەوێت — چارەسەری زیرەک کەمتر، ڕێسای هاوبەش زیاتر، و نووسینەوەی هۆکارەکە هەر کاتێک کۆدەکە خۆی نەیتوانی هەڵیبگرێت.",
     ],
   },
 });
