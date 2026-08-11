@@ -19,11 +19,14 @@ import { parsePageCopy } from "./schema";
  */
 export const pageCopy = parsePageCopy({
   work: {
+    /* Was "Systems that businesses actually run on." "Actually" argued with an
+       accusation nobody made, and "businesses" is contradicted by the paragraph
+       below it — the list carries government, NGO and university work. */
     title: {
-      en: { lead: "Systems that businesses", emphasis: "actually run on", trail: "." },
+      en: { lead: "Systems that organisations", emphasis: "run on", trail: "." },
       ku: {
-        lead: "ئەو سیستەمانەی کۆمپانیاکان",
-        emphasis: "بەڕاستی کاریان پێ دەکەن",
+        lead: "ئەو سیستەمانەی دامەزراوەکان",
+        emphasis: "کاریان پێ دەکەن",
         trail: ".",
       },
     },
