@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion, type Variants } from "motion/react";
 import type { ComponentProps, ReactNode } from "react";
+import { DURATION, EASE_OUT_EXPO, STAGGER } from "@/components/motion/tokens";
 import { cn } from "@/lib/utils/cn";
 
 /**
@@ -29,12 +30,16 @@ const MOTION_MARKER = { "data-motion": "" } as const;
 
 const revealVariants: Variants = {
   hidden: { opacity: 0, y: DISTANCE },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
+  visible: { opacity: 1, y: 0 },
 };
+
+/**
+ * Not inside the variant. Motion resolves timing as `variant.transition ??
+ * props.transition` — a replacement, not a merge — so a variant carrying its
+ * own duration swallowed every `delay` passed next to it. Living here also
+ * leaves `delay` absent for <StaggerItem>, whose offset the parent computes.
+ */
+const revealTransition = { duration: DURATION.slow, ease: EASE_OUT_EXPO } as const;
 
 /** Motion's viewport margin: start the animation slightly before it's visible. */
 const VIEWPORT = { once: true, margin: "0px 0px -12% 0px" } as const;
@@ -62,7 +67,7 @@ export function Reveal({ children, delay = 0, className, ...props }: RevealProps
       whileInView="visible"
       viewport={VIEWPORT}
       variants={revealVariants}
-      transition={{ delay }}
+      transition={{ ...revealTransition, delay }}
       className={className}
       {...MOTION_MARKER}
       {...props}
@@ -76,12 +81,16 @@ export function Reveal({ children, delay = 0, className, ...props }: RevealProps
 
 const staggerVariants: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+  visible: { transition: { staggerChildren: STAGGER.item, delayChildren: STAGGER.lead } },
 };
+
+/** No `delay`: the children's offsets come from the variant above, and the
+ *  prop would only ever have reached the DOM as an unknown attribute. */
+type StaggerProps = Omit<RevealProps, "delay">;
 
 /** Cascades its children in. Pairs with <StaggerItem>, so adding a row needs
  *  no renumbering of hand-tuned delays. */
-export function Stagger({ children, className, ...props }: RevealProps) {
+export function Stagger({ children, className, ...props }: StaggerProps) {
   const reduced = useReducedMotion();
 
   if (reduced) {
@@ -133,11 +142,21 @@ export function StaggerItem({ children, className, as = "div" }: StaggerItemProp
   }
 
   return as === "li" ? (
-    <motion.li variants={revealVariants} className={className} {...MOTION_MARKER}>
+    <motion.li
+      variants={revealVariants}
+      transition={revealTransition}
+      className={className}
+      {...MOTION_MARKER}
+    >
       {children}
     </motion.li>
   ) : (
-    <motion.div variants={revealVariants} className={className} {...MOTION_MARKER}>
+    <motion.div
+      variants={revealVariants}
+      transition={revealTransition}
+      className={className}
+      {...MOTION_MARKER}
+    >
       {children}
     </motion.div>
   );
@@ -193,9 +212,9 @@ export function TextReveal({
               initial={{ y: "110%" }}
               animate={{ y: 0 }}
               transition={{
-                duration: 1,
-                delay: delay + index * 0.09,
-                ease: [0.16, 1, 0.3, 1],
+                duration: DURATION.reveal,
+                delay: delay + index * STAGGER.line,
+                ease: EASE_OUT_EXPO,
               }}
             >
               {line}
