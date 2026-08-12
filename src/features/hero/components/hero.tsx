@@ -26,13 +26,13 @@ export async function Hero() {
    * what makes the "+" honest — see yearsSince. The same figure fills the
    * `{years}` token in the summary, so the prose and the stat cannot disagree.
    *
-   * The latter two both count professional work only, so they describe the
-   * same population — see `professionalProjects`.
+   * The project count carries a "+" for the same reason: it is the length of
+   * the `/work` list, and the list is not the whole career.
    */
   const years = yearsSince(siteConfig.careerStart);
   const stats = [
     { value: `${years}+`, label: dictionary.home.yearsShipping },
-    { value: String(deliveredCount), label: dictionary.home.projectsDelivered },
+    { value: `${deliveredCount}+`, label: dictionary.home.projectsDelivered },
     { value: String(industryCount), label: dictionary.home.industries },
   ];
 
