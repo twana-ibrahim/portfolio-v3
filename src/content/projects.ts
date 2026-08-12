@@ -405,15 +405,18 @@ export const domainLabels: Record<(typeof projects)[number]["domain"], Localized
 };
 
 /**
- * Both hero stats count this set, not `projects` — "delivered" means delivered
- * to someone and "personal" is not an industry, so counting the two personal
- * repos in one figure and not the other described two different populations.
- * `/work` still lists all of them: that page is an index, not a claim.
+ * The "projects delivered" stat. Counts everything `/work` lists, because a
+ * visitor can count those rows and a hero figure that comes up short reads as
+ * either padding or an oversight. The "+" the hero appends carries the rest —
+ * the work that was never written up.
  */
-const professionalProjects = projects.filter((project) => project.domain !== "personal");
+export const deliveredCount = projects.length;
 
-/** The "projects delivered" stat. */
-export const deliveredCount = professionalProjects.length;
-
-/** The "industries" stat. Currently 9. */
-export const industryCount = new Set(professionalProjects.map((project) => project.domain)).size;
+/**
+ * The "industries" stat. Drops the personal repos, which `deliveredCount`
+ * keeps: "personal" is not an industry, and counting it would claim a sector
+ * nobody hired for. Currently 9.
+ */
+export const industryCount = new Set(
+  projects.filter((project) => project.domain !== "personal").map((project) => project.domain),
+).size;
