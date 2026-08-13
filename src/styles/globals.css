@@ -115,6 +115,42 @@
   }
 }
 
+/**
+ * The theme change sweeps out from the toggle instead of crossfading in place.
+ *
+ * The View Transition API snapshots the whole document, so one clip-path on one
+ * pseudo-element reveals every colour on the page at once — type, hairlines,
+ * the header's backdrop blur, code blocks. Animating the live DOM instead would
+ * mean a transition on every element and a repaint of all of them per frame.
+ *
+ * Only the static half lives here. The circle depends on where the button is
+ * when it is clicked, so `theme-toggle.tsx` injects the keyframes with the
+ * geometry already in them — see the note there for why it is not a rule in
+ * this file reading custom properties.
+ *
+ * The UA pairs its default crossfade with `mix-blend-mode: plus-lighter`, which
+ * would wash the overlap out to white. That goes in every case.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+/* The outgoing theme holds still underneath; only the incoming one is clipped. */
+::view-transition-old(root) {
+  z-index: 0;
+  animation: none;
+}
+
+/**
+ * Deliberately no `animation: none` here. The injected rule replaces the UA's
+ * fade-in when it applies, and leaving the fade in place means an engine that
+ * somehow does not take that rule still crossfades rather than cutting.
+ */
+::view-transition-new(root) {
+  z-index: 1;
+}
+
 /* Shiki runs once with two themes and emits both as custom properties, so the
    theme toggle costs nothing. Specificity does the work — no !important. */
 code[data-theme] span,

@@ -113,6 +113,32 @@ in `globals.css` does not stop JS-driven inline transforms, so this matters.
 `TextReveal` takes **authored** lines rather than measuring them. Runtime line
 splitting either blocks paint or reflows after the webfont loads.
 
+The one exception to "components own their motion" is the theme change, which
+sweeps out from the toggle as an expanding circle. It runs on the View
+Transition API: one `clip-path` on `::view-transition-new(root)` reveals the
+whole page, where transitioning the live DOM would mean a transition on every
+element and a full repaint per frame.
+
+Three things about it are load-bearing and none is obvious:
+
+- `setTheme` goes inside `flushSync`. next-themes applies the class from an
+  effect, and the API snapshots whatever the DOM looks like when its callback
+  returns.
+- `theme-toggle.tsx` injects a `<style>` with the circle's geometry already
+  substituted, and removes it when the transition finishes. Not a rule in
+  `globals.css` reading custom properties off `<html>` — the
+  `::view-transition-*` tree inherits from the document element in theory, and
+  a `var()` that arrives unresolved falls back in silence. Not
+  `element.animate(…, { pseudoElement })` either, which is Chromium-only for
+  these pseudo-elements.
+- `::view-transition-new(root)` keeps the UA fade-in on purpose, so an engine
+  that ignores the injected rule crossfades instead of cutting.
+
+Every failure in this feature so far has been silent and plausible — a sweep
+that still runs, from the wrong place or over the wrong duration. Neither the
+build, the types nor a screenshot catches that. Check it by clicking, in more
+than one browser.
+
 ## Content
 
 Content is typed TS + MDX in `src/content/`, parsed through Zod at module load
