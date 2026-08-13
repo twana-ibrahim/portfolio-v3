@@ -3,14 +3,24 @@ import { useId } from "react";
 import { cn } from "@/lib/utils/cn";
 
 /**
- * A baseline rule instead of a box. Nothing moves on focus or error — no ring,
- * no shadow — so an appearing error message never pushes the form down.
+ * A baseline rule instead of a box. Nothing about the control's own box moves
+ * on focus or error — no shadow, no border-width change — so an appearing
+ * error message never pushes the form down.
+ *
+ * The `focus:outline-none` this used to carry is gone. It was justified by that
+ * same no-movement rule, which an outline does not threaten: outlines are
+ * painted outside the border box and take part in no layout. What it actually
+ * did was delete the site's one focus style — `globals.css` says "visible,
+ * never removed" — from the only four controls on the site that are typed
+ * into, leaving a 1px hairline changing colour as the entire keyboard
+ * indicator. `focus:border-ink` stays; it now reinforces the ring instead of
+ * replacing it.
  */
 const controlStyles = [
   "w-full bg-transparent pb-2.5 text-ink",
   "border-line border-b transition-colors duration-fast ease-out-expo",
   "placeholder:text-ink-subtle/60",
-  "hover:border-line-strong focus:border-ink focus:outline-none",
+  "hover:border-line-strong focus:border-ink",
   "aria-[invalid=true]:border-accent",
 ];
 
