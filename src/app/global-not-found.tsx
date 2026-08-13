@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Geist, Geist_Mono, Vazirmatn } from "next/font/google";
 import Link from "next/link";
 import { defaultLocale, localeMeta, locales } from "@/lib/config/i18n";
@@ -7,18 +8,22 @@ import "@/styles/globals.css";
 /**
  * The site's 404, and the only one that renders.
  *
- * It lives at the app root rather than at `[lang]/`, which is the whole fix.
- * With `[lang]` as a root-param segment Next registers a not-found boundary
- * only here — the build emits `/_not-found` and never `/[lang]/_not-found` —
- * so the `[lang]/not-found.tsx` this replaces was never once rendered. Every
- * 404 fell through to Next's built-in error shell: a blank white page, no
- * chrome and no way back, on every mistyped URL.
+ * `global-not-found` rather than `not-found`, which is the whole fix. With
+ * `[lang]` as a root-param segment there is no plain root layout to compose a
+ * 404 inside — the build emits `/_not-found` and never `/[lang]/_not-found`,
+ * so the `[lang]/not-found.tsx` this started as was never once rendered, and
+ * every mistyped URL fell through to Next's built-in error shell: a blank
+ * white page, no chrome, no way back.
  *
- * It renders the whole document itself, fonts and stylesheet included, because
- * nothing above it does. `[lang]/layout.tsx` owns `<html>` for real routes and
- * never applies to a route that did not match, so a 404 that leans on it gets
- * no CSS at all — which is how the first version of this file shipped
- * unstyled: correct text, raw HTML.
+ * Moving it to `app/not-found.tsx` got the markup rendering but not the
+ * document: with no root layout of its own to live in, Next generated a bare
+ * `<html><body>` around it and this file's own `<html>` landed *inside* that
+ * one. Nested document tags are a parse error, and every attribute on them —
+ * `lang`, `dir`, the font variables, the flex centring — depends on browser
+ * error recovery to survive. `global-not-found` is the documented convention
+ * for exactly this shape (a root layout behind a top-level dynamic segment);
+ * it skips app rendering entirely and owns the whole document, which is why
+ * the fonts and the stylesheet are imported here rather than inherited.
  *
  * Both languages, rather than a guess. The segment that carries the locale is
  * precisely the thing that failed to match, so there is no honest way to pick
@@ -29,7 +34,15 @@ const sans = Geist({ variable: "--font-geist-sans", subsets: ["latin"], display:
 const mono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"], display: "swap" });
 const kurdish = Vazirmatn({ variable: "--font-kurdish", subsets: ["arabic"], display: "swap" });
 
-export default async function NotFound() {
+/** Bilingual for the same reason the body is. Next adds `noindex` itself. */
+export async function generateMetadata(): Promise<Metadata> {
+  const dictionaries = await Promise.all(locales.map((locale) => getDictionary(locale)));
+  const titles = dictionaries.map((dictionary) => dictionary.notFound.title);
+
+  return { title: `404 · ${titles.join(" · ")}` };
+}
+
+export default async function GlobalNotFound() {
   const dictionaries = await Promise.all(locales.map((locale) => getDictionary(locale)));
 
   return (

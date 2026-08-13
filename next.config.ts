@@ -31,6 +31,14 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ["motion", "lucide-react"],
+
+    /**
+     * Required by `app/global-not-found.tsx`. The root layout sits behind the
+     * `[lang]` root param, so there is no plain root layout for a `not-found`
+     * to compose itself inside — Next's docs name this as one of the two cases
+     * the flag exists for. See the comment in that file for what it fixes.
+     */
+    globalNotFound: true,
   },
 
   async headers() {
