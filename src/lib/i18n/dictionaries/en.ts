@@ -155,7 +155,6 @@ export const en = {
   },
 
   notFound: {
-    code: "404",
     title: "This page does not exist.",
     body: "The link may be out of date, or the page may have been removed. Everything that does exist is one of these.",
     backHome: "Back to home",
