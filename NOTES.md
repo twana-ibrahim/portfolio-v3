@@ -168,13 +168,27 @@ the tailwind-merge class-collapse, the wrapping hero headline, and the
 floored years count.
 
 Still to check:
-- [ ] 768 and 1920 breakpoints (only 390 and 1440 were covered).
+- [x] **768, 1024 and 1920 re-covered.** Every route × 390/768/1024/1440/1920 ×
+      light/dark — 80 combinations — driven through headless Chrome over CDP.
+      No horizontal overflow anywhere and no console error or warning beyond
+      the two `/_vercel/*` scripts that 404 against `next start` by design.
 - [ ] Mobile detail pass — the 390px capture confirmed structure and stacking
       but was too small to judge type sizing and spacing properly.
-- [ ] Mobile nav dialog, theme toggle, and form error states were never
-      exercised — all three are interactive and screenshots don't reach them.
+- [x] **Mobile nav dialog exercised** in both locales at 390: opens, moves
+      focus inside, closes on Escape, no overflow, all five links present.
+- [x] **Theme toggle exercised**, including under `prefers-reduced-motion:
+      reduce`, where it starts no view transition and swaps instantly.
+- [ ] Form error states still unexercised — the validation branch renders only
+      after a failed submit, which needs a driven form fill.
 - [ ] Contact form submit path has never been run end to end (needs Resend
       credentials).
+
+**On driving the browser without Playwright:** the suites are gone but Chrome
+is still scriptable. Node 24 ships a WebSocket client, so a CDP session is
+`spawn(chrome, ["--remote-debugging-port=…", "--headless=new"])` plus
+`new WebSocket(target.webSocketDebuggerUrl)` and no dependency at all. That is
+how the four checks above were re-run. The `settle()` scroll problem below
+applies just the same.
 
 **Method note for whoever picks this up:** `globals.css` sets
 `scroll-behavior: smooth`, so a scripted scroll must pass
@@ -229,7 +243,39 @@ rolling your own.
       `.env.example`.
 - [ ] Push to GitHub, connect the Vercel project.
 
-### QA pass — bugs found and fixed
+### QA pass 2 — bugs found and fixed
+
+Two more, both invisible to a screenshot and both in the same category as the
+first six: correct-looking markup that fails on a detail nobody looks at.
+
+1. **The 404 was two documents nested inside each other.** `app/not-found.tsx`
+   had no root layout to render inside — `[lang]` owns `<html>` and by
+   definition does not apply to a route that failed to match — so Next
+   generated a bare `<html><body>` around it and this file's own `<html>`
+   landed *inside* that one. Every attribute on it (`lang`, the three font
+   variables, `h-full`, the body's flex centring) survived only by HTML parse
+   error recovery, which merges attributes off a misplaced `<html>` onto the
+   real one. Now `app/global-not-found.tsx` with
+   `experimental.globalNotFound`, which is the convention Next documents for
+   precisely this shape: a root layout behind a top-level dynamic segment. It
+   skips app rendering, owns the whole document, and gained a real `<title>`
+   in the move. Verified: one `<html>`, one `<body>`, `lang="en"`, the fonts,
+   and `<meta name="robots" content="noindex">`.
+2. **The form controls deleted the site's focus ring.** `field.tsx` carried
+   `focus:outline-none`, justified in its own comment by the rule that nothing
+   moves on focus — which an outline never threatened, since outlines paint
+   outside the border box and take part in no layout. Tailwind's utilities
+   layer beats `@layer base` unconditionally, so it beat the
+   `:focus-visible { outline: 2px solid var(--accent) }` in `globals.css` that
+   says "visible, never removed" two lines above itself. The entire keyboard
+   indicator on the only four controls anyone types into was a 1px hairline
+   changing colour. Removed; `focus:border-ink` stays as reinforcement.
+   Verified by tabbing with real key events: 2px accent, 3px offset.
+
+Also removed a dead `notFound.code` key from both dictionaries — the 404
+numeral is a literal in the component and always was.
+
+### QA pass 1 — bugs found and fixed
 
 Five real defects, four of them invisible to a screenshot.
 
@@ -305,6 +351,35 @@ renders the final state immediately, which is the state worth auditing.
       inside a Kurdish sentence renders and reads correctly, but a screen
       reader in Sorani pronounces it with Kurdish phonetics. Common, rarely
       fixed, low priority for this audience — recorded so it is a decision.
+
+### Contrast — re-measured, three open questions
+
+Every ink/paper pair recomputed from `tokens.css` (OKLCH → linear sRGB →
+WCAG 2.1), reproducing the numbers recorded above, so the method agrees with
+what the deleted axe suite was measuring. Everything live passes. Three pairs
+do not, and none of them is a one-line fix:
+
+- [ ] **`ink-subtle` on `paper-raised` is 4.14:1 light, 4.35:1 dark** — under
+      the 4.5:1 that 0.75rem `label` type needs. Currently harmless because
+      `paper-raised` appears only in `mdx-components.tsx` (code blocks, inline
+      code, the callout aside) and there are no case studies, so it renders on
+      zero pages. It becomes a real failure the day one is written. Same for
+      **`accent` on `paper-raised`, 4.35:1 light**. Fix when the first case
+      study lands, not before — the right value depends on what the surface
+      ends up carrying.
+- [ ] **Borders are well under the 3:1 that WCAG 1.4.11 asks of UI
+      components.** `--line` under the form fields is about 1.2:1 on paper;
+      `--line-strong` on the outline button (the hero's second CTA and the CV
+      link on About) is 1.72:1 light, 1.90:1 dark. Whether that is a failure
+      is genuinely arguable — both controls carry visible text labels, and the
+      Understanding document exempts a boundary that is not the only way to
+      identify the component — but it is a real legibility question for
+      low-vision readers, and it cannot be fixed without darkening the
+      hairlines, which *is* the Swiss look. A designer's call, not a bug fix.
+      The focus state is unaffected: 4.77:1 light, 6.51:1 dark.
+- [x] **`positive` at 3.60:1 light is fine.** It is never text on paper — a
+      2px status dot in the hero and an icon on a `positive/12` disc in the
+      form's success state. Both are non-text graphics at the 3:1 bar.
 
 ### QA pass — open, needs a decision rather than a fix
 
@@ -393,4 +468,8 @@ Recorded so they are not relitigated later.
 | Hover feel | Slow curve, not a switch | All interaction easing moved to `ease-out-expo` and `--duration-fast` from 180ms to 260ms. Under ~200ms a colour change reads as a switch being thrown. The curve is doing most of the work — expo decelerates hard, which is what reads as considered. |
 | Budget | Free and open source only | No paid dependency, asset, font, or service tier. Rules out Spline's paid plans, commercial 3D model libraries and licensed typefaces. Everything currently in use qualifies — Geist and Instrument Serif are open-licence, three.js and Motion are MIT, and Vercel and Resend are used inside their free tiers. Check the licence before adding anything. |
 | `paper-inverted` in dark | Elevated dark, not a literal inversion | Inverting it turned the contact band into a full-bleed near-white slab on an otherwise dark page. Someone on dark theme chose it to avoid exactly that — a bright block three quarters down the page is glare, not emphasis. In dark it is now `oklch(0.255)`, a step above `paper-raised`, so the band still reads as its own moment and the ink stays light. Contrast is unaffected: 7.61:1 at `/70`, 14.12:1 at full. |
+| Theme change | Circular sweep from the toggle | A crossfade of every colour at once has no source and reads as a glitch; a wipe that starts under the cursor says the button did it. Costs one `clip-path` on one pseudo-element because the View Transition API snapshots the whole document — no per-element transition, no repaint of the page per frame. Falls back to the instant swap on Firefox < 144, Safari < 18, and any reduced-motion request. |
+| Sweep geometry | An injected stylesheet with the numbers already in it | Two tidier versions shipped broken before this one, and both failed the same way: they worked on the machine they were written on. **v1** put the keyframes in `globals.css` reading `--theme-origin-x/y/radius` off `<html>` — correct by the rules of this repo, and it swept from the top centre of the screen elsewhere. That is the `var()` fallback (`50% 50%`, `150vmax`), so the properties arrived unresolved: the `::view-transition-*` tree inherits from the document element in theory, and this is a corner not worth depending on. **v2** used `element.animate(…, { pseudoElement })`, which removes the inheritance — and is Chromium-only for these pseudo-elements, trading one engine's bug for another's missing feature. **v3** builds a `<style>` with the geometry already substituted and removes it when the transition finishes. No inheritance, no WAAPI, the duration stays `var(--duration-slow)` instead of a number parsed out of it, and `::view-transition-new(root)` deliberately keeps the UA fade-in so an engine that ignores the injected rule crossfades rather than cuts. Note the whole class of bug: every one of these fails *silently and plausibly* — the animation still runs, just wrong — so nothing in the build, the types or a screenshot catches it. |
+| Reading a duration token in JS | Parse the unit | `--duration-slow` is authored `700ms`; the build minifies CSS times to the shorter spelling, so the browser sees `.7s` and `Number.parseFloat` returns **0.7**. That shipped for one iteration as a 0.7-millisecond sweep, which does not read as a fast animation — it reads as the animation not existing. Any token read out of `getComputedStyle` and used as a number needs the same treatment. |
+| Sweep easing | `linear`, and none of the tokens | Shipped on `ease-out-quart` first and it was wrong twice over, in a way worth writing down: the animated quantity is a **radius**, so the curve controls the speed of the wave front, not the arrival of a box. Measured at 1440×900, the front was 142px out on the first frame anyone can see — the circle never appeared to leave the icon, it simply existed — and then spent the last 57% of the duration covering 158px, a crawl you feel rather than see. Every `ease-out-*` token does this; `ease-in-out-quart` does a milder version of both. Constant radius is constant front speed, which is what a spreading wave actually does. Now 37px at one frame and even 2287px/s throughout, with the last corner arriving on the final frame. Radius comes off `clientWidth/clientHeight`, not `innerWidth/innerHeight` — the scrollbar is not in the snapshot, and overshooting it puts dead time back on the end. |
 | "Home" in the nav | Explicit item, not just the wordmark | The logo is only a home link to people who know the convention, and the mobile dialog covers the wordmark entirely — so there was no way back to the front page from inside the open menu. Note `isActive` special-cases `/`: every pathname starts with it, so the prefix match that keeps Work current on `/work/<slug>` would mark Home current everywhere. |
