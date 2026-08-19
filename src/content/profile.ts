@@ -4,15 +4,11 @@ import { parseProfile } from "./schema";
  * The person, in prose. Facts live in `lib/config/site.ts`; sentences live
  * here, because they exist twice and `site.ts` is `as const`.
  *
- * The two versions are not translations of each other, but `summary` is close
- * to one: same claim, same three examples in the same order, each described
- * rather than named. `bio` still goes the other way and names the companies
- * outright — by that point the reader has committed to the page, and "FIB"
- * tells them more than "an Iraqi bank" does.
+ * The locales are not translations of each other: `summary` runs close to one,
+ * `bio` diverges and names the companies outright.
  *
- * NEEDS TWANA'S PASS: the facts are from the CV, but the Kurdish register is
- * one I chose, and register is not something a non-native should be confident
- * about. Read it aloud; where it sounds translated, change the words.
+ * NEEDS TWANA'S PASS: the facts are the CV's, the Kurdish register is mine.
+ * Read it aloud; where it sounds translated, change the words.
  */
 export const profile = parseProfile({
   name: {
@@ -21,17 +17,13 @@ export const profile = parseProfile({
   },
 
   /**
-   * Matches the CV header exactly. Change both together or neither.
-   *
-   * "Senior" is back, and the contradiction that forced it out is gone: the
-   * Aug 2026 CV says Senior Software Engineer (Frontend) in the header, the
-   * running footer and the summary, where the previous version said Senior in
-   * the summary and plain in the header on the same page.
+   * Feeds the OG image, the structured data and every page title — change both
+   * locales together or neither. Unqualified on purpose: the CV header brackets
+   * it as "(Frontend)", the role lines in `experience.ts` and `projects.ts`
+   * carry the specialism job by job.
    */
   role: {
     en: "Senior Software Engineer",
-    // "Frontend" stays in Latin. It is the word Kurdish developers use, and
-    // the transliteration ("فرۆنتئێند") is longer, uglier, and unsearchable.
     ku: "ئەندازیاری باڵای سۆفتوێر",
   },
 
@@ -42,9 +34,9 @@ export const profile = parseProfile({
   },
 
   /**
-   * Lines are authored, never measured: each is its own clipped box in the
-   * hero's mask reveal, so a line that wraps breaks the effect. Keep them
-   * short — "run their business on" wrapped at 1440px and was cut for it.
+   * Authored, never measured: each line is its own clipped box in the hero's
+   * mask reveal, so one that wraps breaks the effect. "run their business on"
+   * wrapped at 1440px and was cut for it.
    */
   headline: {
     en: {
@@ -59,10 +51,7 @@ export const profile = parseProfile({
     },
   },
 
-  /**
-   * `{years}` resolves from `siteConfig.careerStart` at render, so the prose
-   * cannot drift from the hero's stat every January.
-   */
+  /** `{years}` resolves from `siteConfig.careerStart`, so it cannot drift. */
   summary: {
     en: "{years} years of building softwares other businesses depend on to operate — a bank with two million app installs, a streaming platform carrying 450+ live channels, the sales system a telecom runs its agent network on. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
     ku: "{years} ساڵە ئەو سۆفتوێرە دروست دەکەم کە کۆمپانیاکانی تر بۆ کارکردنیان پشتی پێ دەبەستن — بانکێک بە زیاتر لە دوو ملیۆن دابەزاندنی ئەپ، پلاتفۆرمێکی ستریمینگ کە زیاتر لە 450 کەناڵی ڕاستەوخۆ هەڵدەگرێت، و ئەو سیستەمە فرۆشتنەی کە کۆمپانیایەکی تیلیکۆم تۆڕی نوێنەرەکانی پێ بەڕێوە دەبات. زۆربەی بە React و TypeScript، لەو سیستەمانەی کە ڕاستی تێدا گرنگترە لە جوانی.",
@@ -73,8 +62,7 @@ export const profile = parseProfile({
       en: "Available for work",
       ku: "ئامادەم بۆ کار",
     },
-    /* Roles, not engagements: this is employment history, not a freelance
-       book, and leading with "contract" undersells it. */
+    /* Roles, not engagements: employment history, not a freelance book. */
     detail: {
       en: "Open to remote roles, GMT+3",
       ku: "ئامادەم بۆ کارکردن لە دوورەوە، \u2066GMT+3\u2069",
@@ -88,11 +76,9 @@ export const profile = parseProfile({
   },
 
   /**
-   * Skills and named projects rather than an employment history — the full
-   * Experience list renders directly beneath this on /about, and the project
-   * detail lives on /work, which the third paragraph points at instead of
-   * repeating. The skills named here are the spine only; SkillGrid, further
-   * down the same page, carries the full list.
+   * Skills and named projects, not an employment history — the Experience list
+   * renders directly beneath this on /about and SkillGrid carries the full
+   * skill list, so this is the spine only.
    *
    * The `\u2066…\u2069` are bidi isolates and are load-bearing: a Latin
    * run ending in a neutral character renders "MyTV+" as "+MyTV", because the

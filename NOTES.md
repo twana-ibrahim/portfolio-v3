@@ -129,14 +129,15 @@ the English and now say the same things.
 
 ### Decisions for you
 
-- [x] **Job title resolved** — `profile.role` is *"Senior Software Engineer
-      (Frontend)"*, matching the Aug 2026 CV, which says Senior in the header
-      and the footer both.
+- [x] **Job title resolved** — `profile.role` is *"Senior Software Engineer"*
+      in both locales, unqualified. The Aug 2026 CV header brackets it as
+      *(Frontend)*; the site drops the bracket and lets the role lines in
+      `experience.ts` and `projects.ts` say the specialism job by job.
 - [x] **The CV no longer contradicts itself, and the site follows it.** The
-      Aug 2026 PDF says *Senior Software Engineer (Frontend)* in the header
-      and in the running footer on both pages. `profile.role` is now Senior in
-      both locales, which also moves the OG image, the structured data and the
-      page titles — they all read from that one field.
+      Aug 2026 PDF says Senior in the header and in the running footer on both
+      pages, where the previous version said Senior in the summary and plain in
+      the header. `profile.role` is the only place the title lives, so the OG
+      image, the structured data and the page titles all moved with it.
 - [ ] **FIB description.** `projects.ts` deliberately says little. Confirm what
       you can say publicly about a banking client.
 - [ ] **Custom domain.** Currently `twana-ibrahim.vercel.app`. Set
