@@ -1,8 +1,9 @@
 # Twana Ibrahim — Portfolio
 
-Personal portfolio for a frontend engineer in Kalar, Sulaymaniyah, Iraq. Five
-years of work on internal systems that businesses run on — digital banking,
-telecom sales, streaming and advertising, identity and access management.
+Personal portfolio for a senior software engineer in Kalar, Sulaymaniyah, Iraq.
+Five years of work on internal systems that businesses run on — digital
+banking, telecom sales, streaming and advertising, identity and access
+management.
 
 **Live:** [twana-ibrahim.vercel.app](https://twana-ibrahim.vercel.app)
 

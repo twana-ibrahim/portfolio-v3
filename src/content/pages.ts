@@ -18,6 +18,24 @@ import { parsePageCopy } from "./schema";
  * ────────────────────────────────────────────────────────────────────────────
  */
 export const pageCopy = parsePageCopy({
+  /**
+   * The search snippet for `/`, and the one page whose description is not also
+   * on the page. `profile.summary` used to fill this slot by default, but that
+   * string is the hero's visible paragraph — leading it with the job title to
+   * win the snippet would have printed the title directly under the hero's own
+   * copy of it. Kept separate so each can say what its own medium needs.
+   *
+   * "Five years" is written out rather than `{years}`: only the fallback in
+   * `createMetadata` runs through `interpolate`, so a token here would ship
+   * literally. Matches `about.description`, which has the same constraint.
+   */
+  home: {
+    description: {
+      en: "Senior software engineer building the internal systems banks, telecom operators and public bodies run on. Five years of React and TypeScript, remote from Kalar, Iraq.",
+      ku: "ئەندازیاری باڵای سۆفتوێر، دروستکەری ئەو سیستەمە ناوخۆییانەی کە بانک، کۆمپانیای تیلیکۆم و دامەزراوە حکومییەکان پێیان کار دەکەن. پێنج ساڵ کارکردن بە React و TypeScript.",
+    },
+  },
+
   work: {
     /* Was "Systems that businesses actually run on." "Actually" argued with an
        accusation nobody made, and "businesses" is contradicted by the paragraph
@@ -59,8 +77,8 @@ export const pageCopy = parsePageCopy({
       },
     },
     description: {
-      en: "Frontend engineer in Kalar, Iraq. Five years on digital banking, telecom, streaming and identity systems — mostly React and TypeScript.",
-      ku: "ئەندازیاری Frontend لە کەلار. پێنج ساڵ کارکردن لەسەر سیستەمی بانکی، تیلیکۆم، ستریمینگ و ناسنامە — زۆربەی بە React و TypeScript.",
+      en: "Senior software engineer in Kalar, Iraq. Five years on digital banking, telecom, streaming and identity systems — mostly React and TypeScript.",
+      ku: "ئەندازیاری باڵای سۆفتوێر لە کەلار. پێنج ساڵ کارکردن لەسەر سیستەمی بانکی، تیلیکۆم، ستریمینگ و ناسنامە — زۆربەی بە React و TypeScript.",
     },
   },
 
@@ -84,8 +102,8 @@ export const pageCopy = parsePageCopy({
       ku: "کەلار، سلێمانی، عێراق — ⁦GMT+3⁩. ڕۆژی کارم بە تەواوی لەگەڵ کەنداودا دەگونجێت، زۆربەی لەگەڵ ئەوروپا، و کۆتایی ڕۆژەکەم دەکەوێتە سەرەتای بەیانی کەناری ڕۆژهەڵاتی ئەمریکا.",
     },
     description: {
-      en: "Get in touch about remote frontend engineering roles. Based in Kalar, Sulaymaniyah, Iraq and open to new work.",
-      ku: "پەیوەندیم پێوە بکە بۆ کاری ئەندازیاری Frontend. لە کەلارەوە کار دەکەم و ئامادەم بۆ کاری نوێ.",
+      en: "Get in touch about remote software engineering roles. Based in Kalar, Sulaymaniyah, Iraq and open to new work.",
+      ku: "پەیوەندیم پێوە بکە بۆ کاری ئەندازیاری سۆفتوێر. لە کەلارەوە کار دەکەم و ئامادەم بۆ کاری نوێ.",
     },
   },
 
@@ -99,8 +117,8 @@ export const pageCopy = parsePageCopy({
       },
     },
     body: {
-      en: "Open to remote frontend roles. Tell me what you're building and I'll come back with a straight answer about whether I'm the right person for it — including when I'm not.",
-      ku: "ئامادەم بۆ کاری Frontend لە دوورەوە. پێم بڵێ چی دروست دەکەیت، وەڵامێکی ڕاستەوخۆت دەدەمەوە لەسەر ئەوەی من کەسی گونجاوم بۆی یان نا — تەنانەت کاتێک نەبم.",
+      en: "Open to remote software engineering roles. Tell me what you're building and I'll come back with a straight answer about whether I'm the right person for it — including when I'm not.",
+      ku: "ئامادەم بۆ کاری ئەندازیاری سۆفتوێر لە دوورەوە. پێم بڵێ چی دروست دەکەیت، وەڵامێکی ڕاستەوخۆت دەدەمەوە لەسەر ئەوەی من کەسی گونجاوم بۆی یان نا — تەنانەت کاتێک نەبم.",
     },
   },
 });

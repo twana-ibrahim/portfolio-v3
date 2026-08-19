@@ -183,6 +183,15 @@ export function parseProfile(input: unknown): Profile {
  * reused in several places; this is the pages' actual writing.
  */
 export const pageCopySchema = z.object({
+  /**
+   * Home carries a `description` and nothing else. Its headline and paragraph
+   * come from `profile`, but the paragraph is also the hero's visible text, so
+   * it cannot double as the search snippet without printing the job title
+   * twice on the page.
+   */
+  home: z.object({
+    description: localized(z.string().min(40).max(200)),
+  }),
   work: z.object({
     title: localized(statementSchema),
     intro: localized(z.string().min(40)),

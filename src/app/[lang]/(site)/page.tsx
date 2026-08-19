@@ -1,14 +1,33 @@
 import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Section } from "@/components/layout/section";
+import { pageCopy } from "@/content/pages";
 import { featuredProjects, projects } from "@/content/projects";
 import { ContactCta } from "@/features/contact";
 import { ExperienceList } from "@/features/experience";
 import { Hero } from "@/features/hero";
 import { ProjectList } from "@/features/work";
 import { interpolate } from "@/lib/i18n/format";
+import { pick } from "@/lib/i18n/localized";
 import { localePath } from "@/lib/i18n/routing";
 import { getTranslations } from "@/lib/i18n/server";
+import { createMetadata } from "@/lib/seo/metadata";
+
+/**
+ * No `title` — home is the one page that wants the bare `name — role` form
+ * `createMetadata` builds by default, rather than a section name in front of
+ * it.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const { locale } = await getTranslations();
+
+  return createMetadata({
+    path: "/",
+    locale,
+    description: pick(pageCopy.home.description, locale),
+  });
+}
 
 /**
  * The home page composes feature slices and does nothing else.

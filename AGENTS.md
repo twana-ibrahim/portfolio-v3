@@ -10,9 +10,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Twana Ibrahim — Portfolio
 
-Personal portfolio for a software engineer based in Kalar, Sulaymaniyah, Iraq.
-Rebuild of
-`twana-ibrahim.vercel.app`, deployed on Vercel.
+Personal portfolio for a senior software engineer based in Kalar, Sulaymaniyah,
+Iraq. Rebuild of `twana-ibrahim.vercel.app`, deployed on Vercel.
 
 ## Commands
 
