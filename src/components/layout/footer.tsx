@@ -33,15 +33,6 @@ export async function Footer() {
           <p className="mt-5 max-w-xs text-ink-muted text-sm leading-relaxed">
             {pick(profile.tagline, locale)}
           </p>
-          <p className="label mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-subtle">
-            <span>
-              {pick(profile.location.city, locale)}
-              {dictionary.listSeparator}
-              {pick(profile.location.country, locale)}
-            </span>
-            <span aria-hidden className="h-px w-3 bg-line-strong" />
-            <LocalTime suffix={dictionary.footer.localTime} />
-          </p>
         </div>
 
         <nav aria-label={dictionary.a11y.footerNav} className="md:col-span-3 md:col-start-7">
@@ -97,8 +88,17 @@ export async function Footer() {
         <p className="label text-ink-subtle">
           © {new Date().getFullYear()} {pick(profile.name, locale)}
         </p>
-        <p className="label text-ink-subtle" dir="ltr">
-          {dictionary.footer.builtWith}
+        {/* Where and when, opposite who and since — the stack list that used to
+            sit here told a visitor nothing they could act on. This does: it is
+            the one line on the page that answers "can we overlap tomorrow". */}
+        <p className="label flex flex-wrap items-center gap-x-3 gap-y-1 text-ink-subtle">
+          <span>
+            {pick(profile.location.city, locale)}
+            {dictionary.listSeparator}
+            {pick(profile.location.country, locale)}
+          </span>
+          <span aria-hidden className="h-px w-3 bg-line-strong" />
+          <LocalTime suffix={dictionary.footer.localTime} />
         </p>
       </Container>
     </footer>

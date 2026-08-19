@@ -152,7 +152,6 @@ export const en = {
     pages: "Pages",
     elsewhere: "Elsewhere",
     localTime: "local",
-    builtWith: "Next.js · TypeScript · Tailwind",
   },
 
   notFound: {

@@ -142,7 +142,6 @@ export const ku: Dictionary = {
     pages: "لاپەڕەکان",
     elsewhere: "شوێنی تر",
     localTime: "کاتی ناوخۆیی",
-    builtWith: "Next.js · TypeScript · Tailwind",
   },
 
   notFound: {
