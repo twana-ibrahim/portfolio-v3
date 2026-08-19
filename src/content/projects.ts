@@ -10,9 +10,10 @@ import { parseProjects } from "./schema";
  * spends those words on what the thing actually did instead, since the
  * category is already known.
  *
- * STILL NEEDED: `metrics` are empty everywhere, and are the highest-value
- * thing left to add. Blank rather than guessed — a wrong figure in an
- * interview is worse than none. Years are inferred and worth a check.
+ * STILL NEEDED: `metrics` on Authentication Server — the CV describes it in
+ * capabilities only, and the other three featured projects now carry figures.
+ * Blank rather than guessed: a wrong number in an interview is worse than
+ * none. Years are inferred from the employment dates and worth a check.
  */
 
 /** The four role strings that repeat, so a wording change happens once. */
@@ -40,7 +41,16 @@ export const projects = parseProjects([
     domain: "fintech",
     surface: "web-app",
     stack: ["React", "TypeScript", "Redux Toolkit", "SASS"],
-    metrics: [],
+    /* The bank's own public figure, not a claim about this application's
+       traffic — the back office serves staff, not those two million. It is
+       here because it is the only sayable measure of what the product sits
+       behind, and the label says "the bank" rather than "the system". */
+    metrics: [
+      {
+        value: "2M+",
+        label: { en: "App installs for the bank", ku: "جار ئەپی بانکەکە دابەزێنراوە" },
+      },
+    ],
     confidential: true,
     featured: true,
     caseStudy: false,
@@ -81,14 +91,29 @@ export const projects = parseProjects([
     client: "Fastlink Telecom",
     year: 2024,
     summary: {
-      en: "Digitised telecom sales covering physical SIM and eSIM workflows, with custom filtering, reporting and real-time agent management.",
-      ku: "سیستەمی فرۆشتنی SIM و eSIM بۆ نوێنەرەکان: داواکاری، چالاککردن، فلتەری تایبەت، ڕاپۆرت و بەڕێوەبردنی نوێنەران بە کاتی ڕاستەقینە.",
+      en: "Sales platform for Newroz Telecom and Fastlink internet SIMs, covering physical SIM and eSIM, with showroom, agent, dealer and representative management, custom filtering, reporting and real-time agent management.",
+      ku: "سیستەمی فرۆشتنی SIM و eSIM بۆ Newroz Telecom و Fastlink، لەگەڵ بەڕێوەبردنی شۆڕووم، نوێنەر، فرۆشیار و بریکارەکانیان، فلتەری تایبەت، ڕاپۆرت و چاودێری نوێنەران بە کاتی ڕاستەقینە.",
     },
     role: FRONTEND,
     domain: "telecom",
     surface: "pwa",
     stack: ["React", "TypeScript", "PWA", "Role-based access"],
-    metrics: [],
+    /* Scope rather than volume. The CV names the four seller types the system
+       manages and both SIM formats; it gives no agent count or throughput, and
+       a guessed figure is worse in an interview than none. */
+    metrics: [
+      {
+        value: "SIM + eSIM",
+        label: { en: "Both formats end to end", ku: "هەردوو جۆرەکە بە تەواوی" },
+      },
+      {
+        value: "4",
+        label: {
+          en: "Seller types managed",
+          ku: "جۆری فرۆشیار بەڕێوە دەبرێن",
+        },
+      },
+    ],
     confidential: true,
     featured: true,
     // No case study: the work was spec-and-ticket delivery, so the decision
@@ -149,7 +174,11 @@ export const projects = parseProjects([
        as "+MyTV" on /ku. A trailing word puts the plus between two Latin runs,
        where it stays put. */
     title: "MyTV+ App",
-    client: "Gateway ICT",
+    /* Tailored Applications, not Gateway ICT: the company was renamed in 2025
+       and this is 2025 work, sitting inside the tenure that runs to today. The
+       2023 entries below keep the old name because that is what it was called
+       when they shipped. */
+    client: "Tailored Applications",
     year: 2025,
     summary: {
       en: "Streaming interfaces for web and television, covering live channels, films and series across the MyTV+ content delivery ecosystem.",
@@ -159,7 +188,14 @@ export const projects = parseProjects([
     domain: "media",
     surface: "web-app",
     stack: ["React", "TypeScript", "Redux Toolkit", "TV interfaces"],
-    metrics: [],
+    /* Catalogue size, which is the honest measure for this one: it is what the
+       interface had to stay usable against, and unlike a subscriber count it
+       is a figure the platform publishes itself. */
+    metrics: [
+      { value: "450+", label: { en: "Live channels", ku: "کەناڵی ڕاستەوخۆ" } },
+      { value: "10,000+", label: { en: "Movies", ku: "فیلم" } },
+      { value: "5,000+", label: { en: "Series", ku: "زنجیرە" } },
+    ],
     confidential: true,
     featured: true,
     // Flip to true once src/content/case-studies/mytv-plus-app.mdx exists.
@@ -168,7 +204,7 @@ export const projects = parseProjects([
   {
     slug: "mytv-plus-ims",
     title: "MyTV+ IMS",
-    client: "Gateway ICT",
+    client: "Tailored Applications",
     year: 2025,
     summary: {
       en: "Information management system for MyTV+ — the internal, web-based console where the team organises and publishes everything the streaming service serves to its apps.",
@@ -213,7 +249,7 @@ export const projects = parseProjects([
   {
     slug: "mytv-plus-website",
     title: "MyTV+ Brand Site",
-    client: "Gateway ICT",
+    client: "Tailored Applications",
     year: 2025,
     summary: {
       en: "Public marketing site for the MyTV+ service, presenting packages and subscription plans with scroll-led motion.",
@@ -266,8 +302,8 @@ export const projects = parseProjects([
     client: "iQ Group",
     year: 2022,
     summary: {
-      en: "Mission-critical platform for multi-branch operations — case management, funder relations and event coordination for an NGO.",
-      ku: "پلاتفۆرمی سەرەکی ڕێکخراوێکی نافەرمی بە چەند لقەوە — بەڕێوەبردنی دۆسیە، پەیوەندی لەگەڵ پاڵپشتان و ڕێکخستنی چالاکییەکان.",
+      en: "Mission-critical platform for multi-branch operations — case management, funder relations and event coordination, with data integrity as the hard requirement.",
+      ku: "پلاتفۆرمی سەرەکی بۆ کارکردن بە چەند لقەوە — بەڕێوەبردنی دۆسیە، پەیوەندی لەگەڵ پاڵپشتان و ڕێکخستنی چالاکییەکان، کە پارێزگاری لە ڕاستی داتا مەرجی سەرەکی بوو.",
     },
     role: FRONTEND,
     domain: "ngo",

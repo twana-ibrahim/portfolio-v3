@@ -6,7 +6,11 @@ import { getTranslations } from "@/lib/i18n/server";
 import { formatDateRange, formatDuration } from "@/lib/utils/format";
 
 /**
- * "Formerly Gateway ICT", rendered under the company name.
+ * "Formerly Gateway ICT" / "Now Tailored Applications", under the company name.
+ *
+ * Both directions render, because the rename splits one employer across two
+ * entries and a reader scanning top-down should meet the fact wherever they
+ * happen to stop rather than only if they read upward.
  *
  * The template is split around its `{name}` token rather than interpolated,
  * so the company can be wrapped in a <bdi>. A registered company name stays
@@ -15,7 +19,7 @@ import { formatDateRange, formatDuration } from "@/lib/utils/format";
  * comes out with the name at the wrong end. <bdi> scopes the resolution to
  * the name without imposing a direction on the label around it.
  */
-function Formerly({ template, name }: { template: string; name: string }) {
+function AlsoKnownAs({ template, name }: { template: string; name: string }) {
   const [before = "", after = ""] = template.split("{name}");
 
   return (
@@ -64,7 +68,10 @@ export async function ExperienceList({ limit }: ExperienceListProps = {}) {
                   {role.company}
                 </h3>
                 {role.formerly ? (
-                  <Formerly template={dictionary.about.formerly} name={role.formerly} />
+                  <AlsoKnownAs template={dictionary.about.formerly} name={role.formerly} />
+                ) : null}
+                {role.renamedTo ? (
+                  <AlsoKnownAs template={dictionary.about.nowKnownAs} name={role.renamedTo} />
                 ) : null}
                 <p className="mt-1.5 text-ink-muted text-sm">{pick(role.role, locale)}</p>
                 <p className="label mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-ink-subtle">

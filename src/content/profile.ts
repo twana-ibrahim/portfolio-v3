@@ -20,12 +20,19 @@ export const profile = parseProfile({
     ku: "توانا ئیبراهیم",
   },
 
-  /** Matches the CV header exactly. Change both together or neither. */
+  /**
+   * Matches the CV header exactly. Change both together or neither.
+   *
+   * "Senior" is back, and the contradiction that forced it out is gone: the
+   * Aug 2026 CV says Senior Software Engineer (Frontend) in the header, the
+   * running footer and the summary, where the previous version said Senior in
+   * the summary and plain in the header on the same page.
+   */
   role: {
-    en: "Software Engineer (Frontend)",
+    en: "Senior Software Engineer (Frontend)",
     // "Frontend" stays in Latin. It is the word Kurdish developers use, and
     // the transliteration ("فرۆنتئێند") is longer, uglier, and unsearchable.
-    ku: "ئەندازیاری سۆفتوێر (Frontend)",
+    ku: "ئەندازیاری باڵای سۆفتوێر (Frontend)",
   },
 
   /** One line, used in the footer and structured data. */
@@ -62,8 +69,8 @@ export const profile = parseProfile({
    * the characters themselves are invisible in an editor and get deleted.
    */
   summary: {
-    en: "{years} years of frontend work on software other businesses depend on to operate — digital banking, telecom sales, streaming and advertising, identity and access management. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
-    ku: "{years} ساڵە ئەو سۆفتوێرە دروست دەکەم کە کۆمپانیاکان ڕۆژانە کاری پێ دەکەن — بانکی FIB، سیستەمی فرۆشتنی فاستلینک، ستریمینگی \u2066MyTV+\u2069 و سیستەمی ناسنامەی iQ Group. زۆربەی بە React و TypeScript، لەو سیستەمانەی کە ڕاستی تێدا گرنگترە لە جوانی.",
+    en: "{years} years of frontend work on software other businesses depend on to operate — a bank with two million app installs, a streaming platform carrying 450+ live channels, the sales system a telecom runs its agent network on. Mostly React and TypeScript, mostly systems where being right matters more than being pretty.",
+    ku: "{years} ساڵە ئەو سۆفتوێرە دروست دەکەم کە کۆمپانیاکان ڕۆژانە کاری پێ دەکەن — بانکی FIB، سیستەمی فرۆشتنی Newroz Telecom و Fastlink، ستریمینگی \u2066MyTV+\u2069 و سیستەمی ناسنامەی iQ Group. زۆربەی بە React و TypeScript، لەو سیستەمانەی کە ڕاستی تێدا گرنگترە لە جوانی.",
   },
 
   availability: {
@@ -95,14 +102,14 @@ export const profile = parseProfile({
   bio: {
     en: [
       "I'm a frontend engineer in Kalar, in the Sulaymaniyah region of Iraq, working remotely with teams in Erbil. React and TypeScript are where I'm strongest, and I've pointed them mostly at operational software — the systems a company runs on rather than the ones it advertises.",
-      "In practice that comes down to a specific set of things: role-based interfaces that mirror backend permissions exactly, filtering and reporting that stay quick once the dataset is real rather than seeded, and shared component libraries that hold a product together as more people commit to it. I've built in Next.js, Redux Toolkit, Zustand and TanStack Query, and in Angular and RxJS before that. On the server side I'm comfortable in Node and Express, designing REST endpoints and modelling schemas in Postgres and Mongo — enough to know what I'm asking the backend for and what it costs to answer.",
-      "Right now I'm building the internal web applications behind FIB, a digital bank — a BackOffice hub for its data, users and system oversight, plus admin dashboards for the Business and Corporate products. Before that: the MyTV+ streaming apps for web and television and the advertising platform behind them, the SIM and eSIM sales systems Fastlink's agents and dealers use daily, and the identity server that handled registration and permissions across a family of internal products at iQ Group. Each of those, and the rest of the work, is on the work page.",
+      "In practice that comes down to a specific set of things: role-based interfaces that mirror backend permissions exactly, filtering and reporting that stay quick once the dataset is real rather than seeded, and shared component libraries that hold a product together as more people commit to it. I've built in Next.js, Redux Toolkit, Zustand and TanStack Query, and in Angular and RxJS before that. On the server side I'm comfortable in Node and Express, designing REST endpoints and modelling schemas in Postgres and Mongo with Prisma — enough to know what I'm asking the backend for and what it costs to answer.",
+      "Right now I'm building the internal web applications behind FIB, an Iraqi bank with more than two million app installs — a BackOffice hub for its data, users and system oversight, plus admin dashboards for the Business and Corporate products. Before that: the MyTV+ smart TV app and the IMS back office behind it, the advertising platform alongside them, the SIM and eSIM sales systems Newroz Telecom and Fastlink use to run their showroom and agent network, and the identity server that handled registration and permissions across a family of internal products at iQ Group. Each of those, and the rest of the work, is on the work page.",
       "What matters to me on a team is that the next person can follow what I did — fewer clever solutions, more agreed ones, and the reasoning written down wherever the code can't carry it.",
     ],
     ku: [
       "ئەندازیاری Frontend ـم، لە کەلارەوە بۆ تیمەکانی هەولێر لە دوورەوە کار دەکەم. React و TypeScript ئەو شوێنەن کە بەهێزترم تێیاندا، و زۆربەی کارەکانم لەسەر سۆفتوێری کارگێڕی بووە — ئەو سیستەمانەی کۆمپانیایەک پێیان کار دەکات، نەک ئەوانەی ڕیکلامیان بۆ دەکات.",
       "بە کردەوە ئەمە چەند شتێکی دیاریکراو دەگرێتەوە: ڕووکارێک کە بەپێی ڕۆڵ کار دەکات و بە تەواوی هاوتای مۆڵەتەکانی باکئێندە، فلتەر و ڕاپۆرتێک کە خێرا دەمێنێتەوە کاتێک داتاکە ڕاستەقینەیە نەک نموونە، و کتێبخانەی کۆمپۆنێنتی هاوبەش کە بەرهەمەکە یەکدەست ڕادەگرێت کاتێک کەسی زیاتر کاری تێدا دەکات. لە ⁦Next.js⁩، ⁦Redux Toolkit⁩، Zustand و ⁦TanStack Query⁩ کارم کردووە، و پێشتر لە Angular و RxJS. لەلای سێرڤەرەوەش لە Node و Express ئاسوودەم، لە دیزاینکردنی REST و داڕشتنی سکیما لە Postgres و Mongo — ئەوەندەی بزانم داوای چی لە باکئێند دەکەم و بەرهەمهێنانی چەند تێدەچێت.",
-      "ئێستا ئەو ئەپلیکەیشنە ناوخۆییانەی وێب دروست دەکەم کە لە پشت FIB ـەوەن — ناوەندێکی BackOffice بۆ داتا، بەکارهێنەران و سەرپەرشتی سیستەم، لەگەڵ داشبۆردی کارگێڕی بۆ بەرهەمەکانی Business و Corporate. پێش ئەوە: ئەپەکانی ستریمینگی ⁦MyTV+⁩ بۆ وێب و تەلەفزیۆن و ئەو پلاتفۆرمە ڕیکلامییەی لە پشتیانەوەیە، سیستەمەکانی فرۆشتنی SIM و eSIM کە نوێنەر و فرۆشیارەکانی فاستلینک ڕۆژانە بەکاریان دەهێنن، و ئەو سێرڤەری ناسنامەیەی خۆتۆمارکردن و مۆڵەتەکانی چەند بەرنامەیەکی ناوخۆیی ⁦iQ Group⁩ ی بەڕێوە دەبرد. هەریەکەیان، لەگەڵ کارەکانی تر، لە لاپەڕەی کارەکاندا هەن.",
+      "ئێستا ئەو ئەپلیکەیشنە ناوخۆییانەی وێب دروست دەکەم کە لە پشت FIB ـەوەن، بانکێکی عێراقی کە زیاتر لە دوو ملیۆن جار دابەزێنراوە — ناوەندێکی BackOffice بۆ داتا، بەکارهێنەران و سەرپەرشتی سیستەم، لەگەڵ داشبۆردی کارگێڕی بۆ بەرهەمەکانی Business و Corporate. پێش ئەوە: ئەپی سمارت تیڤی \u2066MyTV+\u2069 و کۆنسۆڵی IMS ی پشتی، لەگەڵ ئەو پلاتفۆرمە ڕیکلامییەی لەتەنیشتیانە، سیستەمەکانی فرۆشتنی SIM و eSIM کە Newroz Telecom و Fastlink بۆ بەڕێوەبردنی شۆڕووم و نوێنەرەکانیان بەکاریان دەهێنن، و ئەو سێرڤەری ناسنامەیەی خۆتۆمارکردن و مۆڵەتەکانی چەند بەرنامەیەکی ناوخۆیی \u2066iQ Group\u2069 ی بەڕێوە دەبرد. هەریەکەیان، لەگەڵ کارەکانی تر، لە لاپەڕەی کارەکاندا هەن.",
       "ئەوەی لەناو تیمدا لای من گرنگە، ئەوەیە کە کەسی دواتر بتوانێت شوێن کارەکەم بکەوێت — چارەسەری زیرەک کەمتر، ڕێسای هاوبەش زیاتر، و نووسینەوەی هۆکارەکە هەر کاتێک کۆدەکە خۆی نەیتوانی هەڵیبگرێت.",
     ],
   },

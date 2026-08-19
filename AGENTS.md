@@ -139,6 +139,17 @@ that still runs, from the wrong place or over the wrong duration. Neither the
 build, the types nor a screenshot catches that. Check it by clicking, in more
 than one browser.
 
+## The CV
+
+`public/twana-ibrahim-cv.pdf` is authored elsewhere and is the source for
+everything in `src/content/` — `experience.ts`, `projects.ts`, `skills.ts`,
+`profile.ts`. When a new CV lands, those files are what change; the site never
+holds a second version of the employment history.
+
+The only place the file surfaces is the download button on `/about`. A
+`/resume` route that rendered the CV as a page was built and removed — see
+NOTES.md. Don't rebuild it without asking.
+
 ## Content
 
 Content is typed TS + MDX in `src/content/`, parsed through Zod at module load

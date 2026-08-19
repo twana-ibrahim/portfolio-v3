@@ -96,11 +96,11 @@ export const ku: Dictionary = {
     downloadCv: "داگرتنی CV",
     alsoWorkedWith: "هەروەها کارم لەگەڵ ئەمانە کردووە",
     formerly: "پێشتر {name}",
+    nowKnownAs: "ئێستا {name}",
     languageLevels: {
       Native: "زمانی دایک",
-      Professional: "ئاستی پیشەیی",
-      "Limited working": "ئاستی سنووردار",
-      Elementary: "سەرەتایی",
+      "Upper-intermediate": "ئاستی ناوەندی بەرز (B2)",
+      Receptive: "باش تێدەگەم · قسەکردن سەرەتایی",
     },
   },
 

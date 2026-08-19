@@ -27,13 +27,22 @@ export const experienceSchema = z.object({
   company: z.string().min(1),
   /** Previous name, when the entity changed under a continuous tenure. */
   formerly: z.string().min(1).optional(),
+  /**
+   * The other half of `formerly`, for a tenure that ended under the old name.
+   * Both directions are needed: without this, the 2022 Gateway ICT entry and
+   * the current Tailored Applications entry read as two unrelated employers,
+   * which is exactly what the CV goes out of its way to deny.
+   */
+  renamedTo: z.string().min(1).optional(),
   role: localized(z.string().min(1)),
   location: localized(z.string().min(1)),
   arrangement: z.enum(["remote", "on-site", "hybrid"]),
   start: YearMonth,
   end: EndDate,
-  /** Localized as a whole list, so a locale may use more or fewer bullets. */
-  highlights: localized(z.array(z.string().min(1)).min(1).max(5)),
+  /** Localized as a whole list, so a locale may use more or fewer bullets.
+   *  Six is the CV's own longest entry — the cap exists to stop a role growing
+   *  into a job description, not to force one below what the CV states. */
+  highlights: localized(z.array(z.string().min(1)).min(1).max(6)),
   /** Slugs from `projects`. Cross-checked in `parseExperience`. */
   projects: z.array(Slug).default([]),
 });
@@ -111,9 +120,16 @@ export const certificationSchema = z.object({
   verifyUrl: z.url().optional(),
 });
 
+/**
+ * The CV's own three levels, not the ILR ladder this started with.
+ * "Professional" overstated a B2, and a single bucket for Arabic and Persian
+ * lost the distinction the CV draws: both are understood far better than they
+ * are spoken, which is the useful fact for anyone deciding whether to send a
+ * document or schedule a call.
+ */
 export const languageSchema = z.object({
   name: localized(z.string().min(1)),
-  level: z.enum(["Native", "Professional", "Limited working", "Elementary"]),
+  level: z.enum(["Native", "Upper-intermediate", "Receptive"]),
 });
 
 export type Certification = z.infer<typeof certificationSchema>;

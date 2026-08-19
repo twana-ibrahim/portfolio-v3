@@ -13,19 +13,21 @@ document. What's left is the part a CV can't provide.
 
 ### Blocking — the site should not launch without these
 
-- [ ] **Metrics.** Every project still has `metrics: []`. This is the single
-      biggest differentiator available and the CV has none of it. Rough is
-      fine — "around 400 agents" is honest and useful. Left empty rather
-      than guessed, because a wrong figure in an interview is worse than none.
-      `value` is a **string**, so `"~400"` and `"3 min → 40s"` both validate.
-      Only the four `featured` projects need them:
-      - Fast SIM — agents on the platform · activations per month · rows in the
-        heaviest dealer table · time per activation before vs after
-      - MyTV+ — subscribers or concurrent viewers · catalogue size · which
-        device classes shipped to
-      - Authentication Server — products it was the IdP for · accounts under
-        management · roughly how many distinct roles
-      - FIB — probably nothing publicly sayable; leaving it empty is fine
+- [~] **Metrics — three of the four featured projects now have them.** The
+      Aug 2026 CV supplied the numbers this list had been asking for, and they
+      are in `projects.ts`:
+      - MyTV+ — 450+ live channels, 10,000+ movies, 5,000+ series. Catalogue
+        size rather than subscribers: it is what the interface had to stay
+        usable against, and unlike a user count the platform publishes it.
+      - FIB — 2M+ app installs, labelled "for the bank" rather than for this
+        application. The back office serves staff, not those two million, and
+        the label has to say so or the figure is a lie by placement.
+      - Fast SIM — scope, not volume: both SIM formats end to end, four seller
+        types managed. The CV names those; it still gives no agent count or
+        throughput, and a guessed one is worse than none.
+      - Authentication Server — still empty. The CV describes it in
+        capabilities only. Products it was the IdP for, accounts under
+        management, or a rough count of distinct roles would each fix it.
 - [ ] **Read the experience highlights aloud.** `src/content/experience.ts`.
       The facts are yours; the sentences are mine. Anywhere a line reads as a
       responsibility rather than an achievement, add the number that turns it
@@ -59,6 +61,23 @@ Read `public/twana-ibrahim-cv.pdf` line by line against every content file.
 Dates, languages, education, certifications and the technical-skills list all
 match. Five things do not.
 
+Re-run against the second Aug 2026 PDF, the one dated 19 Aug. It differs from
+the copy earlier that day in three places: FIB is "an Iraqi bank" rather than
+"an Iraqi mobile bank", the MyTV+ work is "the smart TV app" rather than "the
+smart TV client", and SELECTED PROJECTS gained an FIB row above MyTV+. The
+first two are in `experience.ts` and `profile.ts`; the third needed nothing,
+since /work already lists the three FIB applications separately.
+
+From the earlier run that day. What moved: the sixth bullet
+of the current role ("Owning bug fixes, accessibility and cross-browser
+behaviour") was missing and is back, which took the schema's cap from five to
+six; the iQ Group bullets now follow the CV's three, plus the identity-server
+line the CV keeps in its projects section instead; certifications are the CV's
+four in the CV's order (Claude 101 is gone — it is not on this CV); Prisma and
+JavaScript joined the secondary skills, the only two CV entries the site had no
+home for; the Kurdish bullets for Gateway ICT and iQ Group were a locale behind
+the English and now say the same things.
+
 - [x] **"Erbil, Iraq" confirmed.** Company HQs are in Erbil; Twana works
       remotely from Kalar. `location` + `arrangement: "remote"` already says
       exactly that, so nothing changed.
@@ -72,9 +91,9 @@ match. Five things do not.
       the About bio covers Node, Express, REST and schema design, framed as
       what it buys the frontend rather than as a second job title.
 - [ ] **The performance claim still has no number.** This is
-      `experience.ts` → Gateway ICT (2025-04) → *"Cut load and interaction
-      cost across large React applications through code splitting, lazy
-      loading and state that stopped re-rendering the world."*
+      `experience.ts` → Tailored Applications (2025-04) → *"Cutting load and
+      interaction cost through code splitting, lazy loading and tighter state
+      management."* The CV's own line has the same gap.
 
       The sentence names three techniques and no result. A reader cannot tell
       whether it saved 100ms or four seconds, and it is the one line on the
@@ -93,7 +112,9 @@ match. Five things do not.
 
 ### What the content is still missing
 
-- [ ] **Metrics** — see above, unchanged and still the biggest single gap.
+- [ ] **Metrics** — three of the four featured projects have them now. The
+      Authentication Server is the one still empty; see above for what would
+      fill it.
 - [ ] **FIB says almost nothing.** It is featured, it is the current work, and
       the summary is generic. Even under NDA the *shape* is sayable: how many
       screens, what the review bar is, what regulated delivery changes about
@@ -108,14 +129,14 @@ match. Five things do not.
 
 ### Decisions for you
 
-- [x] **Job title resolved** — `siteConfig.role` is *"Software Engineer
-      (Frontend)"*, matching the header of the CV dated Aug 2026.
-- [ ] **Your CV contradicts itself in the first two lines.** The header says
-      *Software Engineer (Frontend)*; the PROFESSIONAL SUMMARY directly below
-      still opens *"Senior Software Engineer with over 5 years…"*. The site
-      follows the header. Fix the summary line in the PDF, or put "Senior"
-      back in the header and tell me — but the two should not disagree on the
-      same page, and a reader sees both at once.
+- [x] **Job title resolved** — `profile.role` is *"Senior Software Engineer
+      (Frontend)"*, matching the Aug 2026 CV, which says Senior in the header
+      and the footer both.
+- [x] **The CV no longer contradicts itself, and the site follows it.** The
+      Aug 2026 PDF says *Senior Software Engineer (Frontend)* in the header
+      and in the running footer on both pages. `profile.role` is now Senior in
+      both locales, which also moves the OG image, the structured data and the
+      page titles — they all read from that one field.
 - [ ] **FIB description.** `projects.ts` deliberately says little. Confirm what
       you can say publicly about a banking client.
 - [ ] **Custom domain.** Currently `twana-ibrahim.vercel.app`. Set
@@ -468,6 +489,10 @@ Recorded so they are not relitigated later.
 | Hover feel | Slow curve, not a switch | All interaction easing moved to `ease-out-expo` and `--duration-fast` from 180ms to 260ms. Under ~200ms a colour change reads as a switch being thrown. The curve is doing most of the work — expo decelerates hard, which is what reads as considered. |
 | Budget | Free and open source only | No paid dependency, asset, font, or service tier. Rules out Spline's paid plans, commercial 3D model libraries and licensed typefaces. Everything currently in use qualifies — Geist and Instrument Serif are open-licence, three.js and Motion are MIT, and Vercel and Resend are used inside their free tiers. Check the licence before adding anything. |
 | `paper-inverted` in dark | Elevated dark, not a literal inversion | Inverting it turned the contact band into a full-bleed near-white slab on an otherwise dark page. Someone on dark theme chose it to avoid exactly that — a bright block three quarters down the page is glare, not emphasis. In dark it is now `oklch(0.255)`, a step above `paper-raised`, so the band still reads as its own moment and the ink stays light. Contrast is unaffected: 7.61:1 at `/70`, 14.12:1 at full. |
+| The CV on the site | Built a `/resume` route, then removed it | The argument for it was real: a PDF is a bad first read — pinch-and-drag on a phone, invisible to search, and a link to it cannot point at one role. The argument against it won: a four-page portfolio that also prints its own CV is saying the same thing twice, and the page needed its own selection of projects, its own skill grouping and its own summary paragraph to be faithful to the PDF — three near-copies of content the site already had, each free to drift. The download button on /about is the whole feature now. The removed components are recoverable from this session's scratchpad or from the CV itself; don't rebuild it without a reason the download does not cover. |
+| Splitting a renamed employer | One entry, both names | The CV runs Apr 2025 → now as a single tenure at Tailored Applications, formerly Gateway ICT, with the MyTV+ work inside it — the company was renamed around him rather than left. The site had it as two entries, which invented a job change that never happened. `formerly` and the new `renamedTo` render on both halves, so a reader scanning top-down meets the fact wherever they stop rather than only if they read upward. |
+| Certifications | The CV's four, in the CV's order | The list is a claim a reader can check, so it holds what the current CV holds and nothing else. Claude 101 was on the site and not on the CV; it is gone. Order follows the PDF, which still leaves Jira Fundamentals — the one credential with no public verification URL — at the bottom rather than dressed up to match. |
+| Language levels | The CV's three, not the ILR ladder | "Professional" overstated a B2, and one "Elementary" bucket for Arabic and Persian lost what the CV actually says: both are understood far better than they are spoken. That is the useful fact for someone deciding whether to send a document or schedule a call. |
 | Theme change | Circular sweep from the toggle | A crossfade of every colour at once has no source and reads as a glitch; a wipe that starts under the cursor says the button did it. Costs one `clip-path` on one pseudo-element because the View Transition API snapshots the whole document — no per-element transition, no repaint of the page per frame. Falls back to the instant swap on Firefox < 144, Safari < 18, and any reduced-motion request. |
 | Sweep geometry | An injected stylesheet with the numbers already in it | Two tidier versions shipped broken before this one, and both failed the same way: they worked on the machine they were written on. **v1** put the keyframes in `globals.css` reading `--theme-origin-x/y/radius` off `<html>` — correct by the rules of this repo, and it swept from the top centre of the screen elsewhere. That is the `var()` fallback (`50% 50%`, `150vmax`), so the properties arrived unresolved: the `::view-transition-*` tree inherits from the document element in theory, and this is a corner not worth depending on. **v2** used `element.animate(…, { pseudoElement })`, which removes the inheritance — and is Chromium-only for these pseudo-elements, trading one engine's bug for another's missing feature. **v3** builds a `<style>` with the geometry already substituted and removes it when the transition finishes. No inheritance, no WAAPI, the duration stays `var(--duration-slow)` instead of a number parsed out of it, and `::view-transition-new(root)` deliberately keeps the UA fade-in so an engine that ignores the injected rule crossfades rather than cuts. Note the whole class of bug: every one of these fails *silently and plausibly* — the animation still runs, just wrong — so nothing in the build, the types or a screenshot catches it. |
 | Reading a duration token in JS | Parse the unit | `--duration-slow` is authored `700ms`; the build minifies CSS times to the shorter spelling, so the browser sees `.7s` and `Number.parseFloat` returns **0.7**. That shipped for one iteration as a 0.7-millisecond sweep, which does not read as a fast animation — it reads as the animation not existing. Any token read out of `getComputedStyle` and used as a number needs the same treatment. |

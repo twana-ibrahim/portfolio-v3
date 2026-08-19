@@ -14,6 +14,10 @@ import { skillGroupSchema } from "./schema";
  * "Angular, RxJS, RBAC" under an identity provider proves something that the
  * same words in a badge cloud never could.
  *
+ * The CV groups the same technologies into seven flatter rows. That grouping
+ * is the PDF's, for a page of A4; this one is the site's, and they are allowed
+ * to differ as long as nothing real is missing from either.
+ *
  * Only the group titles are localized. The items are technology names, and a
  * Kurdish developer writes "TanStack Query" exactly as an English one does —
  * transliterating them into Arabic script would make the list unreadable to
@@ -43,9 +47,15 @@ export const skillGroups = z.array(skillGroupSchema).parse([
 /**
  * The honest home for everything that is real experience but not a headline
  * skill. Listed in a single line on /about rather than given equal billing.
+ *
+ * Everything in the CV's seven skill rows is either here or in a group above,
+ * with one exception: "Agile delivery" is a way of working, not a tool, and it
+ * is the same species as the "Hard Working" the old site listed.
  */
 export const secondarySkills = [
   "Express",
+  "Prisma",
+  "JavaScript",
   "JWT",
   "MongoDB",
   "MySQL",

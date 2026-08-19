@@ -96,12 +96,13 @@ export const en = {
     alsoWorkedWith: "Also worked with",
     /** Renders under a company whose name changed mid-tenure. */
     formerly: "Formerly {name}",
+    /** The same fact from the earlier tenure's side. */
+    nowKnownAs: "Now {name}",
     /** Keys are the `level` enum in content/schema.ts. */
     languageLevels: {
       Native: "Native",
-      Professional: "Professional",
-      "Limited working": "Limited working",
-      Elementary: "Elementary",
+      "Upper-intermediate": "Upper-intermediate (B2)",
+      Receptive: "Understands well · elementary speaking",
     },
   },
 
